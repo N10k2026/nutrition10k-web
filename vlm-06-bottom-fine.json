@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The image shows a large red horizontal banner spanning the full width, with a gradient effect (darker red at the edges, brighter red in the center). Above and below the banner are large empty white zones. No text, product cards, section dividers, headings, footer elements, or other visible content is present. The very last visible pixels at the bottom are part of the white empty zone.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1782938331,
+  "id": "2026070204384815e8eae436664260",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "2026070204384815e8eae436664260",
+  "usage": {
+    "completion_tokens": 83,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2586,
+    "prompt_tokens_details": {
+      "cached_tokens": 7
+    },
+    "total_tokens": 2669
+  }
+}

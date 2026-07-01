@@ -1,0 +1,21 @@
+{
+  "name": "Nutrition 10K — Weight Loss Partners",
+  "short_name": "N10K",
+  "description": "Tu aliado para la pérdida de peso y el aumento de tu autoestima. Productos formulados y producidos en Estados Unidos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#E30613",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/brand/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "There is no small dark badge, pill, or indicator in the bottom - left corner containing text like 'Compiling', 'Compiled', 'Next.js', or similar.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1782938427,
+  "id": "2026070204402605339dd4be3e41f6",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "2026070204402605339dd4be3e41f6",
+  "usage": {
+    "completion_tokens": 37,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 133,
+    "prompt_tokens_details": {
+      "cached_tokens": 5
+    },
+    "total_tokens": 170
+  }
+}

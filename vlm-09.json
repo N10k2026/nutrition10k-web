@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "1. Yes, there is a yellow banner with the text 'COMPRA AHORA Y PAGA DESPUÉS' and 'CASHEA' at the top of this strip.  \n2. Below the yellow banner, there is no content at all — no section headers, link columns, social media icons, payment icons, copyright, newsletter signup form, or contact info.  \n3. Yes, there are large blank/white zones. They are roughly 11/12 (or approximately 91.7%) of the strip’s height.  \n4. Yes, there is a colored band (red) at the bottom of this strip. It is empty (contains no text).  \n5. This region does not have a proper structured footer; it is mostly empty/blank.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1782938397,
+  "id": "20260702043950c76b69819321428a",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "20260702043950c76b69819321428a",
+  "usage": {
+    "completion_tokens": 163,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 2195,
+    "prompt_tokens_details": {
+      "cached_tokens": 7
+    },
+    "total_tokens": 2358
+  }
+}
