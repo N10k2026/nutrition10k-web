@@ -110,6 +110,17 @@ export const byeByeBelly: NutritionProduct = {
   brandColor: '#E30613', // rojo Nutrition 10K
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
+  image: '/products/bye-bye-belly/ByeByeBelly01.webp',
+  images: [
+    '/products/bye-bye-belly/ByeByeBelly01.webp',
+    '/products/bye-bye-belly/ByeByeBelly02.webp',
+    '/products/bye-bye-belly/ByeByeBelly03.webp',
+    '/products/bye-bye-belly/ByeByeBelly04.webp',
+    '/products/bye-bye-belly/ByeByeBelly05.webp',
+    '/products/bye-bye-belly/ByeByeBelly06.webp',
+    '/products/bye-bye-belly/ByeByeBelly07.webp',
+    '/products/bye-bye-belly/ByeByeBelly08.webp',
+  ],
   sizes: ['60 cápsulas'],
   price: 45,
   benefits: [

@@ -1507,3 +1507,46 @@ Stage Summary:
 - Galería interactiva: imagen principal + 5 thumbnails + navegación con flechas + contador.
 - Card del catálogo muestra la imagen principal (Aliens01).
 - Disponible para el usuario en el Preview Panel.
+
+---
+Task ID: 43
+Agent: main (Z.ai Code)
+Task: Añadir las 8 imágenes subidas (ByeBye01-08.jpg, con mezcla de mayúsculas en nombres) al producto Bye Bye Belly.
+
+Work Log:
+- Verifiqué las 8 imágenes subidas en `/home/z/my-project/upload/`:
+  - ByeBye01.jpg, ByeBye02.jpg (camelCase)
+  - Byebye03.jpg - Byebye08.jpg (lowercase)
+- Analicé las 8 imágenes con VLM (z-ai vision) secuencialmente para entender el contenido de cada una:
+  - ByeBye01: frasco frontal con efectos visuales (humo verde, fondo negro) — promocional
+  - ByeBye02: frasco frontal con texto "Desinflama. Recupera tu figura"
+  - Byebye03: frasco frontal con texto publicitario (inflamación abdominal)
+  - Byebye04: frasco en mano de persona (lifestyle)
+  - Byebye05: frasco frontal (vista frontal, promocional)
+  - Byebye06: frasco frontal (diseño negro, texto amarillo/verde)
+  - Byebye07: vista lateral con "Supplement Facts" (info nutricional)
+  - Byebye08: vista trasera con "Supplement Facts", ingredientes, sellos de calidad
+- Creé la carpeta `/home/z/my-project/public/products/bye-bye-belly/`.
+- Convertí las 8 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82), normalizando los nombres a `ByeByeBelly01-08.webp`:
+  - ByeByeBelly01.webp (54KB), 02 (39KB), 03 (54KB), 04 (43KB), 05 (31KB), 06 (22KB), 07 (30KB), 08 (61KB)
+  - Total: ~334KB (vs varios MB en JPG originales)
+- Actualicé `byeByeBelly` en `src/data/products.ts`:
+  - Añadí `image: '/products/bye-bye-belly/ByeByeBelly01.webp'` (imagen principal — frasco frontal con humo verde).
+  - Añadí `images: [...]` array con las 8 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Bye Bye Belly con `image` y `images[]` (8 imágenes) correctos.
+  - Las 8 imágenes webp se sirven con HTTP 200 desde `/products/bye-bye-belly/ByeByeBellyXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra ByeByeBelly01.webp como imagen principal (640px natural, loaded=true).
+    - Modal de detalle: galería con las 8 imágenes, contador "1 / 8", navegación con flechas disponible.
+    - Thumbnails visibles en la galería.
+  - Captura visual confirmada por VLM: frasco visible, nombre "Bye Bye Belly", precio $45, vista profesional completa.
+
+Stage Summary:
+- **Bye Bye Belly ahora tiene galería de 8 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~334KB total).
+- Galería interactiva: imagen principal + 7 thumbnails + navegación con flechas + contador "1 / 8".
+- Card del catálogo muestra la imagen principal (ByeByeBelly01 — frasco con efectos visuales).
+- Nombres normalizados a `ByeByeBelly01-08.webp` para consistencia.
+- Disponible para el usuario en el Preview Panel.
