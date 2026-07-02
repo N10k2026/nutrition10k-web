@@ -1468,3 +1468,42 @@ Stage Summary:
 - **Proteínas (Chocolate, Vainilla, Cookies and Cream):** $60 envase normal / $105 sachet (3 cajas de 14 unidades).
 - **Creatina:** $45 pote / $70 sachet (100 unidades).
 - **Precio dinámico end-to-end verificado:** cards → modal de detalle → carrito → mensaje de WhatsApp.
+
+---
+Task ID: 42
+Agent: main (Z.ai Code)
+Task: Añadir las 6 imágenes subidas (Aliens01-06.jpg) al producto Aliens Blocker.
+
+Work Log:
+- Verifiqué las 6 imágenes subidas en `/home/z/my-project/upload/Aliens01.jpg` a `Aliens06.jpg`.
+- Analicé las 6 imágenes con VLM (z-ai vision) para entender el contenido de cada una:
+  - Aliens01: foto del frasco (fondo oscuro, promocional)
+  - Aliens02: foto del frasco (fondo negro, texto promocional)
+  - Aliens03: foto del frasco (beneficios: bloquea 75% almidones)
+  - Aliens04: foto del frasco (etiqueta verde y negra)
+  - Aliens05: frasco mostrando "Supplement Facts"
+  - Aliens06: ficha técnica con ingredientes/datos nutricionales
+- Creé la carpeta `/home/z/my-project/public/products/aliens-blocker/`.
+- Convertí las 6 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82) para optimizar peso:
+  - Aliens01.webp (41KB), Aliens02.webp (48KB), Aliens03.webp (50KB), Aliens04.webp (27KB), Aliens05.webp (18KB), Aliens06.webp (39KB)
+  - Total: ~224KB (vs varios MB en JPG originales)
+- Actualicé `aliensBlocker` en `src/data/products.ts`:
+  - Añadí `image: '/products/aliens-blocker/Aliens01.webp'` (imagen principal).
+  - Añadí `images: [...]` array con las 6 imágenes webp en orden (Aliens01 como principal, luego 02-06).
+  - El patrón sigue el mismo formato que Whey Protein Chocolate (única referencia con imágenes reales hasta ahora).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products?category=Quemadores`: devuelve Aliens Blocker con `image` y `images[]` correctos.
+  - Las 6 imágenes webp se sirven con HTTP 200 desde `/products/aliens-blocker/AliensXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra Aliens01.webp como imagen principal (640px natural, loaded=true).
+    - Modal de detalle: galería con las 6 imágenes, contador "1 / 6", navegación con flechas funciona (verificado pasando a slide "4 / 6").
+    - Thumbnails visibles en la galería.
+  - Captura visual confirmada por VLM: frasco visible, nombre "Aliens Blocker", precio $45, vista profesional completa.
+
+Stage Summary:
+- **Aliens Blocker ahora tiene galería de 6 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~224KB total).
+- Galería interactiva: imagen principal + 5 thumbnails + navegación con flechas + contador.
+- Card del catálogo muestra la imagen principal (Aliens01).
+- Disponible para el usuario en el Preview Panel.

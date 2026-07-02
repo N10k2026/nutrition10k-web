@@ -296,6 +296,15 @@ export const aliensBlocker: NutritionProduct = {
   brandColor: '#4CAF50', // verde lima
   brandColorFg: '#000000',
   format: 'Cápsulas',
+  image: '/products/aliens-blocker/Aliens01.webp',
+  images: [
+    '/products/aliens-blocker/Aliens01.webp',
+    '/products/aliens-blocker/Aliens02.webp',
+    '/products/aliens-blocker/Aliens03.webp',
+    '/products/aliens-blocker/Aliens04.webp',
+    '/products/aliens-blocker/Aliens05.webp',
+    '/products/aliens-blocker/Aliens06.webp',
+  ],
   sizes: ['60 cápsulas'],
   price: 45,
   benefits: [
