@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { useCartStore } from '@/lib/store';
 import { PRODUCTS } from '@/data/products';
-import { getProductShareUrl } from '@/lib/product-utils';
+import { getProductShareUrl, getProductPrice } from '@/lib/product-utils';
 import { WHATSAPP_NUMBER } from '@/lib/site-config';
 import {
   X,
@@ -85,6 +85,7 @@ export default function ProductDetail() {
       quantity,
       selectedSize,
       selectedFlavor: selectedProduct.flavors?.[0]?.name ?? selectedProduct.name,
+      unitPrice: getProductPrice(selectedProduct, selectedSize),
     });
     toast.success(`${quantity} × ${selectedProduct.name} agregado al carrito`);
     setDetailOpen(false);
@@ -108,7 +109,8 @@ export default function ProductDetail() {
   if (!selectedProduct) return null;
 
   const brandColor = richProduct?.brandColor ?? '#E30613';
-  const subtotal = selectedProduct.price * quantity;
+  const currentPrice = getProductPrice(selectedProduct, selectedSize);
+  const subtotal = currentPrice * quantity;
   const currentImage = galleryImages[activeSlideIndex] || selectedProduct.image;
 
   // Info block (shared between mobile and desktop)
@@ -138,9 +140,9 @@ export default function ProductDetail() {
 
       {/* Price + badges */}
       <div className="flex items-center gap-3 mb-4">
-        {selectedProduct.price > 0 ? (
+        {currentPrice > 0 ? (
           <span className="font-display-black text-2xl sm:text-3xl" style={{ color: brandColor }}>
-            ${selectedProduct.price}
+            ${currentPrice}
           </span>
         ) : (
           <span className="text-sm text-muted-foreground italic">Precio por confirmar</span>

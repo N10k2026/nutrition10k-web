@@ -1,0 +1,1070 @@
+     1→     1→/**
+     2→     2→ * Catálogo de productos de Nutrition 10K
+     3→     3→ * ----------------------------------------
+     4→     4→ * Fuente única de verdad para alimentar la base de datos (seed) y el
+     5→     5→ * fallback estático de la API cuando la BD no esté disponible.
+     6→     6→ *
+     7→     7→ * Estados de ficha técnica:
+     8→     8→ *  - 'complete': ficha técnica completa con ingredientes detallados
+     9→     9→ *  - 'partial':  tenemos beneficios + modo de empleo, pero sin desglose de ingredientes
+    10→    10→ *  - 'pending':  solo info básica de banner/branding
+    11→    11→ *
+    12→    12→ * Marca: Nutrition 10K — Weight Loss Partners
+    13→    13→ * Mercado: Venezuela (es-VE)
+    14→    14→ * Producción: Formulado y producido en Estados Unidos
+    15→    15→ */
+    16→    16→
+    17→    17→export type FichaStatus = 'complete' | 'partial' | 'pending';
+    18→    18→
+    19→    19→export interface ProductIngredient {
+    20→    20→  /** Emoji usado en la ficha técnica original (se renderiza en UI) */
+    21→    21→  emoji: string;
+    22→    22→  /** Nombre del ingrediente */
+    23→    23→  name: string;
+    24→    24→  /** Descripción de su función/beneficio */
+    25→    25→  description: string;
+    26→    26→}
+    27→    27→
+    28→    28→export interface NutritionProduct {
+    29→    29→  /** ID estable (no autogenerado por BD). Formato: slug en kebab-case */
+    30→    30→  id: string;
+    31→    31→  /** Slug URL-friendly */
+    32→    32→  slug: string;
+    33→    33→  /** Nombre comercial */
+    34→    34→  name: string;
+    35→    35→  /** Línea de producto / descriptor corto */
+    36→    36→  tagline: string;
+    37→    37→  /** Descripción larga de marketing */
+    38→    38→  description: string;
+    39→    39→  /** Categoría para filtros del catálogo */
+    40→    40→  category: ProductCategory;
+    41→    41→  /** Color de marca del producto (para swatches y acentos) */
+    42→    42→  brandColor: string;
+    43→    43→  /** Color de marca en formato claro para textos sobre fondo oscuro */
+    44→    44→  brandColorFg: string;
+    45→    45→  /** Lista de ingredientes activos con su función */
+    46→    46→  ingredients: ProductIngredient[];
+    47→    47→  /** Modo de empleo (dosis + momento del día) */
+    48→    48→  usage: string;
+    49→    49→  /** Formato de presentación */
+    50→    50→  format: ProductFormat;
+    51→    51→  /** Tamaño/tamaño de presentación (para selector de "presentaciones") */
+    52→    52→  sizes: string[];
+    53→    53→  /** Beneficios principales (bullets cortos para cards) */
+    54→    54→  benefits: string[];
+    55→    55→  /** Información nutricional destacada (para proteínas) */
+    56→    56→  nutritionFacts?: { label: string; value: string }[];
+    57→    57→  /** Badge de "nuevo" */
+    58→    58→  isNew?: boolean;
+    59→    59→  /** Badge de "más vendido" */
+    60→    60→  isBestSeller?: boolean;
+    61→    61→  /** Estado de la ficha técnica */
+    62→    62→  fichaStatus: FichaStatus;
+    63→    63→  /** Imagen principal (TBD — pendiente de recibir assets del cliente) */
+    64→    64→  image?: string;
+    65→    65→  /** Galería de imágenes (TBD) */
+    66→    66→  images?: string[];
+    67→    67→  /** Precio en USD (TBD — pendiente de confirmación del cliente) */
+    68→    68→  price?: number;
+    69→    69→  /** Precio anterior para mostrar descuento (TBD) */
+    70→    70→  originalPrice?: number;
+    71→    71→  /** Rating promedio (TBD — se calcula desde reseñas) */
+    72→    72→  rating?: number;
+    73→    73→}
+    74→    74→
+    75→    75→export type ProductCategory =
+    76→    76→  | 'Digestión'
+    77→    77→  | 'Quemadores'
+    78→    78→  | 'Cetogénicos'
+    79→    79→  | 'Proteínas'
+    80→    80→  | 'Rendimiento'
+    81→    81→  | 'Nutracéuticos'
+    82→    82→  | 'Accesorios';
+    83→    83→
+    84→    84→export type ProductFormat = 'Cápsulas' | 'Cápsulas blandas' | 'Polvo' | 'Líquido' | 'Gomitas';
+    85→    85→
+    86→    86→export const CATEGORIES: { id: ProductCategory; label: string }[] = [
+    87→    87→  { id: 'Digestión', label: 'Digestión' },
+    88→    88→  { id: 'Quemadores', label: 'Quemadores' },
+    89→    89→  { id: 'Cetogénicos', label: 'Cetogénicos' },
+    90→    90→  { id: 'Proteínas', label: 'Proteínas' },
+    91→    91→  { id: 'Rendimiento', label: 'Rendimiento' },
+    92→    92→  { id: 'Nutracéuticos', label: 'Nutracéuticos' },
+    93→    93→  { id: 'Accesorios', label: 'Accesorios' },
+    94→    94→];
+    95→    95→
+    96→    96→// ============================================================================
+    97→    97→// 1. BYE BYE BELLY — Digestión (ficha completa)
+    98→    98→// ============================================================================
+    99→    99→
+   100→   100→export const byeByeBelly: NutritionProduct = {
+   101→   101→  id: 'bye-bye-belly',
+   102→   102→  slug: 'bye-bye-belly',
+   103→   103→  name: 'Bye Bye Belly',
+   104→   104→  tagline: 'Reduce la inflamación y mejora tu digestión',
+   105→   105→  description:
+   106→   106→    'Bye Bye Belly es una fórmula integral para combatir la inflamación abdominal y favorecer una digestión saludable. Combina probióticos, fibra prebiótica y potentes antiinflamatorios naturales como la cúrcuma y el jengibre, potenciados con pimienta negra para una máxima absorción. Formulado y producido en Estados Unidos.',
+   107→   107→  category: 'Digestión',
+   108→   108→  brandColor: '#E30613', // rojo Nutrition 10K
+   109→   109→  brandColorFg: '#FFFFFF',
+   110→   110→  format: 'Cápsulas',
+   111→   111→  sizes: ['30 cápsulas', '60 cápsulas', '90 cápsulas'],
+   112→   112→  benefits: [
+   113→   113→    'Reduce la inflamación abdominal',
+   114→   114→    'Mejora la digestión y el tránsito intestinal',
+   115→   115→    'Equilibra la microbiota con probióticos',
+   116→   116→    'Apoya la salud cardiovascular y articular',
+   117→   117→  ],
+   118→   118→  isNew: true,
+   119→   119→  isBestSeller: true,
+   120→   120→  fichaStatus: 'complete',
+   121→   121→  ingredients: [
+   122→   122→    {
+   123→   123→      emoji: '🧬',
+   124→   124→      name: 'Ácido fólico',
+   125→   125→      description:
+   126→   126→        'Esencial para la producción de glóbulos rojos y la síntesis del ADN.',
+   127→   127→    },
+   128→   128→    {
+   129→   129→      emoji: '🌱',
+   130→   130→      name: 'Inulina',
+   131→   131→      description: 'Fibra prebiótica que ayuda a mejorar la salud intestinal.',
+   132→   132→    },
+   133→   133→    {
+   134→   134→      emoji: '🦠',
+   135→   135→      name: 'Probióticos',
+   136→   136→      description:
+   137→   137→        'Ayuda a equilibrar la microbiota intestinal, mejorando la digestión y la absorción de nutrientes.',
+   138→   138→    },
+   139→   139→    {
+   140→   140→      emoji: '🫀',
+   141→   141→      name: 'Cúrcuma (curcumina)',
+   142→   142→      description:
+   143→   143→        'Antiinflamatorio y antioxidante que ayuda al funcionamiento intestinal y a la salud cardiovascular.',
+   144→   144→    },
+   145→   145→    {
+   146→   146→      emoji: '🫚',
+   147→   147→      name: 'Jengibre',
+   148→   148→      description:
+   149→   149→        'Excelente diurético natural que ayuda contra el estreñimiento y a reducir la hinchazón.',
+   150→   150→    },
+   151→   151→    {
+   152→   152→      emoji: '🍵',
+   153→   153→      name: 'Té verde',
+   154→   154→      description:
+   155→   155→        'Estimula la producción de enzimas digestivas, desintoxica y aumenta la energía.',
+   156→   156→    },
+   157→   157→    {
+   158→   158→      emoji: '👩🏻',
+   159→   159→      name: 'Ácido hialurónico',
+   160→   160→      description:
+   161→   161→        'Beneficioso para la hidratación de la piel y la salud articular.',
+   162→   162→    },
+   163→   163→    {
+   164→   164→      emoji: '⚫',
+   165→   165→      name: 'Pimienta negra',
+   166→   166→      description: 'Potencia la absorción de la cúrcuma.',
+   167→   167→    },
+   168→   168→  ],
+   169→   169→  usage: 'Consumir 2 cápsulas luego del desayuno.',
+   170→   170→};
+   171→   171→
+   172→   172→// ============================================================================
+   173→   173→// 2. CHOCO PUFF — Digestión (ficha completa)
+   174→   174→// ============================================================================
+   175→   175→
+   176→   176→export const chocoPuff: NutritionProduct = {
+   177→   177→  id: 'choco-puff',
+   178→   178→  slug: 'choco-puff',
+   179→   179→  name: 'Choco Puff',
+   180→   180→  tagline: 'Reduce la flatulencia y neutraliza el olor',
+   181→   181→  description:
+   182→   182→    'Choco Puff es la fórmula definitiva contra los gases y la flatulencia. Su combinación de carbón activado, probióticos, enzimas digestivas y extractos botánicos (menta, hinojo, jengibre) reduce la producción de gases y neutraliza el olor gracias al cacao. Formulado y producido en Estados Unidos.',
+   183→   183→  category: 'Digestión',
+   184→   184→  brandColor: '#5C3A21', // marrón cacao
+   185→   185→  brandColorFg: '#FFFFFF',
+   186→   186→  format: 'Cápsulas',
+   187→   187→  sizes: ['30 cápsulas', '60 cápsulas'],
+   188→   188→  benefits: [
+   189→   189→    'Reduce la flatulencia y los gases',
+   190→   190→    'Neutraliza el olor de forma natural',
+   191→   191→    'Mejora la digestión de comidas pesadas',
+   192→   192→    'Equilibra la microbiota intestinal',
+   193→   193→  ],
+   194→   194→  isNew: true,
+   195→   195→  fichaStatus: 'complete',
+   196→   196→  ingredients: [
+   197→   197→    {
+   198→   198→      emoji: '⚫️',
+   199→   199→      name: 'Carbón activado',
+   200→   200→      description:
+   201→   201→        'Absorbe los gases, toxinas y compuestos que causan el mal olor, ayudando a reducir la flatulencia y a neutralizar el olor.',
+   202→   202→    },
+   203→   203→    {
+   204→   204→      emoji: '🦠',
+   205→   205→      name: 'Probióticos',
+   206→   206→      description:
+   207→   207→        'Equilibra la microbiota intestinal, mejorando la digestión, reduciendo la hinchazón y la producción de gases al metabolizar mejor los alimentos.',
+   208→   208→    },
+   209→   209→    {
+   210→   210→      emoji: '🌱',
+   211→   211→      name: 'Menta',
+   212→   212→      description:
+   213→   213→        'Ayuda a calmar el sistema digestivo y reduce la formación de gases.',
+   214→   214→    },
+   215→   215→    {
+   216→   216→      emoji: '🍃',
+   217→   217→      name: 'Hinojo',
+   218→   218→      description:
+   219→   219→        'Reduce los espasmos intestinales y facilita la expulsión de gases ya formados, aliviando la sensación de hinchazón y presión.',
+   220→   220→    },
+   221→   221→    {
+   222→   222→      emoji: '🍫',
+   223→   223→      name: 'Cacao',
+   224→   224→      description:
+   225→   225→        'Sus compuestos volátiles se liberan con los gases, enmascarando el olor. También ayuda a la salud de la microbiota intestinal.',
+   226→   226→    },
+   227→   227→    {
+   228→   228→      emoji: '✨',
+   229→   229→      name: 'Alpha-galactosidase',
+   230→   230→      description:
+   231→   231→        'Enzima que disminuye la cantidad de carbohidratos que fermentan (frijoles, brócoli, granos enteros), causa principal de la mayoría de los gases e hinchazón.',
+   232→   232→    },
+   233→   233→    {
+   234→   234→      emoji: '🫚',
+   235→   235→      name: 'Jengibre',
+   236→   236→      description:
+   237→   237→        'Ayuda a estimular la digestión, permitiendo que el alimento fluya a través del intestino.',
+   238→   238→    },
+   239→   239→  ],
+   240→   240→  usage:
+   241→   241→    'Consumir 2 cápsulas 30 minutos antes de una comida pesada (granos, harinas, vegetales inflamatorios).',
+   242→   242→};
+   243→   243→
+   244→   244→// ============================================================================
+   245→   245→// 3. KETO 10K — Cetogénicos (ficha parcial, del brand narrative)
+   246→   246→// ============================================================================
+   247→   247→
+   248→   248→export const keto10k: NutritionProduct = {
+   249→   249→  id: 'keto-10k',
+   250→   250→  slug: 'keto-10k',
+   251→   251→  name: 'Keto 10K',
+   252→   252→  tagline: 'Quemador de grasa con BHB Ketones · Energy Boost',
+   253→   253→  description:
+   254→   254→    'Keto 10K es un producto trending basado en cetonas (BHB) que propicia la transformación de grasas en energía. Está diseñado para adultos que desean perder peso y no cuentan con el tiempo o la disposición para entrenar de forma constante. Su fórmula permite empezar a quemar grasa extra desde las primeras horas del día. Formulado y producido en Estados Unidos.',
+   255→   255→  category: 'Cetogénicos',
+   256→   256→  brandColor: '#6A0DAD', // morado
+   257→   257→  brandColorFg: '#FFFFFF',
+   258→   258→  format: 'Cápsulas',
+   259→   259→  sizes: ['60 cápsulas', '90 cápsulas'],
+   260→   260→  benefits: [
+   261→   261→    'Transforma las grasas en energía',
+   262→   262→    'Quema grasa extra desde tempranas horas',
+   263→   263→    'Ideal para quienes no pueden entrenar a diario',
+   264→   264→    'Apoya la cetosis con BHB Ketones',
+   265→   265→  ],
+   266→   266→  isBestSeller: true,
+   267→   267→  fichaStatus: 'partial',
+   268→   268→  ingredients: [
+   269→   269→    {
+   270→   270→      emoji: '⚡',
+   271→   271→      name: 'BHB Ketones',
+   272→   272→      description:
+   273→   273→        'Cetona exógena que propicia la transformación de grasas en energía en el cuerpo, ayudando a quemar grasa extra desde las primeras horas del día.',
+   274→   274→    },
+   275→   275→  ],
+   276→   276→  usage: 'Pendiente de ficha técnica detallada del cliente.',
+   277→   277→};
+   278→   278→
+   279→   279→// ============================================================================
+   280→   280→// 4. ALIENS BLOCKER (Carb Blocker) — Quemadores (ficha parcial)
+   281→   281→// ============================================================================
+   282→   282→
+   283→   283→export const aliensBlocker: NutritionProduct = {
+   284→   284→  id: 'aliens-blocker',
+   285→   285→  slug: 'aliens-blocker',
+   286→   286→  name: 'Aliens Blocker',
+   287→   287→  tagline: 'Bloqueador de carbohidratos',
+   288→   288→  description:
+   289→   289→    'Aliens Blocker es un complemento natural ideal para dietas orientadas a bajar de peso. Disminuye la absorción de hidratos de carbono hasta un 75%, reduce el aporte de calorías y transforma la grasa acumulada en energía. Mejora la sensibilidad a la insulina y controla los niveles de azúcar en sangre. Formulado y producido en Estados Unidos.',
+   290→   290→  category: 'Quemadores',
+   291→   291→  brandColor: '#4CAF50', // verde lima
+   292→   292→  brandColorFg: '#000000',
+   293→   293→  format: 'Cápsulas',
+   294→   294→  sizes: ['60 cápsulas', '90 cápsulas'],
+   295→   295→  benefits: [
+   296→   296→    'Disminuye la absorción de carbohidratos hasta un 75%',
+   297→   297→    'Reduce el aporte de calorías de los alimentos',
+   298→   298→    'Transforma la grasa acumulada en energía',
+   299→   299→    'Controla los niveles de azúcar en sangre',
+   300→   300→  ],
+   301→   301→  fichaStatus: 'partial',
+   302→   302→  ingredients: [],
+   303→   303→  usage:
+   304→   304→    'Consumir 2 cápsulas al día antes de una comida fuerte: una antes del almuerzo y otra antes de la cena.',
+   305→   305→};
+   306→   306→
+   307→   307→// ============================================================================
+   308→   308→// 5. DETOX — Detox (ficha completa — extraída de imagen de ficha técnica)
+   309→   309→//    Nombre comercial real: DeTox
+   310→   310→//    Serving: 2 cápsulas · 30 servicios · 60 cápsulas totales
+   311→   311→// ============================================================================
+   312→   312→
+   313→   313→export const detox: NutritionProduct = {
+   314→   314→  id: 'detox',
+   315→   315→  slug: 'detox',
+   316→   316→  name: 'DeTox',
+   317→   317→  tagline: 'Desintoxicación corporal completa · 60 cápsulas · 30 servicios',
+   318→   318→  description:
+   319→   319→    'DeTox mejora, optimiza y apoya el proceso natural de desintoxicación del cuerpo al disminuir la cantidad de toxinas que ingerimos, además de proveer los nutrientes que el cuerpo necesita para trabajar adecuadamente. Mejora la digestión, evita el estreñimiento y facilita la eliminación de toxinas. Controla valores como el azúcar, el colesterol y los triglicéridos en sangre. Formulado y producido en Estados Unidos.',
+   320→   320→  category: 'Quemadores',
+   321→   321→  brandColor: '#FFEB3B', // amarillo
+   322→   322→  brandColorFg: '#000000',
+   323→   323→  format: 'Cápsulas',
+   324→   324→  sizes: ['60 cápsulas (30 servicios)'],
+   325→   325→  benefits: [
+   326→   326→    'Optimiza el proceso natural de desintoxicación',
+   327→   327→    'Mejora la digestión y evita el estreñimiento',
+   328→   328→    'Facilita la eliminación de toxinas',
+   329→   329→    'Controla azúcar, colesterol y triglicéridos',
+   330→   330→  ],
+   331→   331→  fichaStatus: 'complete',
+   332→   332→  nutritionFacts: [
+   333→   333→    { label: 'Tamaño de servicio', value: '2 cápsulas' },
+   334→   334→    { label: 'Servicios por envase', value: '30' },
+   335→   335→  ],
+   336→   336→  ingredients: [
+   337→   337→    {
+   338→   338→      emoji: '💪',
+   339→   339→      name: 'L-Carnitine (Carnitine Tartrate)',
+   340→   340→      description: '500 mg por servicio. Aminoácido que facilita el transporte de ácidos grasos hacia las mitocondrias para su oxidación, apoyando el metabolismo de grasas.',
+   341→   341→    },
+   342→   342→    {
+   343→   343→      emoji: '⚗️',
+   344→   344→      name: 'Chromium (Chromium Picolinate)',
+   345→   345→      description: '400 mg por servicio. Mineral que mejora la sensibilidad a la insulina y ayuda a regular los niveles de azúcar en sangre.',
+   346→   346→    },
+   347→   347→    {
+   348→   348→      emoji: '🌾',
+   349→   349→      name: 'Psyllium Husks 85% (Plantago Ovata)',
+   350→   350→      description: '200 mg por servicio. Fibra natural que mejora el tránsito intestinal, evita el estreñimiento y facilita la eliminación de toxinas.',
+   351→   351→    },
+   352→   352→    {
+   353→   353→      emoji: '🌿',
+   354→   354→      name: 'Mezcla patentada (Buckthorn Bark, Aloe Vera, Senna Leaf, Burdock Root, Slippery Elm Root)',
+   355→   355→      description: '50 mg de Buckthorn Bark + 50 mg de Coldo Le, más Aloe Vera, Senna Leaf, Burdock Root y Slippery Elm Root. Plantas con propiedades laxantes, depurativas y protectoras de la mucosa intestinal.',
+   356→   356→    },
+   357→   357→  ],
+   358→   358→  usage: 'Consumir 2 cápsulas en la mañana. (Tamaño de servicio: 2 cápsulas · 30 servicios por envase).',
+   359→   359→};
+   360→   360→
+   361→   361→// ============================================================================
+   362→   362→// 6. CLA 10K — Quemadores (ficha parcial, rico en CLA + Omega 3)
+   363→   363→// ============================================================================
+   364→   364→
+   365→   365→export const cla10k: NutritionProduct = {
+   366→   366→  id: 'cla-10k',
+   367→   367→  slug: 'cla-10k',
+   368→   368→  name: 'CLA 10K',
+   369→   369→  tagline: 'Ácido Linolénico Conjugado · Rico en Omega 3',
+   370→   370→  description:
+   371→   371→    'CLA 10K es un producto rico en Omega 3, un ácido graso imprescindible para la función cerebral y cardiaca, además del bienestar general del cuerpo. El CLA (Ácido Linolénico Conjugado) fomenta la reducción de la masa grasa al potenciar el metabolismo de los lípidos, mantiene la masa muscular y regula el azúcar en sangre. Presentado en cápsulas blandas. Formulado y producido en Estados Unidos.',
+   372→   372→  category: 'Quemadores',
+   373→   373→  brandColor: '#0D9488', // teal (omega/salud)
+   374→   374→  brandColorFg: '#FFFFFF',
+   375→   375→  format: 'Cápsulas blandas',
+   376→   376→  sizes: ['90 cápsulas blandas (30 servicios · 3 softgels/servicio)'],
+   377→   377→  benefits: [
+   378→   378→    'Reduce la masa grasa y mantiene la masa muscular',
+   379→   379→    'Rico en Omega 3 para la función cerebral y cardiaca',
+   380→   380→    'Controla colesterol y triglicéridos (grasa abdominal)',
+   381→   381→    'Regula el azúcar en sangre mejorando la sensibilidad a la insulina',
+   382→   382→  ],
+   383→   383→  isBestSeller: true,
+   384→   384→  fichaStatus: 'complete',
+   385→   385→  nutritionFacts: [
+   386→   386→    { label: 'Tamaño de servicio', value: '3 softgels' },
+   387→   387→    { label: 'Servicios por envase', value: '30' },
+   388→   388→    { label: 'Calorías por servicio', value: '18' },
+   389→   389→    { label: 'CLA Oil por servicio', value: '1000 mg' },
+   390→   390→    { label: 'Vitamina E por servicio', value: '4 IU' },
+   391→   391→  ],
+   392→   392→  ingredients: [
+   393→   393→    {
+   394→   394→      emoji: '💊',
+   395→   395→      name: 'Conjugated Linoleic Acid Oil (CLA)',
+   396→   396→      description: '1000 mg por servicio (3 softgels). Mezcla de isómeros (Cis y Trans) de un ácido graso poliinsaturado que el cuerpo no puede sintetizar. El isómero Cis mejora la composición corporal y reduce la masa grasa; el isómero Trans tiene beneficios antiinflamatorios y neuroprotectores.',
+   397→   397→    },
+   398→   398→    {
+   399→   399→      emoji: '🐟',
+   400→   400→      name: 'Vitamina E (Vitamin E oil)',
+   401→   401→      description: '4 IU por servicio (13% del valor diario). Antioxidante que protege los ácidos grasos del CLA de la oxidación y apoya la salud cardiovascular.',
+   402→   402→    },
+   403→   403→  ],
+   404→   404→  usage:
+   405→   405→    'Sin entrenar: 1 cápsula en la mañana en ayunas + 1 cápsula antes de dormir. Entrenando: 1 cápsula en la mañana en ayunas + 2 cápsulas de 10 a 15 minutos antes de entrenar. (Tamaño de servicio: 3 softgels · 30 servicios por envase).',
+   406→   406→};
+   407→   407→
+   408→   408→// ============================================================================
+   409→   409→// 7. MAGIC 10K — Quemadores (pre-entrenamiento con termogénicos, $45)
+   410→   410→//    Fuente: sitio antiguo nutrition10k.com/2025/05/13/magic/
+   411→   411→// ============================================================================
+   412→   412→
+   413→   413→export const magic10k: NutritionProduct = {
+   414→   414→  id: 'magic-10k',
+   415→   415→  slug: 'magic-10k',
+   416→   416→  name: 'Magic 10K',
+   417→   417→  tagline: 'Pre-entrenamiento con matriz energética, nootrópicos y termogénicos',
+   418→   418→  description:
+   419→   419→    'Magic de Nutrition10k combina ingredientes clave para ofrecer una experiencia de entrenamiento superior. Su matriz energética está diseñada para proporcionar un impulso sostenido, evitando los picos y caídas abruptas. Los componentes enfocados en la fuerza buscan mejorar la potencia muscular y la resistencia durante sesiones intensas. Adicionalmente, su fórmula incluye nootrópicos que promueven la concentración mental y la conexión mente-músculo, permitiendo entrenamientos más focalizados y efectivos. La inclusión de ingredientes termogénicos tiene como objetivo estimular el metabolismo y favorecer la quema de grasa en todo el cuerpo. Formulado y producido en Estados Unidos.',
+   420→   420→  category: 'Rendimiento',
+   421→   421→  brandColor: '#EA580C', // naranja energía
+   422→   422→  brandColorFg: '#FFFFFF',
+   423→   423→  format: 'Cápsulas',
+   424→   424→  sizes: ['60 cápsulas (30 servicios · 2 cápsulas/servicio)'],
+   425→   425→  benefits: [
+   426→   426→    'Matriz energética de impulso sostenido (sin picos y caídas)',
+   427→   427→    'Mejora la potencia muscular y la resistencia',
+   428→   428→    'Nootrópicos para concentración mental y conexión mente-músculo',
+   429→   429→    'Termogénicos que estimulan el metabolismo y la quema de grasa',
+   430→   430→  ],
+   431→   431→  isNew: true,
+   432→   432→  fichaStatus: 'complete',
+   433→   433→  price: 45,
+   434→   434→  nutritionFacts: [
+   435→   435→    { label: 'Tamaño de servicio', value: '2 cápsulas' },
+   436→   436→    { label: 'Servicios por envase', value: '30' },
+   437→   437→    { label: 'Mezcla patentada', value: '1500 mg' },
+   438→   438→  ],
+   439→   439→  ingredients: [
+   440→   440→    {
+   441→   441→      emoji: '🍵',
+   442→   442→      name: 'Green Tea Extract (Camellia sinensis)',
+   443→   443→      description: 'Antioxidante y termogénico. Estimula el metabolismo de las grasas y aporta energía sostenida.',
+   444→   444→    },
+   445→   445→    {
+   446→   446→      emoji: '☕',
+   447→   447→      name: 'Green Coffee Bean Extract + Caffeine Anhydrous',
+   448→   448→      description: 'Matriz energética de impulso sostenido que evita los picos y caídas abruptas.',
+   449→   449→    },
+   450→   450→    {
+   451→   451→      emoji: '🫐',
+   452→   452→      name: 'Raspberry Ketones',
+   453→   453→      description: 'Ayuda a regular el metabolismo de los lípidos y favorece la descomposición de la grasa.',
+   454→   454→    },
+   455→   455→    {
+   456→   456→      emoji: '🫒',
+   457→   457→      name: 'Olive Leaf Extract (Olea Europaea)',
+   458→   458→      description: 'Antioxidante y cardiovascular. Apoya la salud general del organismo.',
+   459→   459→    },
+   460→   460→    {
+   461→   461→      emoji: '🧠',
+   462→   462→      name: 'Bacopa Extract (Bacopa Monnieri)',
+   463→   463→      description: 'Nootrópico que promueve la concentración mental y la conexión mente-músculo durante el entrenamiento.',
+   464→   464→    },
+   465→   465→    {
+   466→   466→      emoji: '🍉',
+   467→   467→      name: 'Garcinia Cambogia Extract (Garcinia Gummi-gutta)',
+   468→   468→      description: 'Inhibe la formación de nueva grasa y ayuda a controlar el apetito.',
+   469→   469→    },
+   470→   470→    {
+   471→   471→      emoji: '🌸',
+   472→   472→      name: 'Chrysin (5,7-dihydroxy flavone)',
+   473→   473→      description: 'Flavonoide con propiedades antioxidantes que apoya la regulación hormonal.',
+   474→   474→    },
+   475→   475→    {
+   476→   476→      emoji: '🌱',
+   477→   477→      name: 'Forskohlii Extract (Coleus Forskohlii, root)',
+   478→   478→      description: 'Activa la adenilato ciclasa, favoreciendo la descomposición de grasa y la potencia muscular.',
+   479→   479→    },
+   480→   480→  ],
+   481→   481→  usage: 'Tomar 2 cápsulas al día. (Tamaño de servicio: 2 cápsulas · 30 servicios por envase).',
+   482→   482→};
+   483→   483→
+   484→   484→// ============================================================================
+   485→   485→// 8. [DESCONTINUADO] ASHWAGANDHA — Eliminado del catálogo (ya no se fabrica)
+   486→   486→//     NOTA: La Ashwagandha sigue siendo un ingrediente del producto OMG (#13).
+   487→   487→// ============================================================================
+   488→   488→
+   489→   489→// ============================================================================
+   490→   490→// 9. WHEY PROTEIN SPACE EDITION (Envase) — Proteínas ($60)
+   491→   491→//     Fuente: sitio antiguo nutrition10k.com/2025/05/13/whey-protein-space-edition/
+   492→   492→//     Presentación envase · 28 servicios · 25g proteína/servicio
+   493→   493→//     Sabor disponible: SOLO VAINILLA
+   494→   494→//     (Los sabores Chocolate y Cookies and Cream se venden en presentación Empaque — ver #10 y #12)
+   495→   495→//     (El sabor Fresa fue descontinuado en todas las presentaciones)
+   496→   496→// ============================================================================
+   497→   497→
+   498→   498→export const wheyProteinSpaceEditionEnvase: NutritionProduct = {
+   499→   499→  id: 'whey-protein-space-edition-envase',
+   500→   500→  slug: 'whey-protein-space-edition-envase',
+   501→   501→  name: 'Whey Protein Space Edition (Envase) · Vainilla',
+   502→   502→  tagline: 'Proteína de suero sabor vainilla · 25g por servicio · 28 servicios',
+   503→   503→  description:
+   504→   504→    'Eleva tu rendimiento a órbitas superiores con nuestra Whey Protein Space Edition en su presentación Envase de 28 servicios, disponible exclusivamente en sabor vainilla. Diseñada para el atleta y el entusiasta del fitness que busca una recuperación y crecimiento muscular eficientes, esta fórmula de proteína de suero de leche de alta calidad entrega 25 gramos de proteína pura por servicio. Su formulación avanzada se disuelve fácilmente, ofreciendo una manera práctica y deliciosa de integrar proteína de calidad en tu rutina nutricional. Formulado y producido en Estados Unidos.',
+   505→   505→  category: 'Proteínas',
+   506→   506→  brandColor: '#1E40AF', // azul espacial
+   507→   507→  brandColorFg: '#FFFFFF',
+   508→   508→  format: 'Polvo',
+   509→   509→  sizes: ['Envase · 28 servicios · Vainilla'],
+   510→   510→  benefits: [
+   511→   511→    '25 gramos de proteína pura por servicio',
+   512→   512→    '28 servicios por envase',
+   513→   513→    'Recuperación y crecimiento muscular eficientes',
+   514→   514→    'Se disuelve fácilmente, práctica y deliciosa',
+   515→   515→    'Presentación Envase disponible exclusivamente en sabor vainilla',
+   516→   516→  ],
+   517→   517→  isBestSeller: true,
+   518→   518→  fichaStatus: 'complete',
+   519→   519→  price: 60,
+   520→   520→  nutritionFacts: [
+   521→   521→    { label: 'Tamaño de servicio', value: '1 scoop (32 g)' },
+   522→   522→    { label: 'Servicios por envase', value: '28' },
+   523→   523→    { label: 'Calorías por servicio', value: '120' },
+   524→   524→    { label: 'Proteína por servicio', value: '25 g' },
+   525→   525→    { label: 'BCAA por servicio', value: '4.95 g (Leucina 2450 + Isoleucina 1240 + Valina 1260)' },
+   526→   526→    { label: 'Glutamina por servicio', value: '4.275 g (Ácido L-Glutámico)' },
+   527→   527→    { label: 'Calcio por servicio', value: '200 mg (15% DV)' },
+   528→   528→    { label: 'Sodio por servicio', value: '210 mg (9% DV)' },
+   529→   529→    { label: 'Potasio por servicio', value: '210 mg (6% DV)' },
+   530→   530→    { label: 'Enzimas digestivas', value: '50 mg (proteasa, lactasa, amilasa)' },
+   531→   531→  ],
+   532→   532→  ingredients: [
+   533→   533→    {
+   534→   534→      emoji: '🥛',
+   535→   535→      name: 'Whey Protein Concentrate',
+   536→   536→      description: 'Proteína de suero de leche concentrada, base de la fórmula. 25 g por servicio para recuperación y crecimiento muscular.',
+   537→   537→    },
+   538→   538→    {
+   539→   539→      emoji: '💪',
+   540→   540→      name: 'BCAA (L-Leucina 2450mg, L-Isoleucina 1240mg, L-Valina 1260mg)',
+   541→   541→      description: 'Aminoácidos ramificados esenciales que optimizan la síntesis proteica y la recuperación muscular.',
+   542→   542→    },
+   543→   543→    {
+   544→   544→      emoji: '🧬',
+   545→   545→      name: 'L-Glutamina (4275 mg)',
+   546→   546→      description: 'Aminoácido abundante en el músculo que apoya la recuperación y el sistema inmune.',
+   547→   547→    },
+   548→   548→    {
+   549→   549→      emoji: '🦴',
+   550→   550→      name: 'Calcio (200 mg)',
+   551→   551→      description: 'Mineral esencial para la salud ósea y la contracción muscular (15% DV).',
+   552→   552→    },
+   553→   553→    {
+   554→   554→      emoji: '🧂',
+   555→   555→      name: 'Sodio (210 mg)',
+   556→   556→      description: 'Electrolito que mantiene el balance de fluidos y la función nerviosa (9% DV).',
+   557→   557→    },
+   558→   558→    {
+   559→   559→      emoji: '⚡',
+   560→   560→      name: 'Potasio (210 mg)',
+   561→   561→      description: 'Electrolito que apoya la función muscular y la hidratación (6% DV).',
+   562→   562→    },
+   563→   563→    {
+   564→   564→      emoji: '🍃',
+   565→   565→      name: 'Digestive Enzyme Blend (50 mg)',
+   566→   566→      description: 'Mezcla de enzimas digestivas (proteasa, lactasa, amilasa) que mejora la absorción de la proteína.',
+   567→   567→    },
+   568→   568→    {
+   569→   569→      emoji: '🍦',
+   570→   570→      name: 'Sabor vainilla + maltodextrina + xanthan gum + sucralosa',
+   571→   571→      description: 'Saborizantes naturales y artificiales, espesantes y edulcorante que aportan el carácter suave y cremoso de la vainilla.',
+   572→   572→    },
+   573→   573→  ],
+   574→   574→  usage:
+   575→   575→    'Mezclar 1 scoop (32 g) con agua o leche y consumir después del entrenamiento o como reemplazo de comida. (28 servicios por envase).',
+   576→   576→};
+   577→   577→
+   578→   578→// ============================================================================
+   579→   579→// 10. WHEY PROTEIN CHOCOLATE — Proteínas (ficha completa con minerales)
+   580→   580→//     Presentaciones: Empaque 1 lb / 2 lb / 5 lb · Sobre Sachet (caja de 14 sobres, Space Edition, Zero Sugar)
+   581→   581→//     Sabor: Chocolate (la línea Empaque también está disponible en Vainilla #11 y Cookies and Cream #12)
+   582→   582→//     Imagen referencia sachet: /public/products/whey-protein-sachet-reference.png
+   583→   583→// ============================================================================
+   584→   584→
+   585→   585→export const wheyProteinChocolate: NutritionProduct = {
+   586→   586→  id: 'whey-protein-chocolate',
+   587→   587→  slug: 'whey-protein-chocolate',
+   588→   588→  name: 'Whey Protein Chocolate',
+   589→   589→  tagline: 'Proteína de suero sabor chocolate · 25g de proteína por servicio',
+   590→   590→  description:
+   591→   591→    'Whey Protein de Chocolate está enfocada en el desarrollo y crecimiento muscular, ideal para quienes tienen un plan de acción para generar masa magra. Aporta 25g de proteína, 5.1g de BCAA y 4g de glutamina por servicio, enriquecida con calcio, sodio, hierro y potasio. Formulado y producido en Estados Unidos.',
+   592→   592→  category: 'Proteínas',
+   593→   593→  brandColor: '#3E2723', // chocolate oscuro
+   594→   594→  brandColorFg: '#FFFFFF',
+   595→   595→  format: 'Polvo',
+   596→   596→  image: '/products/whey-protein-chocolate/WheyProteinChocolate01.webp',
+   597→   597→  images: [
+   598→   598→    '/products/whey-protein-chocolate/WheyProteinChocolate01.webp',
+   599→   599→    '/products/whey-protein-chocolate/WheyProteinChocolate02.webp',
+   600→   600→    '/products/whey-protein-chocolate/WheyProteinChocolate03.webp',
+   601→   601→  ],
+   602→   602→  sizes: ['Empaque 1 lb', 'Empaque 2 lb', 'Empaque 5 lb', 'Sobre Sachet · 14 sobres'],
+   603→   603→  benefits: [
+   604→   604→    'Desarrollo y crecimiento muscular (masa magra)',
+   605→   605→    '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
+   606→   606→    'Excelente fuente de aminoácidos esenciales',
+   607→   607→    'Enriquecida con calcio, sodio, hierro y potasio',
+   608→   608→  ],
+   609→   609→  fichaStatus: 'complete',
+   610→   610→  nutritionFacts: [
+   611→   611→    { label: 'Proteína', value: '25 g' },
+   612→   612→    { label: 'BCAA', value: '5.1 g' },
+   613→   613→    { label: 'Glutamina', value: '4 g' },
+   614→   614→  ],
+   615→   615→  ingredients: [
+   616→   616→    {
+   617→   617→      emoji: '🥛',
+   618→   618→      name: 'Whey Protein (proteína de suero)',
+   619→   619→      description:
+   620→   620→        'Uno de los suplementos más usados para el desarrollo y crecimiento muscular. Excelente fuente de aminoácidos esenciales que eleva su concentración en la sangre.',
+   621→   621→    },
+   622→   622→    {
+   623→   623→      emoji: '🍫',
+   624→   624→      name: 'Sabor chocolate',
+   625→   625→      description: 'Saborizante que aporta el carácter achocolatado al suplemento.',
+   626→   626→    },
+   627→   627→    {
+   628→   628→      emoji: '💪',
+   629→   629→      name: 'BCAA (aminoácidos ramificados)',
+   630→   630→      description: '5.1 g por servicio. Aminoácidos esenciales para la recuperación y síntesis muscular.',
+   631→   631→    },
+   632→   632→    {
+   633→   633→      emoji: '🧬',
+   634→   634→      name: 'Glutamina',
+   635→   635→      description: '4 g por servicio. Aminoácido que apoya la recuperación muscular y el sistema inmune.',
+   636→   636→    },
+   637→   637→    {
+   638→   638→      emoji: '🦴',
+   639→   639→      name: 'Calcio',
+   640→   640→      description: 'Mineral esencial para la salud ósea y la contracción muscular.',
+   641→   641→    },
+   642→   642→    {
+   643→   643→      emoji: '🧂',
+   644→   644→      name: 'Sodio',
+   645→   645→      description: 'Electrolito que mantiene el balance de fluidos y la función nerviosa.',
+   646→   646→    },
+   647→   647→    {
+   648→   648→      emoji: '🩸',
+   649→   649→      name: 'Hierro',
+   650→   650→      description: 'Mineral clave para el transporte de oxígeno y la energía.',
+   651→   651→    },
+   652→   652→    {
+   653→   653→      emoji: '⚡',
+   654→   654→      name: 'Potasio',
+   655→   655→      description: 'Electrolito que apoya la función muscular y la hidratación.',
+   656→   656→    },
+   657→   657→  ],
+   658→   658→  usage:
+   659→   659→    'Mezclar 1 servicio con agua o leche y consumir después del entrenamiento o como reemplazo de comida.',
+   660→   660→};
+   661→   661→
+   662→   662→// ============================================================================
+   663→   663→// 11. WHEY PROTEIN VAINILLA — Proteínas (ficha parcial)
+   664→   664→//     Presentaciones: Empaque 1 lb / 2 lb / 5 lb · Sobre Sachet (caja de 14 sobres, Space Edition, Zero Sugar)
+   665→   665→//     Sabor: Vainilla (la línea Empaque también está disponible en Chocolate #10 y Cookies and Cream #12)
+   666→   666→//     Imagen referencia sachet: /public/products/whey-protein-sachet-reference.png
+   667→   667→// ============================================================================
+   668→   668→
+   669→   669→export const wheyProteinVainilla: NutritionProduct = {
+   670→   670→  id: 'whey-protein-vainilla',
+   671→   671→  slug: 'whey-protein-vainilla',
+   672→   672→  name: 'Whey Protein Vainilla',
+   673→   673→  tagline: 'Proteína de suero sabor vainilla · 25g de proteína por servicio',
+   674→   674→  description:
+   675→   675→    'Whey Protein de Vainilla está enfocada en el desarrollo y crecimiento muscular. Aporta 25g de proteína, 5.1g de BCAA y 4g de glutamina por servicio, con el sabor suave y cremoso de la vainilla. Excelente fuente de aminoácidos esenciales que permite sustituir una comida del día si es necesario. Formulado y producido en Estados Unidos.',
+   676→   676→  category: 'Proteínas',
+   677→   677→  brandColor: '#C19A6B', // vainilla / camel
+   678→   678→  brandColorFg: '#FFFFFF',
+   679→   679→  format: 'Polvo',
+   680→   680→  sizes: ['Empaque 1 lb', 'Empaque 2 lb', 'Empaque 5 lb', 'Sobre Sachet · 14 sobres'],
+   681→   681→  benefits: [
+   682→   682→    'Desarrollo y crecimiento muscular (hipertrofia)',
+   683→   683→    '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
+   684→   684→    'Excelente fuente de aminoácidos esenciales',
+   685→   685→    'Sabor suave y cremoso, ideal para mezclar con frutas',
+   686→   686→  ],
+   687→   687→  isNew: true,
+   688→   688→  fichaStatus: 'partial',
+   689→   689→  nutritionFacts: [
+   690→   690→    { label: 'Proteína', value: '25 g' },
+   691→   691→    { label: 'BCAA', value: '5.1 g' },
+   692→   692→    { label: 'Glutamina', value: '4 g' },
+   693→   693→  ],
+   694→   694→  ingredients: [
+   695→   695→    {
+   696→   696→      emoji: '🥛',
+   697→   697→      name: 'Whey Protein (proteína de suero)',
+   698→   698→      description:
+   699→   699→        'Uno de los suplementos más usados para el desarrollo y crecimiento muscular. Excelente fuente de aminoácidos esenciales que eleva su concentración en la sangre.',
+   700→   700→    },
+   701→   701→    {
+   702→   702→      emoji: '🍦',
+   703→   703→      name: 'Sabor vainilla',
+   704→   704→      description: 'Saborizante que aporta el carácter suave y cremoso de la vainilla al suplemento.',
+   705→   705→    },
+   706→   706→    {
+   707→   707→      emoji: '💪',
+   708→   708→      name: 'BCAA (aminoácidos ramificados)',
+   709→   709→      description: '5.1 g por servicio. Aminoácidos esenciales para la recuperación y síntesis muscular.',
+   710→   710→    },
+   711→   711→    {
+   712→   712→      emoji: '🧬',
+   713→   713→      name: 'Glutamina',
+   714→   714→      description: '4 g por servicio. Aminoácido que apoya la recuperación muscular y el sistema inmune.',
+   715→   715→    },
+   716→   716→  ],
+   717→   717→  usage:
+   718→   718→    'Mezclar 1 servicio con agua o leche y consumir después del entrenamiento o como reemplazo de comida.',
+   719→   719→};
+   720→   720→
+   721→   721→// ============================================================================
+   722→   722→// 12. WHEY PROTEIN COOKIES AND CREAM — Proteínas (ficha parcial)
+   723→   723→//     Presentaciones: Empaque 1 lb / 2 lb / 5 lb · Sobre Sachet (caja de 14 sobres, Space Edition, Zero Sugar)
+   724→   724→//     Sabor: Cookies and Cream (la línea Empaque también está disponible en Chocolate #10 y Vainilla #11)
+   725→   725→//     Imagen referencia sachet: /public/products/whey-protein-sachet-reference.png
+   726→   726→// ============================================================================
+   727→   727→
+   728→   728→export const wheyProteinCookiesAndCream: NutritionProduct = {
+   729→   729→  id: 'whey-protein-cookies-and-cream',
+   730→   730→  slug: 'whey-protein-cookies-and-cream',
+   731→   731→  name: 'Whey Protein Cookies and Cream',
+   732→   732→  tagline: 'Proteína de suero sabor cookies and cream · 25g de proteína por servicio',
+   733→   733→  description:
+   734→   734→    'Whey Protein de Cookies and Cream está enfocada en el desarrollo y crecimiento muscular. Aporta 25g de proteína, 5.1g de BCAA y 4g de glutamina por servicio, con el irresistible sabor a galletas con crema. Excelente fuente de aminoácidos esenciales que permite sustituir una comida del día si es necesario. Formulado y producido en Estados Unidos.',
+   735→   735→  category: 'Proteínas',
+   736→   736→  brandColor: '#6B4F2A', // cookies and cream (galleta)
+   737→   737→  brandColorFg: '#FFFFFF',
+   738→   738→  format: 'Polvo',
+   739→   739→  sizes: ['Empaque 1 lb', 'Empaque 2 lb', 'Empaque 5 lb', 'Sobre Sachet · 14 sobres'],
+   740→   740→  benefits: [
+   741→   741→    'Desarrollo y crecimiento muscular (hipertrofia)',
+   742→   742→    '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
+   743→   743→    'Excelente fuente de aminoácidos esenciales',
+   744→   744→    'Irresistible sabor a galletas con crema',
+   745→   745→  ],
+   746→   746→  isNew: true,
+   747→   747→  fichaStatus: 'partial',
+   748→   748→  nutritionFacts: [
+   749→   749→    { label: 'Proteína', value: '25 g' },
+   750→   750→    { label: 'BCAA', value: '5.1 g' },
+   751→   751→    { label: 'Glutamina', value: '4 g' },
+   752→   752→  ],
+   753→   753→  ingredients: [
+   754→   754→    {
+   755→   755→      emoji: '🥛',
+   756→   756→      name: 'Whey Protein (proteína de suero)',
+   757→   757→      description:
+   758→   758→        'Uno de los suplementos más usados para el desarrollo y crecimiento muscular. Excelente fuente de aminoácidos esenciales que eleva su concentración en la sangre.',
+   759→   759→    },
+   760→   760→    {
+   761→   761→      emoji: '🍪',
+   762→   762→      name: 'Sabor cookies and cream',
+   763→   763→      description: 'Saborizante que aporta el carácter irresistible de galletas con crema al suplemento.',
+   764→   764→    },
+   765→   765→    {
+   766→   766→      emoji: '💪',
+   767→   767→      name: 'BCAA (aminoácidos ramificados)',
+   768→   768→      description: '5.1 g por servicio. Aminoácidos esenciales para la recuperación y síntesis muscular.',
+   769→   769→    },
+   770→   770→    {
+   771→   771→      emoji: '🧬',
+   772→   772→      name: 'Glutamina',
+   773→   773→      description: '4 g por servicio. Aminoácido que apoya la recuperación muscular y el sistema inmune.',
+   774→   774→    },
+   775→   775→  ],
+   776→   776→  usage:
+   777→   777→    'Mezclar 1 servicio con agua o leche y consumir después del entrenamiento o como reemplazo de comida.',
+   778→   778→};
+   779→   779→
+   780→   780→// ============================================================================
+   781→   781→// 13. OMG — Vitaminas/Bienestar integral ($45)
+   782→   782→//     Fuente: sitio antiguo nutrition10k.com/2025/05/13/omg/
+   783→   783→// ============================================================================
+   784→   784→
+   785→   785→export const omg: NutritionProduct = {
+   786→   786→  id: 'omg',
+   787→   787→  slug: 'omg',
+   788→   788→  name: 'OMG',
+   789→   789→  tagline: 'Bienestar sexual, hormonal y manejo del estrés',
+   790→   790→  description:
+   791→   791→    'El suplemento OMG de Nutrition10k se presenta como una solución multifacética para el bienestar. Su formulación busca influir positivamente en la esfera sexual, incrementando la libido en ambos sexos a través de la maca, ashwagandha y damiana. Para el manejo del estrés, incorpora componentes que podrían ayudar a promover la calma y el equilibrio emocional. En el ámbito hormonal masculino, apunta a estimular la producción natural de testosterona, lo que puede tener efectos en la energía, la fuerza y la función sexual. Para las mujeres en la etapa de la menopausia, el OMG incluye elementos destinados a aliviar síntomas comunes como los sofocos y las alteraciones del estado de ánimo. Formulado y producido en Estados Unidos.',
+   792→   792→  category: 'Nutracéuticos',
+   793→   793→  brandColor: '#DB2777', // magenta bienestar
+   794→   794→  brandColorFg: '#FFFFFF',
+   795→   795→  format: 'Cápsulas',
+   796→   796→  sizes: ['60 cápsulas'],
+   797→   797→  benefits: [
+   798→   798→    'Incrementa la libido en ambos sexos',
+   799→   799→    'Manejo del estrés y equilibrio emocional',
+   800→   800→    'Estimula la producción natural de testosterona',
+   801→   801→    'Alivia síntomas de la menopausia (sofocos, estado de ánimo)',
+   802→   802→  ],
+   803→   803→  isNew: true,
+   804→   804→  fichaStatus: 'complete',
+   805→   805→  price: 45,
+   806→   806→  nutritionFacts: [
+   807→   807→    { label: 'Tamaño de servicio', value: '2 cápsulas' },
+   808→   808→    { label: 'Servicios por envase', value: '30' },
+   809→   809→    { label: 'Ashwagandha por servicio', value: '1000 mg' },
+   810→   810→    { label: 'Damiana por servicio', value: '400 mg' },
+   811→   811→    { label: 'Maca por servicio', value: '400 mg' },
+   812→   812→  ],
+   813→   813→  ingredients: [
+   814→   814→    {
+   815→   815→      emoji: '🌿',
+   816→   816→      name: 'Ashwagandha Extract (Withania somnifera, root)',
+   817→   817→      description: '1000 mg por servicio. Hierba adaptógena ayurvédica que ayuda al manejo del estrés, reduce el cortisol, promueve la calma y el equilibrio emocional, mejora el sueño y favorece la memoria y la concentración.',
+   818→   818→    },
+   819→   819→    {
+   820→   820→      emoji: '🌼',
+   821→   821→      name: 'Damiana Extract (Turnera diffusa, leaf)',
+   822→   822→      description: '400 mg por servicio. Planta tradicional usada como afrodisíaco natural y para apoyar el bienestar sexual en ambos sexos.',
+   823→   823→    },
+   824→   824→    {
+   825→   825→      emoji: '🫘',
+   826→   826→      name: 'Maca Extract (Lepidium meyenii, root)',
+   827→   827→      description: '400 mg por servicio. Planta andina reconocida por incrementar la libido, la energía y la fertilidad en ambos sexos.',
+   828→   828→    },
+   829→   829→  ],
+   830→   830→  usage: 'Tomar 2 cápsulas diarias. (Tamaño de servicio: 2 cápsulas · 30 servicios por envase).',
+   831→   831→};
+   832→   832→
+   833→   833→// ============================================================================
+   834→   834→// 14. FOREVER — Vitaminas/Salud celular y longevidad ($70)
+   835→   835→//     Fuente: sitio antiguo nutrition10k.com/2025/05/13/forever/
+   836→   836→// ============================================================================
+   837→   837→
+   838→   838→export const forever: NutritionProduct = {
+   839→   839→  id: 'forever',
+   840→   840→  slug: 'forever',
+   841→   841→  name: 'Forever',
+   842→   842→  tagline: 'Salud celular y longevidad con NMN · Precursor del NAD+',
+   843→   843→  description:
+   844→   844→    'Forever de Nutrition10k aprovecha el poder del NMN (nicotinamida mononucleótido) para apoyar la salud celular integral. El NMN es un precursor clave del NAD+, una coenzima esencial involucrada en numerosos procesos biológicos, incluyendo la reparación del ADN y la producción de energía. Al aumentar los niveles de NAD+, Forever busca estimular la regeneración celular, lo que potencialmente podría contribuir a una mayor longevidad y a la prevención de enfermedades degenerativas. Además, al optimizar la función mitocondrial, se espera que este suplemento promueva una mayor energía celular y vitalidad general. Formulado y producido en Estados Unidos.',
+   845→   845→  category: 'Nutracéuticos',
+   846→   846→  brandColor: '#7C3AED', // violeta longevidad
+   847→   847→  brandColorFg: '#FFFFFF',
+   848→   848→  format: 'Cápsulas',
+   849→   849→  sizes: ['60 cápsulas'],
+   850→   850→  benefits: [
+   851→   851→    'Apoya la salud celular integral',
+   852→   852→    'Precursor del NAD+ (reparación del ADN y producción de energía)',
+   853→   853→    'Estimula la regeneración celular y la longevidad',
+   854→   854→    'Optimiza la función mitocondrial para mayor energía y vitalidad',
+   855→   855→  ],
+   856→   856→  isNew: true,
+   857→   857→  fichaStatus: 'complete',
+   858→   858→  price: 70,
+   859→   859→  nutritionFacts: [
+   860→   860→    { label: 'Tamaño de servicio', value: '2 cápsulas vegetarianas' },
+   861→   861→    { label: 'Servicios por envase', value: '30' },
+   862→   862→    { label: 'NMN por servicio', value: '450 mg' },
+   863→   863→  ],
+   864→   864→  ingredients: [
+   865→   865→    {
+   866→   866→      emoji: '🧬',
+   867→   867→      name: 'Nicotinamide Mononucleotide (NMN) — 450 mg',
+   868→   868→      description: 'Precursor clave del NAD+, una coenzima esencial involucrada en la reparación del ADN y la producción de energía. Al aumentar los niveles de NAD+, estimula la regeneración celular y optimiza la función mitocondrial para mayor energía y vitalidad.',
+   869→   869→    },
+   870→   870→  ],
+   871→   871→  usage: 'Tomar 2 cápsulas vegetarianas diariamente o según lo indicado por su profesional de la salud. (30 servicios por envase).',
+   872→   872→};
+   873→   873→
+   874→   874→// ============================================================================
+   875→   875→// 15. CREATINE X-PLOSION EDITION — Rendimiento ($45)
+   876→   876→//     Fuente: sitio antiguo nutrition10k.com/2025/05/13/creatina-x-plosion-edition/
+   877→   877→//     Creatina HCL · sabor tropical
+   878→   878→// ============================================================================
+   879→   879→
+   880→   880→export const creatineXplosion: NutritionProduct = {
+   881→   881→  id: 'creatine-x-plosion-edition',
+   882→   882→  slug: 'creatine-x-plosion-edition',
+   883→   883→  name: 'Creatine X-Plosion Edition',
+   884→   884→  tagline: 'Creatina HCL de rápida absorción · Sabor tropical',
+   885→   885→  description:
+   886→   886→    'Desata una explosión de fuerza y crecimiento muscular con el delicioso y refrescante sabor tropical de Nutrition 10k Creatine Xplosion Edition. Esta fórmula de vanguardia, a base de creatina HCL de rápida absorción, ha sido diseñada meticulosamente para atletas y entusiastas del fitness que buscan una mejora significativa en su energía y desarrollo muscular. La creatina HCL se caracteriza por su alta biodisponibilidad, lo que facilita una absorción más eficiente y rápida en comparación con otras formas de creatina, permitiéndote experimentar resultados notables en fuerza, potencia y volumen muscular de manera más ágil. Formulado y producido en Estados Unidos.',
+   887→   887→  category: 'Rendimiento',
+   888→   888→  brandColor: '#0891B2', // cyan explosión
+   889→   889→  brandColorFg: '#FFFFFF',
+   890→   890→  format: 'Polvo',
+   891→   891→  sizes: ['Pote · 30 servicios'],
+   892→   892→  benefits: [
+   893→   893→    'Creatina HCL de alta biodisponibilidad y rápida absorción',
+   894→   894→    'Mejora significativa en fuerza, potencia y volumen muscular',
+   895→   895→    'Resultados notables de manera más ágil',
+   896→   896→    'Delicioso y refrescante sabor tropical',
+   897→   897→  ],
+   898→   898→  isNew: true,
+   899→   899→  fichaStatus: 'partial',
+   900→   900→  price: 45,
+   901→   901→  ingredients: [
+   902→   902→    {
+   903→   903→      emoji: '💪',
+   904→   904→      name: 'Creatina HCL (hidrocloruro de creatina)',
+   905→   905→      description:
+   906→   906→        'Forma de creatina de alta biodisponibilidad que facilita una absorción más eficiente y rápida en comparación con otras formas de creatina, permitiendo resultados notables en fuerza, potencia y volumen muscular de manera más ágil.',
+   907→   907→    },
+   908→   908→  ],
+   909→   909→  usage: 'Pendiente de ficha técnica detallada del cliente (dosis por peso).',
+   910→   910→};
+   911→   911→
+   912→   912→// ============================================================================
+   913→   913→// 16. AMINOSTACK LIMÓN — Rendimiento ($40)
+   914→   914→//     Fuente: sitio antiguo nutrition10k.com/2025/05/13/aminostack/
+   915→   915→//     BCAA + Glutamina + Aminoácidos + Taurina · sabor limón
+   916→   916→// ============================================================================
+   917→   917→
+   918→   918→export const aminoStackLimon: NutritionProduct = {
+   919→   919→  id: 'aminostack-limon',
+   920→   920→  slug: 'aminostack-limon',
+   921→   921→  name: 'AminoStack Limón',
+   922→   922→  tagline: 'BCAA + Glutamina + Aminoácidos + Taurina · Sabor limón',
+   923→   923→  description:
+   924→   924→    'Maximiza tu recuperación y rendimiento con AminoStack. Esta fórmula avanzada está diseñada para atletas y entusiastas del fitness que buscan optimizar su recuperación muscular e hidratación durante y después del entrenamiento. AminoStack combina una potente mezcla de aminoácidos esenciales y no esenciales, enriquecida con glutamina para apoyar la reparación muscular y taurina para mejorar el enfoque y la resistencia. Además, su formulación contribuye a una hidratación óptima, permitiéndote superar tus límites y alcanzar tus metas más rápido. Formulado y producido en Estados Unidos.',
+   925→   925→  category: 'Rendimiento',
+   926→   926→  brandColor: '#CA8A04', // amarillo limón
+   927→   927→  brandColorFg: '#000000',
+   928→   928→  format: 'Polvo',
+   929→   929→  sizes: ['Pote · 30 servicios'],
+   930→   930→  benefits: [
+   931→   931→    'Mezcla de aminoácidos esenciales y no esenciales',
+   932→   932→    'Glutamina para la reparación muscular',
+   933→   933→    'Taurina para mejorar el enfoque y la resistencia',
+   934→   934→    'Contribuye a una hidratación óptima durante el entrenamiento',
+   935→   935→  ],
+   936→   936→  fichaStatus: 'partial',
+   937→   937→  price: 40,
+   938→   938→  ingredients: [
+   939→   939→    {
+   940→   940→      emoji: '💪',
+   941→   941→      name: 'BCAA (aminoácidos ramificados)',
+   942→   942→      description:
+   943→   943→        'Aminoácidos esenciales y no esenciales que optimizan la recuperación muscular.',
+   944→   944→    },
+   945→   945→    {
+   946→   946→      emoji: '🧬',
+   947→   947→      name: 'Glutamina',
+   948→   948→      description:
+   949→   949→        'Aminoácido que apoya la reparación muscular y el sistema inmune.',
+   950→   950→    },
+   951→   951→    {
+   952→   952→      emoji: '🐂',
+   953→   953→      name: 'Taurina',
+   954→   954→      description:
+   955→   955→        'Aminoácido que mejora el enfoque mental y la resistencia durante el entrenamiento.',
+   956→   956→    },
+   957→   957→  ],
+   958→   958→  usage:
+   959→   959→    'Consumir durante o después del entrenamiento. Mezclar 1 servicio con agua.',
+   960→   960→};
+   961→   961→
+   962→   962→// ============================================================================
+   963→   963→// 17. AMINOSTACK FRAMBUESA — Rendimiento ($40)
+   964→   964→//     Fuente: sitio antiguo nutrition10k.com/2025/05/13/aminostack-frambuesa/
+   965→   965→//     BCAA + Glutamina + Aminoácidos + Taurina · sabor frambuesa
+   966→   966→// ============================================================================
+   967→   967→
+   968→   968→export const aminoStackFrambuesa: NutritionProduct = {
+   969→   969→  id: 'aminostack-frambuesa',
+   970→   970→  slug: 'aminostack-frambuesa',
+   971→   971→  name: 'AminoStack Frambuesa',
+   972→   972→  tagline: 'BCAA + Glutamina + Aminoácidos + Taurina · Sabor frambuesa',
+   973→   973→  description:
+   974→   974→    'Maximiza tu recuperación y rendimiento con AminoStack. Esta fórmula avanzada está diseñada para atletas y entusiastas del fitness que buscan optimizar su recuperación muscular e hidratación durante y después del entrenamiento. AminoStack combina una potente mezcla de aminoácidos esenciales y no esenciales, enriquecida con glutamina para apoyar la reparación muscular y taurina para mejorar el enfoque y la resistencia. Además, su formulación contribuye a una hidratación óptima, permitiéndote superar tus límites y alcanzar tus metas más rápido. Formulado y producido en Estados Unidos.',
+   975→   975→  category: 'Rendimiento',
+   976→   976→  brandColor: '#BE185D', // frambuesa
+   977→   977→  brandColorFg: '#FFFFFF',
+   978→   978→  format: 'Polvo',
+   979→   979→  sizes: ['Pote · 30 servicios'],
+   980→   980→  benefits: [
+   981→   981→    'Mezcla de aminoácidos esenciales y no esenciales',
+   982→   982→    'Glutamina para la reparación muscular',
+   983→   983→    'Taurina para mejorar el enfoque y la resistencia',
+   984→   984→    'Contribuye a una hidratación óptima durante el entrenamiento',
+   985→   985→  ],
+   986→   986→  fichaStatus: 'partial',
+   987→   987→  price: 40,
+   988→   988→  ingredients: [
+   989→   989→    {
+   990→   990→      emoji: '💪',
+   991→   991→      name: 'BCAA (aminoácidos ramificados)',
+   992→   992→      description:
+   993→   993→        'Aminoácidos esenciales y no esenciales que optimizan la recuperación muscular.',
+   994→   994→    },
+   995→   995→    {
+   996→   996→      emoji: '🧬',
+   997→   997→      name: 'Glutamina',
+   998→   998→      description:
+   999→   999→        'Aminoácido que apoya la reparación muscular y el sistema inmune.',
+  1000→  1000→    },
+  1001→  1001→    {
+  1002→  1002→      emoji: '🐂',
+  1003→  1003→      name: 'Taurina',
+  1004→  1004→      description:
+  1005→  1005→        'Aminoácido que mejora el enfoque mental y la resistencia durante el entrenamiento.',
+  1006→  1006→    },
+  1007→  1007→  ],
+  1008→  1008→  usage:
+  1009→  1009→    'Consumir durante o después del entrenamiento. Mezclar 1 servicio con agua.',
+  1010→  1010→};
+  1011→  1011→
+  1012→  1012→// ============================================================================
+  1013→  1013→// CATÁLOGO EXPORTADO
+  1014→  1014→// ============================================================================
+  1015→  1015→
+  1016→  1016→export const PRODUCTS: NutritionProduct[] = [
+  1017→  1017→  byeByeBelly,
+  1018→  1018→  chocoPuff,
+  1019→  1019→  keto10k,
+  1020→  1020→  aliensBlocker,
+  1021→  1021→  detox,
+  1022→  1022→  cla10k,
+  1023→  1023→  magic10k,
+  1024→  1024→  wheyProteinSpaceEditionEnvase,
+  1025→  1025→  wheyProteinChocolate,
+  1026→  1026→  wheyProteinVainilla,
+  1027→  1027→  wheyProteinCookiesAndCream,
+  1028→  1028→  omg,
+  1029→  1029→  forever,
+  1030→  1030→  creatineXplosion,
+  1031→  1031→  aminoStackLimon,
+  1032→  1032→  aminoStackFrambuesa,
+  1033→  1033→];
+  1034→  1034→
+  1035→  1035→/** Productos con ficha técnica completa (ingredientes detallados) */
+  1036→  1036→export const COMPLETE_PRODUCTS = PRODUCTS.filter(
+  1037→  1037→  (p) => p.fichaStatus === 'complete',
+  1038→  1038→);
+  1039→  1039→
+  1040→  1040→/** Productos con ficha parcial (beneficios + uso, sin desglose de ingredientes) */
+  1041→  1041→export const PARTIAL_PRODUCTS = PRODUCTS.filter(
+  1042→  1042→  (p) => p.fichaStatus === 'partial',
+  1043→  1043→);
+  1044→  1044→
+  1045→  1045→/** Productos pendientes de ficha técnica */
+  1046→  1046→export const PENDING_PRODUCTS = PRODUCTS.filter(
+  1047→  1047→  (p) => p.fichaStatus === 'pending',
+  1048→  1048→);
+  1049→  1049→
+  1050→  1050→/** Helper para buscar por slug */
+  1051→  1051→export function getProductBySlug(slug: string): NutritionProduct | undefined {
+  1052→  1052→  return PRODUCTS.find((p) => p.slug === slug);
+  1053→  1053→}
+  1054→  1054→
+  1055→  1055→/** Helper para filtrar por categoría */
+  1056→  1056→export function getProductsByCategory(
+  1057→  1057→  category: ProductCategory,
+  1058→  1058→): NutritionProduct[] {
+  1059→  1059→  return PRODUCTS.filter((p) => p.category === category);
+  1060→  1060→}
+  1061→  1061→
+  1062→  1062→/** Cuenta de productos por categoría (para pills de filtro con conteo) */
+  1063→  1063→export function getCategoryCounts(): Record<ProductCategory, number> {
+  1064→  1064→  const counts = {} as Record<ProductCategory, number>;
+  1065→  1065→  for (const cat of CATEGORIES) {
+  1066→  1066→    counts[cat.id] = PRODUCTS.filter((p) => p.category === cat.id).length;
+  1067→  1067→  }
+  1068→  1068→  return counts;
+  1069→  1069→}
+  1070→  1070→

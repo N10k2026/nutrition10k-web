@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useCartStore } from '@/lib/store';
 import { PRODUCTS } from '@/data/products';
-import { parseStoredStringArray, getProductShareUrl } from '@/lib/product-utils';
+import { parseStoredStringArray, getProductShareUrl, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { Search, X, Clock, ArrowRight } from 'lucide-react';
 
@@ -164,7 +164,7 @@ export default function SearchModal() {
                   </div>
                   {product.price ? (
                     <span className="font-display-bold text-sm text-[#E30613] shrink-0">
-                      ${product.price}
+                      {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
                     </span>
                   ) : null}
                   <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />

@@ -1400,3 +1400,71 @@ Stage Summary:
 - 0 errores de lint, 0 errores de runtime, página renderiza end-to-end (header, hero, grid de 16 productos, secciones diferidas, footer completo).
 - Script reutilizable `.zscripts/start-dev-only.sh` para reiniciar el dev server de forma robusta.
 - Sitio listo para que el usuario lo previsualice en el Preview Panel.
+
+---
+Task ID: 41
+Agent: main (Z.ai Code)
+Task: Actualizar precios y presentaciones de todos los productos según indicaciones del cliente:
+  - Todos los productos $45 (base)
+  - Todos en presentación de 60 cápsulas (los de cápsulas)
+  - CLA $40
+  - Proteína $60 normal / $105 sachet (3 cajas de 14 unidades)
+  - Creatina $45 normal / $70 sachet (100 unidades)
+  - AminoStack $40
+
+Work Log:
+- **Análisis del modelo de datos existente:** el modelo `NutritionProduct`/`Product` tenía un solo `price: number` por producto, sin soporte para precios por presentación. Las proteínas y creatina necesitan DOS precios (normal + sachet).
+- **Implementé soporte de `sizePricing` (precio por presentación):**
+  - Añadí `sizePricing?: Record<string, number>` a las interfaces `NutritionProduct` (products.ts) y `Product` (store.ts).
+  - Añadí 3 helpers en `product-utils.ts`:
+    - `getProductPrice(product, size?)` — resuelve el precio para una presentación específica.
+    - `getProductMinPrice(product)` — precio mínimo entre todas las presentaciones (para cards).
+    - `hasMultiPrice(product)` — indica si el producto tiene múltiples precios.
+  - Añadí `unitPrice: number` a `CartItem` en store.ts.
+  - Actualicé `toStoreProduct` para pasar `sizePricing`.
+  - Actualicé `addItem` para resolver `unitPrice` desde `sizePricing[selectedSize]` automáticamente.
+  - Actualicé `totalPrice()` para usar `item.unitPrice ?? item.product.price`.
+- **Actualicé los 16 productos en products.ts:**
+  | Producto | Precio | Presentación |
+  |----------|--------|--------------|
+  | Bye Bye Belly | $45 | 60 cápsulas |
+  | Choco Puff | $45 | 60 cápsulas |
+  | Keto 10K | $45 | 60 cápsulas |
+  | Aliens Blocker | $45 | 60 cápsulas |
+  | DeTox | $45 | 60 cápsulas |
+  | CLA 10K | $40 | 60 cápsulas |
+  | Magic 10K | $45 | 60 cápsulas |
+  | Whey Protein Space Edition (Envase) | $60 | Envase · 28 servicios |
+  | Whey Protein Chocolate | $60 / $105 | Envase normal / Sachet · 3 cajas de 14 unidades |
+  | Whey Protein Vainilla | $60 / $105 | Envase normal / Sachet · 3 cajas de 14 unidades |
+  | Whey Protein Cookies and Cream | $60 / $105 | Envase normal / Sachet · 3 cajas de 14 unidades |
+  | OMG | $45 | 60 cápsulas |
+  | Forever | $45 (era $70) | 60 cápsulas |
+  | Creatine X-Plosion | $45 / $70 | Pote · 30 servicios / Sachet · 100 unidades |
+  | AminoStack Limón | $40 | Pote · 30 servicios |
+  | AminoStack Frambuesa | $40 | Pote · 30 servicios |
+- **Actualicé 7 componentes para usar el precio dinámico por presentación:**
+  - `ProductDetail.tsx`: precio y subtotal se actualizan dinámicamente al seleccionar presentación; `addItem` pasa `unitPrice` resuelto.
+  - `CartSidebar.tsx`: usa `item.unitPrice` para subtotal de línea, total del carrito y mensaje de WhatsApp.
+  - `ProductGrid.tsx`: muestra "Desde $X" para productos con múltiples presentaciones.
+  - `FeaturedProducts.tsx`: muestra "Desde $X" para productos con múltiples presentaciones.
+  - `SearchModal.tsx`: muestra "Desde $X" para productos con múltiples presentaciones.
+  - `RecentlyViewedSection.tsx`: muestra "Desde $X" para productos con múltiples presentaciones.
+  - `WishlistSidebar.tsx`: muestra "Desde $X" para productos con múltiples presentaciones.
+- **Verificación:**
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products` devuelve los 16 productos con precios y `sizePricing` correctos.
+  - Agent Browser verificó:
+    - Cards del catálogo muestran: $45, $40, $60, "Desde $60" (proteínas con sachet), "Desde $45" (creatina con sachet).
+    - Modal de detalle Whey Protein Chocolate: precio $60 con "Envase normal", cambia a $105 al seleccionar "Sachet · 3 cajas de 14 unidades".
+    - Subtotal se actualiza dinámicamente ($60 → $105).
+    - Carrito: añadir Whey Protein Chocolate sachet → muestra $105.00, Total $105.00.
+
+Stage Summary:
+- **Sistema de precios por presentación implementado** (`sizePricing`) — soporta productos con múltiples presentaciones a diferentes precios.
+- **16 productos actualizados** con los precios y presentaciones exactas indicadas por el cliente.
+- **Todas las presentaciones de cápsulas son "60 cápsulas"** (excepto CLA que sigue siendo cápsulas blandas pero 60 unidades).
+- **Forever bajó de $70 a $45.**
+- **Proteínas (Chocolate, Vainilla, Cookies and Cream):** $60 envase normal / $105 sachet (3 cajas de 14 unidades).
+- **Creatina:** $45 pote / $70 sachet (100 unidades).
+- **Precio dinámico end-to-end verificado:** cards → modal de detalle → carrito → mensaje de WhatsApp.

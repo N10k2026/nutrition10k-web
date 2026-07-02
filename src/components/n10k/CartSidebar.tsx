@@ -22,7 +22,7 @@ export default function CartSidebar() {
   const clearCart = useCartStore((s) => s.clearCart);
 
   const totalPrice = useMemo(
-    () => items.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
+    () => items.reduce((sum, i) => sum + (i.unitPrice ?? i.product.price) * i.quantity, 0),
     [items],
   );
   const totalItems = useMemo(
@@ -37,7 +37,7 @@ export default function CartSidebar() {
         `${index + 1}. ${item.product.name}`,
         `   Presentación: ${item.selectedSize}`,
         `   Cantidad: ${item.quantity}`,
-        `   Subtotal: $${(item.product.price * item.quantity).toFixed(2)}`,
+        `   Subtotal: $${((item.unitPrice ?? item.product.price) * item.quantity).toFixed(2)}`,
         '',
       );
     });
@@ -133,7 +133,7 @@ export default function CartSidebar() {
                         </button>
                       </div>
                       <span className="font-display-bold text-sm text-[#E30613]">
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        ${((item.unitPrice ?? item.product.price) * item.quantity).toFixed(2)}
                       </span>
                     </div>
                   </div>

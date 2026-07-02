@@ -28,6 +28,8 @@ export interface Product {
   sizes: string[];
   /** Sizes/presentations that are currently out of stock. */
   outOfStock?: string[];
+  /** Per-size pricing override (size label → price in USD). */
+  sizePricing?: Record<string, number>;
   /** Flavors with their brand color swatch (only for Whey Protein). */
   flavors?: { name: string; hex: string }[];
   description: string;
@@ -44,6 +46,8 @@ export interface CartItem {
   quantity: number;
   selectedSize: string;
   selectedFlavor: string;
+  /** Precio unitario resuelto según la presentación seleccionada al agregar. */
+  unitPrice: number;
 }
 
 export interface WishlistItem {
@@ -87,6 +91,7 @@ export function toStoreProduct(p: NutritionProduct): Product {
     images: p.images?.length ? p.images : [placeholder],
     sizes: p.sizes,
     outOfStock: [],
+    sizePricing: p.sizePricing,
     flavors:
       p.category === "Proteínas"
         ? [{ name: p.name, hex: p.brandColor }]
@@ -160,6 +165,10 @@ export const useCartStore = create<CartStore>()(
         if (isProductSizeOutOfStock(item.product, item.selectedSize)) return;
         const qty = Math.min(Math.max(1, item.quantity), MAX_CART_QUANTITY);
         const items = get().items;
+        // Resolver el precio unitario según la presentación seleccionada
+        const resolvedUnitPrice =
+          item.unitPrice ??
+          (item.product.sizePricing?.[item.selectedSize] ?? item.product.price);
         const existing = items.find(
           (i) =>
             i.product.id === item.product.id &&
@@ -173,12 +182,12 @@ export const useCartStore = create<CartStore>()(
               i.product.id === item.product.id &&
               i.selectedSize === item.selectedSize &&
               i.selectedFlavor === item.selectedFlavor
-                ? { ...i, quantity: nextQty }
+                ? { ...i, quantity: nextQty, unitPrice: resolvedUnitPrice }
                 : i
             ),
           });
         } else {
-          set({ items: [...items, { ...item, quantity: qty }] });
+          set({ items: [...items, { ...item, quantity: qty, unitPrice: resolvedUnitPrice }] });
         }
       },
       removeItem: (productId, size, flavor) => {
@@ -209,7 +218,7 @@ export const useCartStore = create<CartStore>()(
       },
       clearCart: () => set({ items: [] }),
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
-      totalPrice: () => get().items.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
+      totalPrice: () => get().items.reduce((sum, i) => sum + (i.unitPrice ?? i.product.price) * i.quantity, 0),
       wishlist: [],
       isWishlistOpen: false,
       setWishlistOpen: (open) => set({ isWishlistOpen: open }),

@@ -5,7 +5,7 @@ import { useCartStore } from '@/lib/store';
 import { PRODUCTS } from '@/data/products';
 import { BlurIn, SplitWords } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef, useStaggerChildren } from '@/hooks/use-scroll-visible';
-import { handleKeyboardClick } from '@/lib/product-utils';
+import { handleKeyboardClick, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
 import { ShoppingBag, Star, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -153,7 +153,7 @@ function FeaturedCard({
           <div className="flex items-center gap-2">
             {product.price > 0 ? (
               <span className="font-display-bold text-lg" style={{ color: brandColor }}>
-                ${product.price}
+                {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
               </span>
             ) : (
               <span className="text-xs text-muted-foreground italic">Por confirmar</span>

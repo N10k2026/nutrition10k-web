@@ -50,6 +50,8 @@ export interface NutritionProduct {
   format: ProductFormat;
   /** Tamaño/tamaño de presentación (para selector de "presentaciones") */
   sizes: string[];
+  /** Precios por presentación (label del size → precio en USD). Opcional. */
+  sizePricing?: Record<string, number>;
   /** Beneficios principales (bullets cortos para cards) */
   benefits: string[];
   /** Información nutricional destacada (para proteínas) */
@@ -108,7 +110,8 @@ export const byeByeBelly: NutritionProduct = {
   brandColor: '#E30613', // rojo Nutrition 10K
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
-  sizes: ['30 cápsulas', '60 cápsulas', '90 cápsulas'],
+  sizes: ['60 cápsulas'],
+  price: 45,
   benefits: [
     'Reduce la inflamación abdominal',
     'Mejora la digestión y el tránsito intestinal',
@@ -184,7 +187,8 @@ export const chocoPuff: NutritionProduct = {
   brandColor: '#5C3A21', // marrón cacao
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
-  sizes: ['30 cápsulas', '60 cápsulas'],
+  sizes: ['60 cápsulas'],
+  price: 45,
   benefits: [
     'Reduce la flatulencia y los gases',
     'Neutraliza el olor de forma natural',
@@ -256,7 +260,8 @@ export const keto10k: NutritionProduct = {
   brandColor: '#6A0DAD', // morado
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
-  sizes: ['60 cápsulas', '90 cápsulas'],
+  sizes: ['60 cápsulas'],
+  price: 45,
   benefits: [
     'Transforma las grasas en energía',
     'Quema grasa extra desde tempranas horas',
@@ -291,7 +296,8 @@ export const aliensBlocker: NutritionProduct = {
   brandColor: '#4CAF50', // verde lima
   brandColorFg: '#000000',
   format: 'Cápsulas',
-  sizes: ['60 cápsulas', '90 cápsulas'],
+  sizes: ['60 cápsulas'],
+  price: 45,
   benefits: [
     'Disminuye la absorción de carbohidratos hasta un 75%',
     'Reduce el aporte de calorías de los alimentos',
@@ -321,7 +327,8 @@ export const detox: NutritionProduct = {
   brandColor: '#FFEB3B', // amarillo
   brandColorFg: '#000000',
   format: 'Cápsulas',
-  sizes: ['60 cápsulas (30 servicios)'],
+  sizes: ['60 cápsulas'],
+  price: 45,
   benefits: [
     'Optimiza el proceso natural de desintoxicación',
     'Mejora la digestión y evita el estreñimiento',
@@ -373,7 +380,8 @@ export const cla10k: NutritionProduct = {
   brandColor: '#0D9488', // teal (omega/salud)
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas blandas',
-  sizes: ['90 cápsulas blandas (30 servicios · 3 softgels/servicio)'],
+  sizes: ['60 cápsulas'],
+  price: 40,
   benefits: [
     'Reduce la masa grasa y mantiene la masa muscular',
     'Rico en Omega 3 para la función cerebral y cardiaca',
@@ -421,7 +429,7 @@ export const magic10k: NutritionProduct = {
   brandColor: '#EA580C', // naranja energía
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
-  sizes: ['60 cápsulas (30 servicios · 2 cápsulas/servicio)'],
+  sizes: ['60 cápsulas'],
   benefits: [
     'Matriz energética de impulso sostenido (sin picos y caídas)',
     'Mejora la potencia muscular y la resistencia',
@@ -599,7 +607,9 @@ export const wheyProteinChocolate: NutritionProduct = {
     '/products/whey-protein-chocolate/WheyProteinChocolate02.webp',
     '/products/whey-protein-chocolate/WheyProteinChocolate03.webp',
   ],
-  sizes: ['Empaque 1 lb', 'Empaque 2 lb', 'Empaque 5 lb', 'Sobre Sachet · 14 sobres'],
+  sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades'],
+  price: 60,
+  sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
   benefits: [
     'Desarrollo y crecimiento muscular (masa magra)',
     '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
@@ -677,7 +687,9 @@ export const wheyProteinVainilla: NutritionProduct = {
   brandColor: '#C19A6B', // vainilla / camel
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  sizes: ['Empaque 1 lb', 'Empaque 2 lb', 'Empaque 5 lb', 'Sobre Sachet · 14 sobres'],
+  sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades'],
+  price: 60,
+  sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
   benefits: [
     'Desarrollo y crecimiento muscular (hipertrofia)',
     '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
@@ -736,7 +748,9 @@ export const wheyProteinCookiesAndCream: NutritionProduct = {
   brandColor: '#6B4F2A', // cookies and cream (galleta)
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  sizes: ['Empaque 1 lb', 'Empaque 2 lb', 'Empaque 5 lb', 'Sobre Sachet · 14 sobres'],
+  sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades'],
+  price: 60,
+  sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
   benefits: [
     'Desarrollo y crecimiento muscular (hipertrofia)',
     '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
@@ -831,7 +845,7 @@ export const omg: NutritionProduct = {
 };
 
 // ============================================================================
-// 14. FOREVER — Vitaminas/Salud celular y longevidad ($70)
+// 14. FOREVER — Nutracéuticos/Salud celular y longevidad ($45)
 //     Fuente: sitio antiguo nutrition10k.com/2025/05/13/forever/
 // ============================================================================
 
@@ -855,7 +869,7 @@ export const forever: NutritionProduct = {
   ],
   isNew: true,
   fichaStatus: 'complete',
-  price: 70,
+  price: 45,
   nutritionFacts: [
     { label: 'Tamaño de servicio', value: '2 cápsulas vegetarianas' },
     { label: 'Servicios por envase', value: '30' },
@@ -888,7 +902,8 @@ export const creatineXplosion: NutritionProduct = {
   brandColor: '#0891B2', // cyan explosión
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  sizes: ['Pote · 30 servicios'],
+  sizes: ['Pote · 30 servicios', 'Sachet · 100 unidades'],
+  sizePricing: { 'Sachet · 100 unidades': 70 },
   benefits: [
     'Creatina HCL de alta biodisponibilidad y rápida absorción',
     'Mejora significativa en fuerza, potencia y volumen muscular',

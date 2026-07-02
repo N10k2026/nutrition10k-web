@@ -5,7 +5,7 @@ import { useCartStore } from '@/lib/store';
 import { PRODUCTS } from '@/data/products';
 import { BlurIn } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef } from '@/hooks/use-scroll-visible';
-import { handleKeyboardClick } from '@/lib/product-utils';
+import { handleKeyboardClick, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
 import { Clock, Trash2, ArrowRight } from 'lucide-react';
 
 export default function RecentlyViewedSection() {
@@ -84,7 +84,7 @@ export default function RecentlyViewedSection() {
                   <h3 className="font-display-bold text-xs line-clamp-1 mt-0.5">{product.name}</h3>
                   {product.price > 0 ? (
                     <span className="font-display-bold text-sm" style={{ color: brandColor }}>
-                      ${product.price}
+                      {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
                     </span>
                   ) : (
                     <span className="text-[10px] text-muted-foreground italic">Por confirmar</span>

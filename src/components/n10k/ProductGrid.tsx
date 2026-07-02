@@ -5,7 +5,7 @@ import { useCartStore } from '@/lib/store';
 import { PRODUCTS, CATEGORIES, type ProductCategory } from '@/data/products';
 import { BlurIn, SplitWords } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef, useStaggerChildren } from '@/hooks/use-scroll-visible';
-import { handleKeyboardClick, getProductShareUrl } from '@/lib/product-utils';
+import { handleKeyboardClick, getProductShareUrl, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
 import { gsap, ScrollTrigger } from '@/lib/gsap-init';
 import { ShoppingBag, Star, Heart, Share2, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
@@ -334,7 +334,7 @@ function ProductCard({
         <div className="flex items-center justify-between">
           {product.price > 0 ? (
             <span className="font-display-bold text-sm sm:text-base" style={{ color: brandColor }}>
-              ${product.price}
+              {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
             </span>
           ) : (
             <span className="text-[10px] text-muted-foreground italic">Por confirmar</span>

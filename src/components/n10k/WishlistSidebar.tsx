@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/sheet';
 import { useCartStore } from '@/lib/store';
 import { PRODUCTS } from '@/data/products';
-import { getFirstAvailableSize } from '@/lib/product-utils';
+import { getFirstAvailableSize, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
 import { WHATSAPP_NUMBER } from '@/lib/site-config';
 import { Heart, X, ShoppingBag, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -60,7 +60,7 @@ export default function WishlistSidebar() {
   const handleShare = useCallback(() => {
     const lines = ['*Mi lista de favoritos - NUTRITION 10K*', ''];
     entries.forEach((e, i) => {
-      lines.push(`${i + 1}. ${e.product.name} - $${e.product.price}`);
+      lines.push(`${i + 1}. ${e.product.name} - $${getProductMinPrice(e.product)}${hasMultiPrice(e.product) ? ' ( Desde)' : ''}`);
     });
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
   }, [entries]);
@@ -148,7 +148,7 @@ export default function WishlistSidebar() {
                       </div>
                       {product.price > 0 && (
                         <span className="font-display-bold text-sm text-[#E30613]">
-                          ${product.price}
+                          {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
                         </span>
                       )}
                     </div>
