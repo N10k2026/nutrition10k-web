@@ -1663,3 +1663,45 @@ Stage Summary:
 - Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
 - Card del catálogo muestra la imagen principal (CLA10K01 — frasco promocional con "CLA+").
 - Pusheo los cambios a GitHub.
+
+---
+Task ID: 47
+Agent: main (Z.ai Code)
+Task: Añadir las 8 imágenes subidas (Chocopuff 01.jpg + ChocoPuff 02-08.jpg, con espacios en nombres) al producto Choco Puff.
+
+Work Log:
+- Verifiqué las 8 imágenes subidas en `/home/z/my-project/upload/`:
+  - "Chocopuff 01.jpg" (minúscula 'p', 1.2MB)
+  - "ChocoPuff 02.jpg" - "ChocoPuff 08.jpg" (mayúscula 'P', 388KB-853KB)
+  - Todas con espacios en los nombres.
+- Analicé las 8 imágenes con VLM (z-ai vision) secuencialmente para entender el contenido de cada una:
+  - ChocoPuff 01: frasco frontal promocional (trozos de chocolate, polvo)
+  - ChocoPuff 02: frasco frontal (malos olores, lifestyle)
+  - ChocoPuff 03: frasco frontal (bienestar interior/exterior, Nutrition 10K branding)
+  - ChocoPuff 04: frasco frontal (beneficios, lifestyle)
+  - ChocoPuff 05: frasco frontal (sabor, neutralizar olores, trozos de chocolate)
+  - ChocoPuff 06: vista lateral con "Supplement Facts"
+  - ChocoPuff 07: frasco frontal (diseño estilizado)
+  - ChocoPuff 08: "Supplement Facts" (info nutricional, sellos de calidad, fondo negro con puntos)
+- Creé la carpeta `/home/z/my-project/public/products/choco-puff/`.
+- Convertí las 8 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82), normalizando los nombres a `ChocoPuff01-08.webp` (sin espacios):
+  - ChocoPuff01.webp (82KB), 02 (29KB), 03 (29KB), 04 (26KB), 05 (63KB), 06 (31KB), 07 (18KB), 08 (49KB)
+  - Total: ~327KB
+- Actualicé `chocoPuff` en `src/data/products.ts`:
+  - Añadí `image: '/products/choco-puff/ChocoPuff01.webp'` (imagen principal — frasco con trozos de chocolate).
+  - Añadí `images: [...]` array con las 8 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Choco Puff con `image` y `images[]` (8 imágenes) correctos.
+  - Las 8 imágenes webp se sirven con HTTP 200 desde `/products/choco-puff/ChocoPuffXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra ChocoPuff01.webp como imagen principal (640px natural, loaded=true).
+    - Modal de detalle: galería con las 8 imágenes, contador "1 / 8", navegación con flechas disponible.
+    - Thumbnails visibles en la galería.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Choco Puff ahora tiene galería de 8 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~327KB total), nombres normalizados sin espacios.
+- Galería interactiva: imagen principal + 7 thumbnails + navegación con flechas + contador "1 / 8".
+- Card del catálogo muestra la imagen principal (ChocoPuff01 — frasco con trozos de chocolate).

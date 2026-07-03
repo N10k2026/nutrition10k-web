@@ -202,6 +202,17 @@ export const chocoPuff: NutritionProduct = {
   brandColor: '#5C3A21', // marrón cacao
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
+  image: '/products/choco-puff/ChocoPuff01.webp',
+  images: [
+    '/products/choco-puff/ChocoPuff01.webp',
+    '/products/choco-puff/ChocoPuff02.webp',
+    '/products/choco-puff/ChocoPuff03.webp',
+    '/products/choco-puff/ChocoPuff04.webp',
+    '/products/choco-puff/ChocoPuff05.webp',
+    '/products/choco-puff/ChocoPuff06.webp',
+    '/products/choco-puff/ChocoPuff07.webp',
+    '/products/choco-puff/ChocoPuff08.webp',
+  ],
   sizes: ['60 cápsulas'],
   price: 45,
   benefits: [
