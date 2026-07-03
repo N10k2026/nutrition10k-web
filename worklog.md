@@ -1625,3 +1625,41 @@ Stage Summary:
   - Nutracéuticos (1): OMG
   - **Longevidad (1): Forever** ← NUEVA
 - Filtros del catálogo funcionan end-to-end.
+
+---
+Task ID: 46
+Agent: main (Z.ai Code)
+Task: Añadir las 7 imágenes subidas (CLA01-07.jpg) al producto CLA 10K.
+
+Work Log:
+- Verifiqué las 7 imágenes subidas en `/home/z/my-project/upload/CLA01.jpg` a `CLA07.jpg`.
+- Analicé las 7 imágenes con VLM (z-ai vision) secuencialmente para entender el contenido de cada una:
+  - CLA01: frasco frontal promocional ("CLA+", fondo dinámico)
+  - CLA02: frasco frontal (etiqueta verde y negra)
+  - CLA03: frasco frontal promocional ("REDUCE GRASA", "MANTÉN MÚSCULO")
+  - CLA04: frasco frontal con efectos visuales y beneficios
+  - CLA05: frasco frontal (info del suplemento, logos)
+  - CLA06: vista lateral/trasera con "Supplement Facts"
+  - CLA07: ficha técnica con info nutricional (diseño negro)
+- Creé la carpeta `/home/z/my-project/public/products/cla-10k/`.
+- Convertí las 7 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - CLA10K01.webp (122KB), 02 (30KB), 03 (96KB), 04 (61KB), 05 (23KB), 06 (19KB), 07 (26KB)
+  - Total: ~377KB
+- Actualicé `cla10k` en `src/data/products.ts`:
+  - Añadí `image: '/products/cla-10k/CLA10K01.webp'` (imagen principal — frasco promocional con "CLA+").
+  - Añadí `images: [...]` array con las 7 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve CLA 10K con `image` y `images[]` (7 imágenes) correctos.
+  - Las 7 imágenes webp se sirven con HTTP 200 desde `/products/cla-10k/CLA10KXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra CLA10K01.webp como imagen principal (640px natural, loaded=true).
+    - Modal de detalle: galería con las 7 imágenes, contador "1 / 7", navegación con flechas disponible.
+    - Thumbnails visibles en la galería.
+
+Stage Summary:
+- **CLA 10K ahora tiene galería de 7 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~377KB total).
+- Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
+- Card del catálogo muestra la imagen principal (CLA10K01 — frasco promocional con "CLA+").
+- Pusheo los cambios a GitHub.

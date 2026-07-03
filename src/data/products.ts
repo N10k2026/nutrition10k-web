@@ -404,6 +404,16 @@ export const cla10k: NutritionProduct = {
   brandColor: '#0D9488', // teal (omega/salud)
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas blandas',
+  image: '/products/cla-10k/CLA10K01.webp',
+  images: [
+    '/products/cla-10k/CLA10K01.webp',
+    '/products/cla-10k/CLA10K02.webp',
+    '/products/cla-10k/CLA10K03.webp',
+    '/products/cla-10k/CLA10K04.webp',
+    '/products/cla-10k/CLA10K05.webp',
+    '/products/cla-10k/CLA10K06.webp',
+    '/products/cla-10k/CLA10K07.webp',
+  ],
   sizes: ['60 cápsulas'],
   price: 40,
   benefits: [
