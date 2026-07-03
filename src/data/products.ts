@@ -852,6 +852,16 @@ export const omg: NutritionProduct = {
   brandColor: '#DB2777', // magenta bienestar
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
+  image: '/products/omg/OMG01.webp',
+  images: [
+    '/products/omg/OMG01.webp',
+    '/products/omg/OMG02.webp',
+    '/products/omg/OMG03.webp',
+    '/products/omg/OMG04.webp',
+    '/products/omg/OMG05.webp',
+    '/products/omg/OMG06.webp',
+    '/products/omg/OMG07.webp',
+  ],
   sizes: ['60 cápsulas'],
   benefits: [
     'Incrementa la libido en ambos sexos',

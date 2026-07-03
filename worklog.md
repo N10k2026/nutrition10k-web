@@ -1705,3 +1705,41 @@ Stage Summary:
 - Imágenes optimizadas a WebP (~327KB total), nombres normalizados sin espacios.
 - Galería interactiva: imagen principal + 7 thumbnails + navegación con flechas + contador "1 / 8".
 - Card del catálogo muestra la imagen principal (ChocoPuff01 — frasco con trozos de chocolate).
+
+---
+Task ID: 48
+Agent: main (Z.ai Code)
+Task: Añadir las 7 imágenes subidas (OMG01-07.jpg) al producto OMG.
+
+Work Log:
+- Verifiqué las 7 imágenes subidas en `/home/z/my-project/upload/OMG01.jpg` a `OMG07.jpg`.
+- Analicé las 7 imágenes con VLM (z-ai vision) secuencialmente para entender el contenido de cada una:
+  - OMG01: frasco frontal promocional (fondo estilizado)
+  - OMG02: frasco frontal (humo de fondo)
+  - OMG03: frasco frontal con sellos de calidad
+  - OMG04: frasco frontal ("Libido y energía sin límites", ingredientes: maca, ashwagandha, damiana)
+  - OMG05: frasco frontal (branding visible)
+  - OMG06: vista lateral con "Supplement Facts"
+  - OMG07: ficha técnica con info nutricional y sellos
+- Creé la carpeta `/home/z/my-project/public/products/omg/`.
+- Convertí las 7 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - OMG01.webp (55KB), 02 (62KB), 03 (30KB), 04 (61KB), 05 (23KB), 06 (20KB), 07 (30KB)
+  - Total: ~282KB
+- Actualicé `omg` en `src/data/products.ts`:
+  - Añadí `image: '/products/omg/OMG01.webp'` (imagen principal — frasco frontal promocional).
+  - Añadí `images: [...]` array con las 7 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve OMG con `image` y `images[]` (7 imágenes) correctos.
+  - Las 7 imágenes webp se sirven con HTTP 200 desde `/products/omg/OMGXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra OMG01.webp como imagen principal (640px natural, loaded=true).
+    - Modal de detalle: galería con las 7 imágenes, contador "1 / 7", navegación con flechas disponible.
+    - Thumbnails visibles en la galería.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **OMG ahora tiene galería de 7 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~282KB total).
+- Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
+- Card del catálogo muestra la imagen principal (OMG01 — frasco frontal promocional).
