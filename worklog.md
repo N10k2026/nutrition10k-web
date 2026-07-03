@@ -1581,3 +1581,47 @@ Stage Summary:
 - Remote configurado como `origin` con upstream tracking.
 
 ⚠️ **NOTA DE SEGURIDAD:** El token de acceso personal (PAT) de GitHub fue compartido en el chat en texto plano. Se recomienda rotar/revocar este token en GitHub Settings → Developer settings → Personal access tokens, ya que quedó expuesto.
+
+---
+Task ID: 45
+Agent: main (Z.ai Code)
+Task: Crear dos nuevas categorías en el catálogo: "Inhibidores" (mover Aliens Blocker aquí) y "Longevidad" (mover Forever aquí).
+
+Work Log:
+- Añadí 'Inhibidores' y 'Longevidad' al tipo `ProductCategory` en `src/data/products.ts`.
+- Añadí ambas categorías al array `CATEGORIES` en `src/data/products.ts`:
+  - "Inhibidores" se colocó después de "Quemadores" (agrupando productos relacionados con pérdida de peso).
+  - "Longevidad" se colocó después de "Nutracéuticos" (agrupando productos de salud celular/bienestar).
+- Cambié la categoría de **Aliens Blocker** de 'Quemadores' → **'Inhibidores'** (es un carb blocker/inhibidor).
+- Cambié la categoría de **Forever** de 'Nutracéuticos' → **'Longevidad'** (es un producto de salud celular y longevidad con NMN).
+- Actualicé los comentarios de cabecera de ambos productos para reflejar la nueva categoría.
+- Actualicé el array `categories` en `src/lib/store.ts` (pills de filtro del catálogo) añadiendo "Inhibidores" y "Longevidad" en las mismas posiciones.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products` confirma la nueva distribución de categorías:
+    - Inhibidores: 1 (Aliens Blocker)
+    - Longevidad: 1 (Forever)
+    - Quemadores: bajó de 3 a 2 (perdió Aliens Blocker)
+    - Nutracéuticos: bajó de 2 a 1 (perdió Forever)
+  - Agent Browser:
+    - Pills de filtro muestran las 9 categorías en orden: Todos, Digestión, Quemadores, **Inhibidores**, Cetogénicos, Proteínas, Rendimiento, Nutracéuticos, **Longevidad**.
+    - Filtro "Todos": 16 productos (.pg-card).
+    - Filtro "Inhibidores": 1 producto → **Aliens Blocker** ✓
+    - Filtro "Longevidad": 1 producto → **Forever** ✓
+  - Captura visual confirmada por VLM: pill "Inhibidores" activo (rojo), 1 sola card visible (Aliens Blocker).
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **2 nuevas categorías creadas**: "Inhibidores" y "Longevidad".
+- **Aliens Blocker** movido de Quemadores → **Inhibidores**.
+- **Forever** movido de Nutracéuticos → **Longevidad**.
+- Distribución final de categorías (16 productos):
+  - Digestión (2): Bye Bye Belly, Choco Puff
+  - Quemadores (2): DeTox, CLA 10K
+  - **Inhibidores (1): Aliens Blocker** ← NUEVA
+  - Cetogénicos (1): Keto 10K
+  - Proteínas (4): Whey Protein Space Edition Envase, Chocolate, Vainilla, Cookies and Cream
+  - Rendimiento (4): Magic 10K, Creatine X-Plosion, AminoStack Limón, AminoStack Frambuesa
+  - Nutracéuticos (1): OMG
+  - **Longevidad (1): Forever** ← NUEVA
+- Filtros del catálogo funcionan end-to-end.

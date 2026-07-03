@@ -77,10 +77,12 @@ export interface NutritionProduct {
 export type ProductCategory =
   | 'Digestión'
   | 'Quemadores'
+  | 'Inhibidores'
   | 'Cetogénicos'
   | 'Proteínas'
   | 'Rendimiento'
   | 'Nutracéuticos'
+  | 'Longevidad'
   | 'Accesorios';
 
 export type ProductFormat = 'Cápsulas' | 'Cápsulas blandas' | 'Polvo' | 'Líquido' | 'Gomitas';
@@ -88,10 +90,12 @@ export type ProductFormat = 'Cápsulas' | 'Cápsulas blandas' | 'Polvo' | 'Líqu
 export const CATEGORIES: { id: ProductCategory; label: string }[] = [
   { id: 'Digestión', label: 'Digestión' },
   { id: 'Quemadores', label: 'Quemadores' },
+  { id: 'Inhibidores', label: 'Inhibidores' },
   { id: 'Cetogénicos', label: 'Cetogénicos' },
   { id: 'Proteínas', label: 'Proteínas' },
   { id: 'Rendimiento', label: 'Rendimiento' },
   { id: 'Nutracéuticos', label: 'Nutracéuticos' },
+  { id: 'Longevidad', label: 'Longevidad' },
   { id: 'Accesorios', label: 'Accesorios' },
 ];
 
@@ -293,7 +297,7 @@ export const keto10k: NutritionProduct = {
 };
 
 // ============================================================================
-// 4. ALIENS BLOCKER (Carb Blocker) — Quemadores (ficha parcial)
+// 4. ALIENS BLOCKER (Carb Blocker) — Inhibidores (ficha parcial)
 // ============================================================================
 
 export const aliensBlocker: NutritionProduct = {
@@ -303,7 +307,7 @@ export const aliensBlocker: NutritionProduct = {
   tagline: 'Bloqueador de carbohidratos',
   description:
     'Aliens Blocker es un complemento natural ideal para dietas orientadas a bajar de peso. Disminuye la absorción de hidratos de carbono hasta un 75%, reduce el aporte de calorías y transforma la grasa acumulada en energía. Mejora la sensibilidad a la insulina y controla los niveles de azúcar en sangre. Formulado y producido en Estados Unidos.',
-  category: 'Quemadores',
+  category: 'Inhibidores',
   brandColor: '#4CAF50', // verde lima
   brandColorFg: '#000000',
   format: 'Cápsulas',
@@ -865,7 +869,7 @@ export const omg: NutritionProduct = {
 };
 
 // ============================================================================
-// 14. FOREVER — Nutracéuticos/Salud celular y longevidad ($45)
+// 14. FOREVER — Longevidad/Salud celular ($45)
 //     Fuente: sitio antiguo nutrition10k.com/2025/05/13/forever/
 // ============================================================================
 
@@ -876,7 +880,7 @@ export const forever: NutritionProduct = {
   tagline: 'Salud celular y longevidad con NMN · Precursor del NAD+',
   description:
     'Forever de Nutrition10k aprovecha el poder del NMN (nicotinamida mononucleótido) para apoyar la salud celular integral. El NMN es un precursor clave del NAD+, una coenzima esencial involucrada en numerosos procesos biológicos, incluyendo la reparación del ADN y la producción de energía. Al aumentar los niveles de NAD+, Forever busca estimular la regeneración celular, lo que potencialmente podría contribuir a una mayor longevidad y a la prevención de enfermedades degenerativas. Además, al optimizar la función mitocondrial, se espera que este suplemento promueva una mayor energía celular y vitalidad general. Formulado y producido en Estados Unidos.',
-  category: 'Nutracéuticos',
+  category: 'Longevidad',
   brandColor: '#7C3AED', // violeta longevidad
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',

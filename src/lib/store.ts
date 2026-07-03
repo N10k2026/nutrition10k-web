@@ -59,10 +59,12 @@ export const categories: { id: ProductCategory | "Todos"; label: string }[] = [
   { id: "Todos", label: "Todos" },
   { id: "Digestión", label: "Digestión" },
   { id: "Quemadores", label: "Quemadores" },
+  { id: "Inhibidores", label: "Inhibidores" },
   { id: "Cetogénicos", label: "Cetogénicos" },
   { id: "Proteínas", label: "Proteínas" },
   { id: "Rendimiento", label: "Rendimiento" },
   { id: "Nutracéuticos", label: "Nutracéuticos" },
+  { id: "Longevidad", label: "Longevidad" },
 ];
 
 // Guard to prevent concurrent fetch calls
