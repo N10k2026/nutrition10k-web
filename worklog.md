@@ -1864,3 +1864,43 @@ Stage Summary:
 - Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
 - Card del catálogo muestra la imagen principal (AminoStackF01 — frasco promocional con frambuesas).
 - Categoría: Rendimiento.
+
+---
+Task ID: 52
+Agent: main (Z.ai Code)
+Task: Añadir 6 imágenes subidas (AminoStackLemon01-06.jpg) al producto AminoStack Limón. ⚠️ NO pushear hasta que el usuario lo pida.
+
+Work Log:
+- Verifiqué las 6 imágenes subidas en `/home/z/my-project/upload/AminoStackLemon01.jpg` a `AminoStackLemon06.jpg`.
+- Analicé las 6 imágenes con VLM (z-ai vision) una por una:
+  - AminoStackLemon01: frasco frontal promocional (limones animados, diseño dinámico)
+  - AminoStackLemon02: frasco promocional (gráficos urbanos, limones, entrenamiento)
+  - AminoStackLemon03: frasco promocional (5g BCAA, glutamina, taurina, "recuperación muscular avanzada")
+  - AminoStackLemon04: frasco con datos de nutrición (sabor Blast Lemon)
+  - AminoStackLemon05: frasco con "Supplement Facts" (ficha nutricional)
+  - AminoStackLemon06: ficha técnica (datos nutricionales, ingredientes, sellos)
+- Creé la carpeta `/home/z/my-project/public/products/aminostack-limon/`.
+- Convertí las 6 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - AminoStackLemon01.webp (147KB), 02 (152KB), 03 (95KB), 04 (43KB), 05 (29KB), 06 (55KB)
+  - Total: ~521KB
+- Actualicé `aminoStackLimon` en `src/data/products.ts`:
+  - Añadí `image: '/products/aminostack-limon/AminoStackLemon01.webp'` (imagen principal — frasco promocional con limones).
+  - Añadí `images: [...]` array con las 6 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve AminoStack Limón con `image` y `images[]` (6 imágenes) correctos.
+  - Las 6 imágenes webp se sirven con HTTP 200 desde `/products/aminostack-limon/AminoStackLemonXX.webp`.
+  - Agent Browser:
+    - Filtré por categoría "Rendimiento" → AminoStack Limón aparece entre los 4 productos.
+    - Card del catálogo: muestra AminoStackLemon01.webp como imagen principal.
+    - Modal de detalle: galería con las 6 imágenes, contador "1 / 6", navegación con flechas disponible.
+    - Thumbnails visibles en la galería (todas loaded=true).
+- ⚠️ NO se pusheó a GitHub (esperando instrucción del usuario).
+
+Stage Summary:
+- **AminoStack Limón ahora tiene galería de 6 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~521KB total).
+- Galería interactiva: imagen principal + 5 thumbnails + navegación con flechas + contador "1 / 6".
+- Card del catálogo muestra la imagen principal (AminoStackLemon01 — frasco promocional con limones).
+- Categoría: Rendimiento.
+- Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).

@@ -1017,6 +1017,15 @@ export const aminoStackLimon: NutritionProduct = {
   brandColor: '#CA8A04', // amarillo limón
   brandColorFg: '#000000',
   format: 'Polvo',
+  image: '/products/aminostack-limon/AminoStackLemon01.webp',
+  images: [
+    '/products/aminostack-limon/AminoStackLemon01.webp',
+    '/products/aminostack-limon/AminoStackLemon02.webp',
+    '/products/aminostack-limon/AminoStackLemon03.webp',
+    '/products/aminostack-limon/AminoStackLemon04.webp',
+    '/products/aminostack-limon/AminoStackLemon05.webp',
+    '/products/aminostack-limon/AminoStackLemon06.webp',
+  ],
   sizes: ['Pote · 30 servicios'],
   benefits: [
     'Mezcla de aminoácidos esenciales y no esenciales',
