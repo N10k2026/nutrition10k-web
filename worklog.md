@@ -1946,3 +1946,41 @@ Stage Summary:
 - Card del catálogo muestra la imagen principal (Keto01 — frasco promocional).
 - Categoría: Cetogénicos.
 - Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
+
+---
+Task ID: 54
+Agent: main (Z.ai Code)
+Task: Añadir 5 imágenes subidas (Magic01-05.jpg) al producto Magic 10K. ⚠️ NO pushear hasta que el usuario lo pida.
+
+Work Log:
+- Verifiqué las 5 imágenes subidas en `/home/z/my-project/upload/Magic01.jpg` a `Magic05.jpg`.
+- Analicé las 5 imágenes con VLM (z-ai vision) una por una:
+  - Magic01: frasco frontal promocional (rayos eléctricos)
+  - Magic02: frasco promocional (fuerza explosiva, quema de grasa)
+  - Magic03: frasco con etiqueta (uso, datos nutricionales, certificaciones)
+  - Magic04: frasco/envase (60 cápsulas, 1500mg, "Fat Burner & Energy Boost", fondo negro/rojo con relámpagos)
+  - Magic05: ficha técnica (uso sugerido, facts nutricionales, certificaciones)
+- Creé la carpeta `/home/z/my-project/public/products/magic-10k/`.
+- Convertí las 5 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - Magic01.webp (106KB), 02 (82KB), 03 (29KB), 04 (25KB), 05 (43KB)
+  - Total: ~285KB
+- Actualicé `magic10k` en `src/data/products.ts`:
+  - Añadí `image: '/products/magic-10k/Magic01.webp'` (imagen principal — frasco promocional con rayos eléctricos).
+  - Añadí `images: [...]` array con las 5 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Magic 10K con `image` y `images[]` (5 imágenes) correctos.
+  - Las 5 imágenes webp se sirven con HTTP 200 desde `/products/magic-10k/MagicXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra Magic01.webp como imagen principal (640px, loaded=true).
+    - Modal de detalle: galería con las 5 imágenes, contador "1 / 5", navegación con flechas disponible.
+    - Thumbnails visibles en la galería (todas loaded=true).
+- ⚠️ NO se pusheó a GitHub (esperando instrucción del usuario).
+
+Stage Summary:
+- **Magic 10K ahora tiene galería de 5 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~285KB total).
+- Galería interactiva: imagen principal + 4 thumbnails + navegación con flechas + contador "1 / 5".
+- Card del catálogo muestra la imagen principal (Magic01 — frasco promocional con rayos eléctricos).
+- Categoría: Rendimiento.
+- Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).

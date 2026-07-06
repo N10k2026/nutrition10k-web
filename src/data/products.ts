@@ -496,6 +496,14 @@ export const magic10k: NutritionProduct = {
   brandColor: '#EA580C', // naranja energía
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
+  image: '/products/magic-10k/Magic01.webp',
+  images: [
+    '/products/magic-10k/Magic01.webp',
+    '/products/magic-10k/Magic02.webp',
+    '/products/magic-10k/Magic03.webp',
+    '/products/magic-10k/Magic04.webp',
+    '/products/magic-10k/Magic05.webp',
+  ],
   sizes: ['60 cápsulas'],
   benefits: [
     'Matriz energética de impulso sostenido (sin picos y caídas)',
