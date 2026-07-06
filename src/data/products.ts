@@ -926,6 +926,16 @@ export const forever: NutritionProduct = {
   brandColor: '#7C3AED', // violeta longevidad
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
+  image: '/products/forever/Forever01.webp',
+  images: [
+    '/products/forever/Forever01.webp',
+    '/products/forever/Forever02.webp',
+    '/products/forever/Forever03.webp',
+    '/products/forever/Forever04.webp',
+    '/products/forever/Forever05.webp',
+    '/products/forever/Forever06.webp',
+    '/products/forever/Forever07.webp',
+  ],
   sizes: ['60 cápsulas'],
   benefits: [
     'Apoya la salud celular integral',

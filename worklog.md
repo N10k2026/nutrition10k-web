@@ -1784,3 +1784,43 @@ Stage Summary:
 - Imágenes optimizadas a WebP (~466KB total), nombres normalizados.
 - Galería interactiva: imagen principal + 7 thumbnails + navegación con flechas + contador "1 / 8".
 - Card del catálogo muestra la imagen principal (DeTox01 — frasco promocional con humo).
+
+---
+Task ID: 50
+Agent: main (Z.ai Code)
+Task: Añadir 7 imágenes subidas (Forever01-07.jpg) al producto Forever.
+
+Work Log:
+- Verifiqué las 7 imágenes subidas en `/home/z/my-project/upload/Forever01.jpg` a `Forever07.jpg`.
+- Analicé las 7 imágenes con VLM (z-ai vision) una por una:
+  - Forever01: frasco frontal promocional (efectos visuales dinámicos)
+  - Forever02: frasco promocional (Nicotinamida Mononucleótido, fondo científico)
+  - Forever03: frasco promocional (diseño científico, beneficios)
+  - Forever04: frasco promocional ("Reparación Celular y Longevidad", efectos agua/ADN)
+  - Forever05: frasco negro (NMN 450mg, 60 cápsulas vegetales, certificaciones)
+  - Forever06: frasco con "Supplement Facts" (etiqueta lateral/trasera)
+  - Forever07: ficha técnica con datos nutricionales e ingredientes
+- Creé la carpeta `/home/z/my-project/public/products/forever/`.
+- Convertí las 7 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - Forever01.webp (70KB), 02 (71KB), 03 (61KB), 04 (84KB), 05 (19KB), 06 (21KB), 07 (45KB)
+  - Total: ~370KB
+- Actualicé `forever` en `src/data/products.ts`:
+  - Añadí `image: '/products/forever/Forever01.webp'` (imagen principal — frasco promocional).
+  - Añadí `images: [...]` array con las 7 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Forever con `image` y `images[]` (7 imágenes) correctos.
+  - Las 7 imágenes webp se sirven con HTTP 200 desde `/products/forever/ForeverXX.webp`.
+  - Agent Browser:
+    - Filtré por categoría "Longevidad" → Forever es el único producto.
+    - Card del catálogo: muestra Forever01.webp como imagen principal.
+    - Modal de detalle: galería con las 7 imágenes, contador "1 / 7", navegación con flechas disponible.
+    - Thumbnails visibles en la galería (todas loaded=true, 640px natural).
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Forever ahora tiene galería de 7 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~370KB total).
+- Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
+- Card del catálogo muestra la imagen principal (Forever01 — frasco promocional con efectos visuales).
+- Categoría: Longevidad (creada en Task 45).
