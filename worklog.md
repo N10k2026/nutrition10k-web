@@ -1743,3 +1743,44 @@ Stage Summary:
 - Imágenes optimizadas a WebP (~282KB total).
 - Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
 - Card del catálogo muestra la imagen principal (OMG01 — frasco frontal promocional).
+
+---
+Task ID: 49
+Agent: main (Z.ai Code)
+Task: Añadir 8 imágenes subidas (Detox01-07.jpg + SUPPLEMENT FACT_DETOX.jpg) al producto DeTox.
+
+Work Log:
+- Verifiqué las 8 imágenes subidas en `/home/z/my-project/upload/`:
+  - Detox01.jpg - Detox07.jpg (7 imágenes)
+  - SUPPLEMENT FACT_DETOX.jpg (1 ficha técnica, nombre con espacios y guion bajo)
+- Analicé las 8 imágenes con VLM (z-ai vision) secuencialmente:
+  - Detox01: frasco promocional (efectos de humo, 60 cápsulas)
+  - Detox02: frasco con etiqueta y cápsulas (promocional)
+  - Detox03: frasco promocional (humo verde y amarillo, beneficios)
+  - Detox04: frasco con componentes clave (promocional)
+  - Detox05: frasco con "Supplement Facts" (ficha técnica)
+  - Detox06: frasco "Complete Body Detoxifier" (lifestyle)
+  - Detox07: frasco con cápsulas derramadas, humo amarillo (promocional)
+  - SUPPLEMENT FACT_DETOX: ficha técnica con info nutricional e ingredientes
+- Creé la carpeta `/home/z/my-project/public/products/detox/`.
+- Convertí las 8 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82), normalizando los nombres:
+  - DeTox01-07.webp + DeTox08-SupplementFacts.webp
+  - Total: ~466KB
+- Actualicé `detox` en `src/data/products.ts`:
+  - Añadí `image: '/products/detox/DeTox01.webp'` (imagen principal — frasco promocional).
+  - Añadí `images: [...]` array con las 8 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve DeTox con `image` y `images[]` (8 imágenes) correctos.
+  - Las 8 imágenes webp se sirven con HTTP 200 desde `/products/detox/DeToxXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra DeTox01.webp como imagen principal (640px natural, loaded=true).
+    - Modal de detalle: galería con las 8 imágenes, contador "1 / 8", navegación con flechas disponible.
+    - Thumbnails visibles en la galería.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **DeTox ahora tiene galería de 8 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~466KB total), nombres normalizados.
+- Galería interactiva: imagen principal + 7 thumbnails + navegación con flechas + contador "1 / 8".
+- Card del catálogo muestra la imagen principal (DeTox01 — frasco promocional con humo).

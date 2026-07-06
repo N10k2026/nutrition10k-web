@@ -362,6 +362,17 @@ export const detox: NutritionProduct = {
   brandColor: '#FFEB3B', // amarillo
   brandColorFg: '#000000',
   format: 'Cápsulas',
+  image: '/products/detox/DeTox01.webp',
+  images: [
+    '/products/detox/DeTox01.webp',
+    '/products/detox/DeTox02.webp',
+    '/products/detox/DeTox03.webp',
+    '/products/detox/DeTox04.webp',
+    '/products/detox/DeTox05.webp',
+    '/products/detox/DeTox06.webp',
+    '/products/detox/DeTox07.webp',
+    '/products/detox/DeTox08-SupplementFacts.webp',
+  ],
   sizes: ['60 cápsulas'],
   price: 45,
   benefits: [
