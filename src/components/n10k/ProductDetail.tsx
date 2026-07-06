@@ -12,7 +12,6 @@ import { PRODUCTS } from '@/data/products';
 import { getProductShareUrl, getProductPrice } from '@/lib/product-utils';
 import { WHATSAPP_NUMBER } from '@/lib/site-config';
 import {
-  X,
   Minus,
   Plus,
   ShoppingBag,
@@ -116,26 +115,17 @@ export default function ProductDetail() {
   // Info block (shared between mobile and desktop)
   const infoBlock = (
     <>
-      {/* Header: category + name + tagline + close */}
-      <div className="flex items-start justify-between gap-4 mb-3">
-        <div className="flex-1 min-w-0">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
-            {selectedProduct.category}
-          </p>
-          <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight">
-            {selectedProduct.name}
-          </h2>
-          {richProduct && (
-            <p className="text-sm text-muted-foreground">{richProduct.tagline}</p>
-          )}
-        </div>
-        <button
-          onClick={() => setDetailOpen(false)}
-          className="shrink-0 p-2 rounded-full hover:bg-muted transition-colors cursor-pointer"
-          aria-label="Cerrar detalle"
-        >
-          <X className="h-5 w-5" />
-        </button>
+      {/* Header: category + name + tagline */}
+      <div className="mb-3">
+        <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+          {selectedProduct.category}
+        </p>
+        <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight">
+          {selectedProduct.name}
+        </h2>
+        {richProduct && (
+          <p className="text-sm text-muted-foreground">{richProduct.tagline}</p>
+        )}
       </div>
 
       {/* Price + badges */}

@@ -1984,3 +1984,36 @@ Stage Summary:
 - Card del catálogo muestra la imagen principal (Magic01 — frasco promocional con rayos eléctricos).
 - Categoría: Rendimiento.
 - Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
+
+---
+Task ID: 55
+Agent: main (Z.ai Code)
+Task: Eliminar el botón de cierre (X) más grande duplicado del modal de detalle de producto. ⚠️ NO pushear hasta que el usuario lo pida.
+
+Work Log:
+- El usuario reportó que había dos botones de cierre (X) en el modal de detalle de producto.
+- Análisis con VLM de la imagen subida por el usuario confirmó: hay 2 botones X, uno más grande dentro del contenido y uno más pequeño en la esquina.
+- Investigué el código y encontré la causa:
+  1. **Botón grande (ProductDetail.tsx)**: botón personalizado en el header del infoBlock con `<X className="h-5 w-5" />` (20px) + `p-2` padding = 36x36px total, aria-label="Cerrar detalle".
+  2. **Botón pequeño (Dialog shadcn/ui)**: botón por defecto del componente `DialogContent` con `showCloseButton = true` (por defecto), renderiza `XIcon` con `[&_svg:not([class*='size-'])]:size-4` (16px), `absolute top-4 right-4`, data-slot="dialog-close".
+- Confirmé con Agent Browser las dimensiones exactas:
+  - Botón ProductDetail: 36x36px (w:36, h:36, svgClass: "lucide lucide-x h-5 w-5")
+  - Botón Dialog shadcn: 16x16px (w:16, h:16, svgClass: "lucide lucide-x")
+- El usuario pidió eliminar "la equis más grande" → el botón de ProductDetail.tsx (36x36px).
+- Cambios en `src/components/n10k/ProductDetail.tsx`:
+  - Eliminé el `<button onClick={() => setDetailOpen(false)} ...><X className="h-5 w-5" /></button>` del header del infoBlock.
+  - Simplifiqué el contenedor del header: removí `flex items-start justify-between gap-4` (ya no hay dos columnas), dejando solo `<div className="mb-3">` con categoría + nombre + tagline.
+  - Actualicé el comentario del header: "Header: category + name + tagline + close" → "Header: category + name + tagline".
+  - Eliminé `X` del import de lucide-react (ya no se usa en el archivo).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser: confirmó que ahora solo hay 1 botón de cierre en el modal (data-slot="dialog-close", 16x16px).
+  - VLM confirmó visualmente: "ves solo uno botón X (cierre)".
+- ⚠️ NO se pusheó a GitHub (esperando instrucción del usuario).
+
+Stage Summary:
+- **Eliminado el botón de cierre (X) duplicado más grande** del modal de detalle de producto.
+- Causa raíz: ProductDetail.tsx tenía su propio botón de cierre personalizado (36x36px) Y el componente Dialog de shadcn/ui renderizaba su botón de cierre por defecto (16x16px) porque `showCloseButton` es `true` por defecto.
+- Solución: eliminé el botón personalizado de ProductDetail.tsx, dejando solo el botón nativo del Dialog shadcn (más pequeño y estándar, en absolute top-4 right-4).
+- Ahora el modal tiene un solo botón de cierre (X) en la esquina superior derecha.
+- Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
