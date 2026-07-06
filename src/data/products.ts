@@ -1067,6 +1067,16 @@ export const aminoStackFrambuesa: NutritionProduct = {
   brandColor: '#BE185D', // frambuesa
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
+  image: '/products/aminostack-frambuesa/AminoStackF01.webp',
+  images: [
+    '/products/aminostack-frambuesa/AminoStackF01.webp',
+    '/products/aminostack-frambuesa/AminoStackF02.webp',
+    '/products/aminostack-frambuesa/AminoStackF04.webp',
+    '/products/aminostack-frambuesa/AminoStackF05.webp',
+    '/products/aminostack-frambuesa/AminoStackF06.webp',
+    '/products/aminostack-frambuesa/AminoStackF07.webp',
+    '/products/aminostack-frambuesa/AminoStackF08.webp',
+  ],
   sizes: ['Pote · 30 servicios'],
   benefits: [
     'Mezcla de aminoácidos esenciales y no esenciales',

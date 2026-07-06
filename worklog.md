@@ -1824,3 +1824,43 @@ Stage Summary:
 - Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
 - Card del catálogo muestra la imagen principal (Forever01 — frasco promocional con efectos visuales).
 - Categoría: Longevidad (creada en Task 45).
+
+---
+Task ID: 51
+Agent: main (Z.ai Code)
+Task: Añadir 7 imágenes subidas (AminoStackF01,02,04,05,06,07,08.jpg — sin 03) al producto AminoStack Frambuesa.
+
+Work Log:
+- Verifiqué las 7 imágenes subidas en `/home/z/my-project/upload/`. Nota: el numbering salta de 02 a 04 (no hay AminoStackF03).
+- Analicé las 7 imágenes con VLM (z-ai vision) una por una:
+  - AminoStackF01: frasco frontal promocional (frambuesas, diseño vibrante)
+  - AminoStackF02: frasco promocional (texto motivacional, entrenamientos)
+  - AminoStackF04: frasco promocional (diseño urbano, frambuesas)
+  - AminoStackF05: frasco promocional (5G BCAA, glutamina, taurina, "Recuperación Muscular Avanzada")
+  - AminoStackF06: frasco/envase (diseño colorido, nombre, sabor, beneficios)
+  - AminoStackF07: frasco con "Supplement Facts" (ficha técnica, certificaciones)
+  - AminoStackF08: ficha técnica (datos nutricionales, ingredientes, sellos)
+- Creé la carpeta `/home/z/my-project/public/products/aminostack-frambuesa/`.
+- Convertí las 7 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82), manteniendo los números originales (01, 02, 04, 05, 06, 07, 08):
+  - AminoStackF01.webp (119KB), 02 (105KB), 04 (134KB), 05 (102KB), 06 (40KB), 07 (27KB), 08 (54KB)
+  - Total: ~581KB
+- Actualicé `aminoStackFrambuesa` en `src/data/products.ts`:
+  - Añadí `image: '/products/aminostack-frambuesa/AminoStackF01.webp'` (imagen principal — frasco promocional con frambuesas).
+  - Añadí `images: [...]` array con las 7 imágenes webp en orden (manteniendo números originales).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve AminoStack Frambuesa con `image` y `images[]` (7 imágenes) correctos.
+  - Las 7 imágenes webp se sirven con HTTP 200 desde `/products/aminostack-frambuesa/AminoStackFXX.webp`.
+  - Agent Browser:
+    - Filtré por categoría "Rendimiento" → AminoStack Frambuesa aparece entre los 4 productos.
+    - Card del catálogo: muestra AminoStackF01.webp como imagen principal.
+    - Modal de detalle: galería con las 7 imágenes, contador "1 / 7", navegación con flechas disponible.
+    - Thumbnails visibles en la galería (todas loaded=true, 640px natural).
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **AminoStack Frambuesa ahora tiene galería de 7 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~581KB total), manteniendo números originales del usuario (sin 03).
+- Galería interactiva: imagen principal + 6 thumbnails + navegación con flechas + contador "1 / 7".
+- Card del catálogo muestra la imagen principal (AminoStackF01 — frasco promocional con frambuesas).
+- Categoría: Rendimiento.
