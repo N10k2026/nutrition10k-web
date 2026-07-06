@@ -44,8 +44,37 @@ export default function Header() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Las secciones pueden estar dentro de DeferredSection (lazy-loaded),
+    // por lo que el elemento con el id puede no existir aún en el DOM.
+    // Estrategia: buscar el elemento; si no existe, forzar el render del
+    // DeferredSection más cercano haciendo scroll incremental hasta que aparezca.
+    const tryScrollToTarget = () => {
+      const el = document.querySelector(href);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return true;
+      }
+      return false;
+    };
+
+    // Intento directo (la sección ya está renderizada)
+    if (tryScrollToTarget()) return;
+
+    // La sección está deferred: hacer scroll hacia abajo para activar el
+    // IntersectionObserver del DeferredSection, reintentando hasta que el
+    // target aparezca.
+    const SCROLL_STEP = 600;
+    const MAX_ATTEMPTS = 12;
+    let attempts = 0;
+    const interval = window.setInterval(() => {
+      attempts += 1;
+      if (tryScrollToTarget() || attempts >= MAX_ATTEMPTS) {
+        window.clearInterval(interval);
+        return;
+      }
+      // Scroll incremental (sin animación para activar el observer rápido)
+      window.scrollBy({ top: SCROLL_STEP, behavior: 'auto' });
+    }, 250);
   };
 
   return (

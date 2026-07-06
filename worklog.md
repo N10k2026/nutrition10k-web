@@ -2058,3 +2058,34 @@ Stage Summary:
 - Refactorización limpia: el `infoBlock` se dividió en 4 bloques reutilizables (header, price, description, details), permitiendo componer el orden mobile independientemente del desktop.
 - El desktop layout se mantuvo sin cambios (split lateral con gallery+recommended izquierda, info derecha).
 - Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
+
+---
+Task ID: 57
+Agent: main (Z.ai Code)
+Task: Al presionar "Nosotros" en la barra de inicio, debe llevar a la sección "Nuestra Esencia". ⚠️ NO pushear hasta que el usuario lo pida.
+
+Work Log:
+- **Diagnóstico del problema:**
+  - El botón "Nosotros" en el Header apunta a `href: '#nosotros'` (Header.tsx línea 37).
+  - En `page.tsx` línea 184 hay un `<div id="nosotros">` que envuelve `<AboutSection />` (que contiene el título "Nuestra Esencia").
+  - PERO esa sección está dentro de un `<DeferredSection>` (lazy loading vía IntersectionObserver) + `AboutSection` se carga con `next/dynamic`.
+  - Resultado: al cargar la página, `#nosotros` **NO existe en el DOM** hasta que el usuario hace scroll cerca de esa zona. Cuando se hace clic en "Nosotros" estando arriba del todo, `document.querySelector('#nosotros')` devuelve `null` y el `scrollIntoView` no hace nada.
+- **Solución implementada en `src/components/n10k/Header.tsx`:**
+  - Reescribí `handleNavClick` con una estrategia robusta para secciones deferred:
+    1. Intento directo: `document.querySelector(href)?.scrollIntoView()` (funciona si la sección ya está renderizada).
+    2. Si no existe: scroll incremental (`window.scrollBy(600px)` cada 250ms, hasta 12 intentos) para activar el IntersectionObserver del DeferredSection, que renderiza el contenido.
+    3. En cada intento, vuelve a buscar el target; cuando aparece, hace `scrollIntoView({ behavior: 'smooth', block: 'start' })` y limpia el interval.
+  - Esto funciona para cualquier sección deferred (#nosotros, #newsletter, etc.), no solo "Nosotros".
+- **Verificación:**
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser:
+    - Al cargar la página: `#nosotros` NO está en el DOM (deferred) ✓ (comportamiento esperado).
+    - Tras hacer clic en "Nosotros": el scroll incremental activó el IntersectionObserver, renderizó la sección, y "Nuestra Esencia" apareció en el viewport (top=577px, dentro de los 812px del viewport mobile).
+    - `#nosotros` quedó en top=497px (justo arriba del título "Nuestra Esencia", que está ~80px más abajo dentro de la sección).
+- ⚠️ NO se pusheó a GitHub (esperando instrucción del usuario).
+
+Stage Summary:
+- **El botón "Nosotros" ahora lleva a la sección "Nuestra Esencia"** incluso cuando la sección está lazy-loaded (DeferredSection + next/dynamic).
+- Solución: `handleNavClick` hace scroll incremental para forzar el render de secciones deferred antes de hacer `scrollIntoView` al target.
+- La solución es genérica y funciona para cualquier enlace de navegación (#nosotros, #newsletter, #catalogo, #novedades) que apunte a una sección deferred.
+- Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
