@@ -2017,3 +2017,44 @@ Stage Summary:
 - Solución: eliminé el botón personalizado de ProductDetail.tsx, dejando solo el botón nativo del Dialog shadcn (más pequeño y estándar, en absolute top-4 right-4).
 - Ahora el modal tiene un solo botón de cierre (X) en la esquina superior derecha.
 - Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
+
+---
+Task ID: 56
+Agent: main (Z.ai Code)
+Task: Reorganizar el layout mobile del modal de detalle de producto: imagen primero, luego carrusel, luego título, descripción, etc., dejando "Porque te puede interesar" de último. ⚠️ NO pushear hasta que el usuario lo pida.
+
+Work Log:
+- El layout mobile anterior era: infoBlock (todo mezclado: título+precio+descripción+selector+botones+ingredientes) → galleryBlock (imagen+thumbnails) → recommendedBlock.
+- El usuario quería el orden: imagen → carrusel → título → descripción → resto → "porque te puede interesar" de último.
+- **Refactoricé ProductDetail.tsx** separando el `infoBlock` (Fragment gigante) en bloques reutilizables:
+  - `headerBlock`: categoría + nombre + tagline (título)
+  - `priceBlock`: precio + badges (Nuevo/Top Ventas)
+  - `descriptionBlock`: descripción del producto
+  - `detailsBlock`: selector de presentación + cantidad/subtotal + botones (agregar al carrito, wishlist, share) + ingredientes + información nutricional + modo de empleo + beneficios
+- Mantuve `infoBlock` como composición de los bloques (header → price → description → details) para el **desktop layout** (sin cambios de orden).
+- **Nuevo mobile layout** (`md:hidden`) con el orden solicitado:
+  1. `galleryBlock` (imagen principal + carrusel de thumbnails) — primero
+  2. `headerBlock` (categoría + nombre + tagline) — título
+  3. `descriptionBlock` (descripción)
+  4. `priceBlock` (precio + badges)
+  5. `detailsBlock` (selector, cantidad, botones, ingredientes, nutrition, uso, beneficios)
+  6. `recommendedBlock` ("Porque te puede interesar") — de último
+- El desktop layout se mantuvo igual (split lateral: gallery+recommended izquierda, info derecha).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (viewport mobile 375x812): confirmé el orden de los 6 bloques hijos del mobile layout:
+    1. GALLERY (imagen+carrusel)
+    2. TITLE (categoría+nombre+tagline)
+    3. DESCRIPTION
+    4. PRICE (precio+badges)
+    5. DETAILS (selector+botones+ingredientes)
+    6. RECOMMENDED ("Porque te puede interesar")
+  - VLM confirmó visualmente el orden: "1. Imagen del producto (con navegación de carrusel)... 2. Categoría... 3. Título... 4. Descripción... 5. Precio... 6. Etiquetas... 7. Descripción detallada... 8. Presentación... 9. Cantidad..."
+- ⚠️ NO se pusheó a GitHub (esperando instrucción del usuario).
+
+Stage Summary:
+- **Layout mobile del modal de detalle reorganizado** según el orden solicitado por el usuario:
+  imagen → carrusel → título → descripción → precio → detalles → "porque te puede interesar" (último).
+- Refactorización limpia: el `infoBlock` se dividió en 4 bloques reutilizables (header, price, description, details), permitiendo componer el orden mobile independientemente del desktop.
+- El desktop layout se mantuvo sin cambios (split lateral con gallery+recommended izquierda, info derecha).
+- Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).

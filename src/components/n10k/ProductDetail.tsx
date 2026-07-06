@@ -112,48 +112,54 @@ export default function ProductDetail() {
   const subtotal = currentPrice * quantity;
   const currentImage = galleryImages[activeSlideIndex] || selectedProduct.image;
 
-  // Info block (shared between mobile and desktop)
-  const infoBlock = (
-    <>
-      {/* Header: category + name + tagline */}
-      <div className="mb-3">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
-          {selectedProduct.category}
-        </p>
-        <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight">
-          {selectedProduct.name}
-        </h2>
-        {richProduct && (
-          <p className="text-sm text-muted-foreground">{richProduct.tagline}</p>
-        )}
-      </div>
-
-      {/* Price + badges */}
-      <div className="flex items-center gap-3 mb-4">
-        {currentPrice > 0 ? (
-          <span className="font-display-black text-2xl sm:text-3xl" style={{ color: brandColor }}>
-            ${currentPrice}
-          </span>
-        ) : (
-          <span className="text-sm text-muted-foreground italic">Precio por confirmar</span>
-        )}
-        {selectedProduct.isNew && (
-          <span className="bg-[#E30613] text-white text-[10px] font-black px-2 py-1 rounded-full uppercase">
-            Nuevo
-          </span>
-        )}
-        {selectedProduct.isBestSeller && (
-          <span className="bg-foreground text-background text-[10px] font-black px-2 py-1 rounded-full uppercase">
-            Top Ventas
-          </span>
-        )}
-      </div>
-
-      {/* Description */}
-      <p className="text-sm text-muted-foreground/90 leading-relaxed mb-5">
-        {selectedProduct.description}
+  // Header block (category + name + tagline)
+  const headerBlock = (
+    <div className="mb-3">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+        {selectedProduct.category}
       </p>
+      <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight">
+        {selectedProduct.name}
+      </h2>
+      {richProduct && (
+        <p className="text-sm text-muted-foreground">{richProduct.tagline}</p>
+      )}
+    </div>
+  );
 
+  // Price + badges block
+  const priceBlock = (
+    <div className="flex items-center gap-3 mb-4">
+      {currentPrice > 0 ? (
+        <span className="font-display-black text-2xl sm:text-3xl" style={{ color: brandColor }}>
+          ${currentPrice}
+        </span>
+      ) : (
+        <span className="text-sm text-muted-foreground italic">Precio por confirmar</span>
+      )}
+      {selectedProduct.isNew && (
+        <span className="bg-[#E30613] text-white text-[10px] font-black px-2 py-1 rounded-full uppercase">
+          Nuevo
+        </span>
+      )}
+      {selectedProduct.isBestSeller && (
+        <span className="bg-foreground text-background text-[10px] font-black px-2 py-1 rounded-full uppercase">
+          Top Ventas
+        </span>
+      )}
+    </div>
+  );
+
+  // Description block
+  const descriptionBlock = (
+    <p className="text-sm text-muted-foreground/90 leading-relaxed mb-5">
+      {selectedProduct.description}
+    </p>
+  );
+
+  // Details block (size selector + quantity + actions + ingredients + nutrition + usage + benefits)
+  const detailsBlock = (
+    <>
       {/* Size selector */}
       {selectedProduct.sizes.length > 0 && (
         <div className="mb-5">
@@ -344,6 +350,17 @@ export default function ProductDetail() {
     </>
   );
 
+  // Info block (desktop only) — compuesto por todos los bloques en orden original:
+  // header → price → description → details
+  const infoBlock = (
+    <>
+      {headerBlock}
+      {priceBlock}
+      {descriptionBlock}
+      {detailsBlock}
+    </>
+  );
+
   // Gallery block (shared between mobile and desktop)
   const galleryBlock = (
     <div className="relative">
@@ -454,14 +471,29 @@ export default function ProductDetail() {
           </DialogDescription>
         </VisuallyHidden>
 
-        {/* Mobile layout: info → gallery → recommended */}
+        {/* Mobile layout: gallery → title → description → price → details → recommended */}
         <div className="flex flex-col h-full overflow-y-auto md:hidden">
-          <div className="p-5 pb-3">
-            {infoBlock}
-          </div>
-          <div className="px-5">
+          {/* Imagen principal + carrusel de miniaturas */}
+          <div className="px-5 pt-5">
             {galleryBlock}
           </div>
+          {/* Título (categoría + nombre + tagline) */}
+          <div className="px-5 pt-4">
+            {headerBlock}
+          </div>
+          {/* Descripción */}
+          <div className="px-5">
+            {descriptionBlock}
+          </div>
+          {/* Precio + badges */}
+          <div className="px-5">
+            {priceBlock}
+          </div>
+          {/* Detalles: selector, cantidad, botones, ingredientes, nutrition, uso, beneficios */}
+          <div className="px-5 pb-3">
+            {detailsBlock}
+          </div>
+          {/* Porque te puede interesar (último) */}
           <div className="px-5 pb-5">
             {recommendedBlock}
           </div>
