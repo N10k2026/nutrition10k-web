@@ -1904,3 +1904,45 @@ Stage Summary:
 - Card del catálogo muestra la imagen principal (AminoStackLemon01 — frasco promocional con limones).
 - Categoría: Rendimiento.
 - Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
+
+---
+Task ID: 53
+Agent: main (Z.ai Code)
+Task: Añadir 8 imágenes subidas (Keto01-07.jpg + "Keto 08.jpg" con espacio) al producto Keto 10K. ⚠️ NO pushear hasta que el usuario lo pida.
+
+Work Log:
+- Verifiqué las 8 imágenes subidas en `/home/z/my-project/upload/`. Nota: "Keto 08.jpg" tiene espacio en el nombre (los demás no).
+- Analicé las 8 imágenes con VLM (z-ai vision) una por una:
+  - Keto01: frasco frontal promocional (fondo vibrante, beneficios)
+  - Keto02: frasco promocional (fondo dinámico)
+  - Keto03: frasco promocional (ansiedad/hambre, BHB, energía)
+  - Keto04: frasco promocional (quemador de grasa, reducción ansiedad)
+  - Keto05: frasco promocional ("menos ansiedad", "más disciplina")
+  - Keto06: frasco/envase (Advance Weight Loss, Fat Burner, BHB Ketones, Energy Boost)
+  - Keto07: frasco con uso sugerido, facts nutricionales, certificaciones
+  - Keto 08: ficha técnica (uso sugerido, supplement facts, ingredientes)
+- Creé la carpeta `/home/z/my-project/public/products/keto-10k/`.
+- Convertí las 8 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82), normalizando "Keto 08.jpg" → "Keto08.webp":
+  - Keto01.webp (47KB), 02 (75KB), 03 (38KB), 04 (58KB), 05 (36KB), 06 (22KB), 07 (23KB), 08 (29KB)
+  - Total: ~328KB
+- Actualicé `keto10k` en `src/data/products.ts`:
+  - Añadí `image: '/products/keto-10k/Keto01.webp'` (imagen principal — frasco promocional).
+  - Añadí `images: [...]` array con las 8 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Keto 10K con `image` y `images[]` (8 imágenes) correctos.
+  - Las 8 imágenes webp se sirven con HTTP 200 desde `/products/keto-10k/KetoXX.webp`.
+  - Agent Browser:
+    - Filtré por categoría "Cetogénicos" → Keto 10K es el único producto.
+    - Card del catálogo: muestra Keto01.webp como imagen principal (640px, loaded=true).
+    - Modal de detalle: galería con las 8 imágenes, contador "1 / 8", navegación con flechas disponible.
+    - Thumbnails visibles en la galería (todas loaded=true, 640px natural).
+- ⚠️ NO se pusheó a GitHub (esperando instrucción del usuario).
+
+Stage Summary:
+- **Keto 10K ahora tiene galería de 8 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~328KB total), nombre "Keto 08.jpg" normalizado a "Keto08.webp".
+- Galería interactiva: imagen principal + 7 thumbnails + navegación con flechas + contador "1 / 8".
+- Card del catálogo muestra la imagen principal (Keto01 — frasco promocional).
+- Categoría: Cetogénicos.
+- Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).

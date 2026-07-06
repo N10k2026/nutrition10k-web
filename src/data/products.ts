@@ -286,6 +286,17 @@ export const keto10k: NutritionProduct = {
   brandColor: '#6A0DAD', // morado
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
+  image: '/products/keto-10k/Keto01.webp',
+  images: [
+    '/products/keto-10k/Keto01.webp',
+    '/products/keto-10k/Keto02.webp',
+    '/products/keto-10k/Keto03.webp',
+    '/products/keto-10k/Keto04.webp',
+    '/products/keto-10k/Keto05.webp',
+    '/products/keto-10k/Keto06.webp',
+    '/products/keto-10k/Keto07.webp',
+    '/products/keto-10k/Keto08.webp',
+  ],
   sizes: ['60 cápsulas'],
   price: 45,
   benefits: [
