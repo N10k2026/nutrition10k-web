@@ -154,10 +154,23 @@ export default function SearchModal() {
                   }`}
                 >
                   <div
-                    className="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center text-white text-xs font-bold"
-                    style={{ backgroundColor: product.brandColor }}
+                    className="w-10 h-10 rounded-lg shrink-0 overflow-hidden border border-border bg-muted"
                   >
-                    {product.name.substring(0, 2).toUpperCase()}
+                    {product.image ? (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center text-white text-xs font-bold"
+                        style={{ backgroundColor: product.brandColor }}
+                      >
+                        {product.name.substring(0, 2).toUpperCase()}
+                      </div>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-display-bold text-sm line-clamp-1">{product.name}</p>

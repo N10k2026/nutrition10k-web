@@ -2888,3 +2888,24 @@ Stage Summary:
 - **Error `q is not defined` corregido** en SearchModal.tsx.
 - La búsqueda ahora filtra productos correctamente por nombre, categoría, descripción y tagline.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 82
+Agent: main (Z.ai Code)
+Task: Añadir miniaturas (thumbnails) de producto a los resultados de búsqueda.
+
+Work Log:
+- **Antes:** los resultados de búsqueda usaban un placeholder de color con las 2 primeras letras del nombre (div con backgroundColor=brandColor).
+- **Ahora:** reemplacé el placeholder por la imagen real del producto (`product.image`) en un contenedor `w-10 h-10 rounded-lg overflow-hidden border border-border`.
+  - Si el producto tiene `image`, muestra `<img src={product.image} className="w-full h-full object-cover" loading="lazy" />`.
+  - Si no tiene `image` (fallback), muestra el placeholder anterior (color + iniciales).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser: busqué "pro" y los resultados mostraron 5 thumbnails reales (ByeByeBelly01, ChocoPuff01, Keto01, Aliens01, DeTox01), todas 38x38px, loaded=true ✓.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Resultados de búsqueda ahora tienen miniaturas reales** del producto en lugar de placeholders de color.
+- Las miniaturas son 40x40px (w-10 h-10) con object-cover, border sutil y esquinas redondeadas.
+- Fallback: si un producto no tiene imagen, muestra el placeholder de color + iniciales.
+- Cambios committeados y pusheados a GitHub.
