@@ -2615,3 +2615,34 @@ Stage Summary:
 - Solución: cambiar a `display: flex; flex-direction: column; overflow: hidden; height: 100%;` en la card + `flex: 1 1 0%; min-height: 0;` en el inner y sus hijos.
 - El efecto glow interactivo de BorderGlow se mantiene (borde mesh + glow direccional que sigue el cursor).
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 73
+Agent: main (Z.ai Code)
+Task: Hacer perceptible el glow del BorderGlow en el ProductDetail (era imperceptible tras el fix de scroll) sin romper el scroll.
+
+Work Log:
+- **Diagnóstico:** En el Task 72 cambié `overflow: visible` → `overflow: hidden` en `.border-glow-card` para arreglar el scroll. Esto recortó el halo exterior (`.edge-light` que extiende `inset: calc(var(--glow-padding) * -1)` fuera de la card). Además, el glow original solo aparece on-hover (`:not(:hover)` → opacity 0), lo que en mobile no funciona.
+- **Solución en `src/components/ui/border-glow.css`:**
+  - Mantuve `overflow: hidden` (necesario para que la card respete `height: 100%` y el scroll funcione).
+  - Añadí un **glow base siempre visible** vía `box-shadow` (los box-shadow NO se recortan con `overflow: hidden`, así que el halo exterior sigue visible):
+    - `0 0 0 1px var(--glow-color-40)` — borde de color
+    - `0 0 20px 2px var(--glow-color-40)` — halo cercano
+    - `0 0 50px 8px var(--glow-color-20)` — halo exterior suave
+  - Cambié el `border` de `rgb(255 255 255 / 15%)` (blanco) → `var(--glow-color-40)` (color de marca al 40%) para que el borde también refleje el brandColor.
+  - El glow usa las CSS variables `--glow-color-40` y `--glow-color-20` que el componente BorderGlow setea desde el `glowColor` (HSL del brandColor).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (desktop 1280x577):
+    - Glow visible: box-shadow = `rgba(153, 205, 50, 0.48)` (verde Bye Bye Belly) ✓
+    - Card respeta 517px (90vh) ✓
+    - Columna izquierda (galería): sh=857 > h=517, canScroll=true ✓
+    - Columna derecha (info): sh=1659 > h=517, canScroll=true, scrollTop=500 ✓
+  - VLM confirmó: "Sí, se ve un resplandor (glow) de color verde alrededor del modal de producto."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Glow del BorderGlow ahora perceptible** — halo siempre visible del color de marca del producto (verde Bye Bye Belly, teal CLA, etc.) vía `box-shadow` que no se recorta con `overflow: hidden`.
+- **Scroll preservado** — la card respeta 90vh, las columnas internas hacen scroll independientemente.
+- El glow base (box-shadow) es siempre visible; el glow interactivo (mesh border + edge-light on hover) se añade encima al acercar el cursor a los bordes.
+- Cambios committeados y pusheados a GitHub.
