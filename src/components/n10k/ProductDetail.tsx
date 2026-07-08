@@ -498,7 +498,7 @@ export default function ProductDetail() {
   return (
     <Dialog open={isOpen} onOpenChange={setDetailOpen}>
       <DialogContent
-        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden !border-2 bg-black/60 backdrop-blur-2xl"
+        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden !border-2 bg-black/30 backdrop-blur-2xl"
         style={{
           borderColor: brandColor,
           boxShadow: `0 0 50px 8px ${glowColor}, 0 0 120px 30px ${glowColorSoft}`,
