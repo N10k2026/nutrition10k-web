@@ -2646,3 +2646,33 @@ Stage Summary:
 - **Scroll preservado** — la card respeta 90vh, las columnas internas hacen scroll independientemente.
 - El glow base (box-shadow) es siempre visible; el glow interactivo (mesh border + edge-light on hover) se añade encima al acercar el cursor a los bordes.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 74
+Agent: main (Z.ai Code)
+Task: Eliminar el componente BorderGlow (glow interactivo imperceptible) para alivianar el peso, reemplazándolo por un glow simple con boxShadow directo.
+
+Work Log:
+- El usuario reportó que el glow interactivo de BorderGlow no se notaba y pidió eliminarlo para alivianar el peso.
+- **Eliminé los archivos del componente BorderGlow:**
+  - `src/components/ui/border-glow.tsx` (componente TSX, ~150 líneas)
+  - `src/components/ui/border-glow.css` (estilos, ~150 líneas)
+  - Removí el `import BorderGlow from '@/components/ui/border-glow'` de ProductDetail.tsx.
+- **Restauré el ProductDetail con glow simple:**
+  - Volví a usar `hexToRgba(brandColor, alpha)` para convertir el brandColor a rgba.
+  - `DialogContent` con `bg-background !border-2` + `style={{ borderColor: brandColor, boxShadow: ... }}`:
+    - `0 0 0 1px ${glowColor}` (50% opacidad) — borde de color
+    - `0 0 30px 4px ${glowColor}` (50% opacidad) — halo cercano
+    - `0 0 80px 12px ${glowColorSoft}` (25% opacidad) — halo exterior suave
+  - Eliminé el wrapper `<BorderGlow>` y el `hexToHsl` (ya no se necesita).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (desktop): border=rgb(154,205,50) (verde Bye Bye Belly), boxShadow con glow verde, cardH=515 (90vh), leftScroll=true, rightScroll=true ✓.
+  - VLM confirmó: "Sí, se ve un resplandor (glow) de color verde alrededor del modal."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **BorderGlow eliminado** (~300 líneas de código TSX+CSS removidas) — aligera el peso del proyecto.
+- **Glow simple restaurado** vía `boxShadow` directo en el DialogContent: borde de color (brandColor 2px) + halo cercano (30px, 50% opacidad) + halo exterior suave (80px, 25% opacidad).
+- El glow es siempre visible (no depende de hover), usa el brandColor de cada producto, y el scroll funciona correctamente.
+- Cambios committeados y pusheados a GitHub.

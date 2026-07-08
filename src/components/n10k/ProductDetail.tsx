@@ -26,7 +26,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import BorderGlow from '@/components/ui/border-glow';
 
 export default function ProductDetail() {
   const isOpen = useCartStore((s) => s.isDetailOpen);
@@ -126,35 +125,22 @@ export default function ProductDetail() {
 
   const brandColor = richProduct?.brandColor ?? '#E30613';
 
-  // Convierte un color hex a "H S L" (string) para el componente BorderGlow.
-  const hexToHsl = (hex: string): string => {
+  // Convierte un color hex (#RRGGBB o #RGB) a `rgba(r, g, b, alpha)` para
+  // poder usar el brandColor con opacidad en el glow del modal.
+  const hexToRgba = (hex: string, alpha: number): string => {
     let h = hex.replace('#', '');
     if (h.length === 3) {
       h = h.split('').map((c) => c + c).join('');
     }
-    const r = (parseInt(h.substring(0, 2), 16) || 0) / 255;
-    const g = (parseInt(h.substring(2, 4), 16) || 0) / 255;
-    const b = (parseInt(h.substring(4, 6), 16) || 0) / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let hue = 0;
-    let sat = 0;
-    const light = (max + min) / 2;
-    if (max !== min) {
-      const d = max - min;
-      sat = light > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r: hue = ((g - b) / d + (g < b ? 6 : 0)); break;
-        case g: hue = ((b - r) / d + 2); break;
-        case b: hue = ((r - g) / d + 4); break;
-      }
-      hue *= 60;
-    }
-    return `${Math.round(hue)} ${Math.round(sat * 100)} ${Math.round(light * 100)}`;
+    const r = parseInt(h.substring(0, 2), 16) || 0;
+    const g = parseInt(h.substring(2, 4), 16) || 0;
+    const b = parseInt(h.substring(4, 6), 16) || 0;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
-  // HSL del brandColor para el BorderGlow interactivo.
-  const glowHsl = hexToHsl(brandColor);
+  // Glow del modal: halo del color de marca del producto.
+  const glowColor = hexToRgba(brandColor, 0.5);
+  const glowColorSoft = hexToRgba(brandColor, 0.25);
 
   const currentPrice = getProductPrice(selectedProduct, selectedSize);
   const subtotal = currentPrice * quantity;
@@ -512,66 +498,57 @@ export default function ProductDetail() {
   return (
     <Dialog open={isOpen} onOpenChange={setDetailOpen}>
       <DialogContent
-        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 !bg-transparent !border-0 !shadow-none overflow-visible"
+        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden bg-background !border-2"
+        style={{
+          borderColor: brandColor,
+          boxShadow: `0 0 0 1px ${glowColor}, 0 0 30px 4px ${glowColor}, 0 0 80px 12px ${glowColorSoft}`,
+        }}
       >
-        <BorderGlow
-          className="!h-full"
-          glowColor={glowHsl}
-          backgroundColor="var(--background, #ffffff)"
-          borderRadius={20}
-          glowRadius={50}
-          glowIntensity={1.2}
-          edgeSensitivity={25}
-          coneSpread={25}
-          fillOpacity={0.3}
-          colors={[brandColor, brandColor, brandColor]}
-        >
-          <VisuallyHidden>
-            <DialogTitle>{selectedProduct.name}</DialogTitle>
-            <DialogDescription>
-              Detalle del producto {selectedProduct.name} de Nutrition 10K
-            </DialogDescription>
-          </VisuallyHidden>
+        <VisuallyHidden>
+          <DialogTitle>{selectedProduct.name}</DialogTitle>
+          <DialogDescription>
+            Detalle del producto {selectedProduct.name} de Nutrition 10K
+          </DialogDescription>
+        </VisuallyHidden>
 
-          {/* Mobile layout: gallery → title → description → price → details → recommended */}
-          <div className="flex flex-col h-full overflow-y-auto md:hidden">
-            {/* Imagen principal + carrusel de miniaturas */}
-            <div className="px-5 pt-5">
-              {galleryBlock}
-            </div>
-            {/* Título (categoría + nombre + tagline) */}
-            <div className="px-5 pt-4">
-              {headerBlock}
-            </div>
-            {/* Descripción */}
-            <div className="px-5">
-              {descriptionBlock}
-            </div>
-            {/* Precio + badges */}
-            <div className="px-5">
-              {priceBlock}
-            </div>
-            {/* Detalles: selector, cantidad, botones, ingredientes, nutrition, uso, beneficios */}
-            <div className="px-5 pb-3">
-              {detailsBlock}
-            </div>
-            {/* Porque te puede interesar (último) */}
-            <div className="px-5 pb-5">
-              {recommendedBlock}
-            </div>
+        {/* Mobile layout: gallery → title → description → price → details → recommended */}
+        <div className="flex flex-col h-full overflow-y-auto md:hidden">
+          {/* Imagen principal + carrusel de miniaturas */}
+          <div className="px-5 pt-5">
+            {galleryBlock}
           </div>
+          {/* Título (categoría + nombre + tagline) */}
+          <div className="px-5 pt-4">
+            {headerBlock}
+          </div>
+          {/* Descripción */}
+          <div className="px-5">
+            {descriptionBlock}
+          </div>
+          {/* Precio + badges */}
+          <div className="px-5">
+            {priceBlock}
+          </div>
+          {/* Detalles: selector, cantidad, botones, ingredientes, nutrition, uso, beneficios */}
+          <div className="px-5 pb-3">
+            {detailsBlock}
+          </div>
+          {/* Porque te puede interesar (último) */}
+          <div className="px-5 pb-5">
+            {recommendedBlock}
+          </div>
+        </div>
 
-          {/* Desktop layout: split lateral — gallery+recommended left, info right */}
-          <div className="hidden md:flex h-full overflow-y-auto">
-            <div className="md:w-[55%] shrink-0 p-5 overflow-y-auto">
-              {galleryBlock}
-              {recommendedBlock}
-            </div>
-            <div className="flex-1 p-6 sm:p-8 overflow-y-auto">
-              {infoBlock}
-            </div>
+        {/* Desktop layout: split lateral — gallery+recommended left, info right */}
+        <div className="hidden md:flex h-full overflow-y-auto">
+          <div className="md:w-[55%] shrink-0 p-5 overflow-y-auto">
+            {galleryBlock}
+            {recommendedBlock}
           </div>
-        </BorderGlow>
+          <div className="flex-1 p-6 sm:p-8 overflow-y-auto">
+            {infoBlock}
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
