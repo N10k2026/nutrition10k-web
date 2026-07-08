@@ -115,8 +115,8 @@ export const byeByeBelly: NutritionProduct = {
   description:
     'Bye Bye Belly es una fórmula integral para combatir la inflamación abdominal y favorecer una digestión saludable. Combina probióticos, fibra prebiótica y potentes antiinflamatorios naturales como la cúrcuma y el jengibre, potenciados con pimienta negra para una máxima absorción. Formulado y producido en Estados Unidos.',
   category: 'Digestión',
-  brandColor: '#E30613', // rojo Nutrition 10K
-  brandColorFg: '#FFFFFF',
+  brandColor: '#9ACD32', // verde amarillo (yellowgreen)
+  brandColorFg: '#1A1A1A',
   format: 'Cápsulas',
   image: '/products/bye-bye-belly/ByeByeBelly01.webp',
   images: [
@@ -438,7 +438,7 @@ export const cla10k: NutritionProduct = {
   description:
     'CLA 10K es un producto rico en Omega 3, un ácido graso imprescindible para la función cerebral y cardiaca, además del bienestar general del cuerpo. El CLA (Ácido Linolénico Conjugado) fomenta la reducción de la masa grasa al potenciar el metabolismo de los lípidos, mantiene la masa muscular y regula el azúcar en sangre. Presentado en cápsulas blandas. Formulado y producido en Estados Unidos.',
   category: 'Quemadores',
-  brandColor: '#0D9488', // teal (omega/salud)
+  brandColor: '#4B5320', // verde militar (army green)
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas blandas',
   image: '/products/cla-10k/CLA10K01.webp',
@@ -682,7 +682,7 @@ export const wheyProteinChocolate: NutritionProduct = {
   description:
     'Whey Protein de Chocolate está enfocada en el desarrollo y crecimiento muscular, ideal para quienes tienen un plan de acción para generar masa magra. Aporta 25g de proteína, 5.1g de BCAA y 4g de glutamina por servicio, enriquecida con calcio, sodio, hierro y potasio. Formulado y producido en Estados Unidos.',
   category: 'Proteínas',
-  brandColor: '#3E2723', // chocolate oscuro
+  brandColor: '#8B5A2B', // marrón claro (tan / cocoa)
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
   image: '/products/whey-protein-chocolate/WheyProteinChocolate05.webp',
@@ -1015,7 +1015,7 @@ export const creatineXplosion: NutritionProduct = {
   description:
     'Desata una explosión de fuerza y crecimiento muscular con el delicioso y refrescante sabor tropical de Nutrition 10k Creatine Xplosion Edition. Esta fórmula de vanguardia, a base de creatina HCL de rápida absorción, ha sido diseñada meticulosamente para atletas y entusiastas del fitness que buscan una mejora significativa en su energía y desarrollo muscular. La creatina HCL se caracteriza por su alta biodisponibilidad, lo que facilita una absorción más eficiente y rápida en comparación con otras formas de creatina, permitiéndote experimentar resultados notables en fuerza, potencia y volumen muscular de manera más ágil. Formulado y producido en Estados Unidos.',
   category: 'Rendimiento',
-  brandColor: '#0891B2', // cyan explosión
+  brandColor: '#F97316', // naranja (orange)
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
   image: '/products/creatine-x-plosion/Creatina01.webp',

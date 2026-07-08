@@ -2355,3 +2355,40 @@ Stage Summary:
 - El glow combina con el borde dinámico (ambos usan brandColor), dando identidad cromática por producto solo en el detalle.
 - Catálogo mantiene precios en rojo unificado; el color de marca de cada producto aparece como acento en el borde + glow del modal.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 66
+Agent: main (Z.ai Code)
+Task: Corregir los brandColor de 4 productos que no coincidían con el color real de sus portadas: Bye Bye Belly, CLA 10K, Creatine X-Plosion, Whey Protein Chocolate.
+
+Work Log:
+- El usuario reportó que los bordes/glow del modal no coincidían con el color visual de las portadas:
+  - Bye Bye Belly aparecía rojo pero debería ser verde amarillo.
+  - CLA aparecía teal pero debería ser verde militar.
+  - Creatina aparecía cyan pero debería ser naranja.
+  - Whey Protein Chocolate aparecía muy oscuro pero debería ser marrón claro.
+- Cambios en `src/data/products.ts` (brandColor + brandColorFg):
+  | Producto | Antes | Ahora |
+  |----------|-------|-------|
+  | Bye Bye Belly | #E30613 (rojo) | #9ACD32 (verde amarillo / yellowgreen), fg #1A1A1A |
+  | CLA 10K | #0D9488 (teal) | #4B5320 (verde militar / army green), fg #FFFFFF |
+  | Creatine X-Plosion | #0891B2 (cyan) | #F97316 (naranja / orange), fg #FFFFFF |
+  | Whey Protein Chocolate | #3E2723 (chocolate oscuro) | #8B5A2B (marrón claro / tan), fg #FFFFFF |
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser confirmó los colores del borde + glow de cada producto:
+    - Bye Bye Belly: rgb(154,205,50) = #9ACD32 ✓
+    - CLA 10K: rgb(75,83,32) = #4B5320 ✓
+    - Creatine: rgb(249,115,22) = #F97316 ✓
+    - Whey Chocolate: rgb(139,90,43) = #8B5A2B ✓
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **4 brandColor corregidos** para coincidir con el color visual real de las portadas:
+  - Bye Bye Belly → verde amarillo (#9ACD32)
+  - CLA 10K → verde militar (#4B5320)
+  - Creatine X-Plosion → naranja (#F97316)
+  - Whey Protein Chocolate → marrón claro (#8B5A2B)
+- El borde (2px) y el glow (halo radial 45% + 20%) del modal ahora muestran el color correcto de cada producto.
+- brandColorFg ajustado a oscuro (#1A1A1A) para Bye Bye Belly (verde amarillo necesita texto oscuro para contraste); el resto mantiene blanco.
+- Cambios committeados y pusheados a GitHub.
