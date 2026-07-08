@@ -2771,3 +2771,30 @@ Stage Summary:
 - **Última tarjeta del carrusel ya no se corta** en Productos Destacados ni Vistos Recientemente.
 - Solución: añadir `pr-8` (32px padding derecho extra) al contenedor del scroll horizontal.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 78
+Agent: main (Z.ai Code)
+Task: Añadir los logos según su región: favicon en el browser tab (su área) y logo negativo en el footer (su área), no ambos en el footer.
+
+Work Log:
+- El usuario subió versiones actualizadas de "logo nutrition negativo.png" y "logo favicoon.png".
+- Copié los logos a sus ubicaciones:
+  - `upload/logo nutrition negativo.png` → `public/brand/logo-negative.png`
+  - `upload/logo favicoon.png` → `public/brand/favicon.png` + `public/favicon.png` (raíz, para el browser tab)
+- **Footer.tsx**: en un primer intento puse ambos (favicon + logo negativo) juntos en el footer. El usuario corrigió: el favicon va en su área (browser tab) y el negativo en el footer.
+  - Revertí: removí el favicon del footer, dejando solo el logo negativo (`/brand/logo-negative.png?v=3`).
+  - Actualicé cache-busting: `?v=2` → `?v=3` para forzar recarga de la nueva versión.
+- **layout.tsx**: el favicon ya estaba configurado correctamente en `icons.icon` (`/favicon.png`) y `icons.apple` (`/brand/favicon.png`), apuntando a las ubicaciones actualizadas.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Footer: solo contiene `/brand/logo-negative.png?v=3` (Nutrition 10K) — sin favicon ✓.
+  - Browser tab: `<link rel="icon" href="/favicon.png">` + `<link rel="apple-touch-icon" href="/brand/favicon.png">` ✓.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Favicon** en su área: browser tab (vía `layout.tsx` icons.icon → `/favicon.png`).
+- **Logo negativo** en su área: footer (única imagen de marca en el footer).
+- Cada logo en su región correspondiente, no duplicados.
+- Cache-busting actualizado a `?v=3` para forzar recarga.
+- Cambios committeados y pusheados a GitHub.
