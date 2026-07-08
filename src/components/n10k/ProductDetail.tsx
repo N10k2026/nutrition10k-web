@@ -149,14 +149,14 @@ export default function ProductDetail() {
   // Header block (category + name + tagline)
   const headerBlock = (
     <div className="mb-3">
-      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+      <p className="text-xs uppercase tracking-wide text-white/60 mb-1">
         {selectedProduct.category}
       </p>
-      <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight">
+      <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight text-white">
         {selectedProduct.name}
       </h2>
       {richProduct && (
-        <p className="text-sm text-muted-foreground">{richProduct.tagline}</p>
+        <p className="text-sm text-white/70">{richProduct.tagline}</p>
       )}
     </div>
   );
@@ -169,7 +169,7 @@ export default function ProductDetail() {
           ${currentPrice}
         </span>
       ) : (
-        <span className="text-sm text-muted-foreground italic">Precio por confirmar</span>
+        <span className="text-sm text-white/60 italic">Precio por confirmar</span>
       )}
       {selectedProduct.isNew && (
         <span className="bg-[#E30613] text-white text-[10px] font-black px-2 py-1 rounded-full uppercase">
@@ -186,7 +186,7 @@ export default function ProductDetail() {
 
   // Description block
   const descriptionBlock = (
-    <p className="text-sm text-muted-foreground/90 leading-relaxed mb-5">
+    <p className="text-sm text-white/80 leading-relaxed mb-5">
       {selectedProduct.description}
     </p>
   );
@@ -197,7 +197,7 @@ export default function ProductDetail() {
       {/* Size selector */}
       {selectedProduct.sizes.length > 0 && (
         <div className="mb-5">
-          <p className="text-xs font-display-bold uppercase tracking-wide text-muted-foreground mb-2">
+          <p className="text-xs font-display-bold uppercase tracking-wide text-white/60 mb-2">
             Presentación
           </p>
           <div className="flex flex-wrap gap-2">
@@ -207,8 +207,8 @@ export default function ProductDetail() {
                 onClick={() => setSelectedSize(size)}
                 className={`px-4 py-2 rounded-xl text-sm font-display-semibold border transition-all cursor-pointer ${
                   selectedSize === size
-                    ? 'border-[#E30613] bg-[#E30613]/10 text-[#E30613]'
-                    : 'border-border hover:border-foreground/30'
+                    ? 'border-[#E30613] bg-[#E30613]/20 text-white'
+                    : 'border-white/20 text-white/80 hover:border-white/40'
                 }`}
               >
                 {size}
@@ -224,10 +224,10 @@ export default function ProductDetail() {
           Cantidad
         </p>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 bg-muted rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-white/10 rounded-xl p-1">
             <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="w-8 h-8 rounded-lg hover:bg-background flex items-center justify-center cursor-pointer"
+              className="w-8 h-8 rounded-lg hover:bg-white/10 text-white flex items-center justify-center cursor-pointer"
               aria-label="Disminuir cantidad"
             >
               <Minus className="h-4 w-4" />
@@ -241,9 +241,9 @@ export default function ProductDetail() {
               <Plus className="h-4 w-4" />
             </button>
           </div>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-white/70">
             Subtotal:{' '}
-            <span className="font-display-bold text-foreground">
+            <span className="font-display-bold text-white">
               ${subtotal > 0 ? subtotal.toFixed(2) : '—'}
             </span>
           </span>
@@ -266,7 +266,7 @@ export default function ProductDetail() {
               selectedProduct.flavors?.[0]?.name ?? selectedProduct.name,
             )
           }
-          className="w-12 h-12 rounded-xl border border-border hover:border-foreground/30 flex items-center justify-center transition-colors cursor-pointer"
+          className="w-12 h-12 rounded-xl border border-white/20 hover:border-white/40 text-white flex items-center justify-center transition-colors cursor-pointer"
           aria-label={isWishlisted ? 'Quitar de favoritos' : 'Agregar a favoritos'}
         >
           <Heart
@@ -282,10 +282,10 @@ export default function ProductDetail() {
             <Share2 className="h-5 w-5" />
           </button>
           {shareOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-xl shadow-2xl overflow-hidden z-20">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-black/80 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl overflow-hidden z-20">
               <button
                 onClick={() => handleShare('copy')}
-                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted cursor-pointer"
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white hover:bg-white/10 cursor-pointer"
               >
                 <Check className="h-4 w-4" /> Copiar enlace
               </button>
@@ -305,17 +305,17 @@ export default function ProductDetail() {
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <Beaker className="h-4 w-4" style={{ color: brandColor }} />
-            <h3 className="font-display-bold text-sm uppercase tracking-wide">
+            <h3 className="font-display-bold text-sm uppercase tracking-wide text-white">
               Ingredientes
             </h3>
           </div>
           <div className="space-y-2">
             {richProduct.ingredients.map((ing, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 bg-muted/50 rounded-xl">
+              <div key={i} className="flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-xl">
                 <span className="text-xl shrink-0">{ing.emoji}</span>
                 <div>
-                  <p className="font-display-bold text-sm">{ing.name}</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="font-display-bold text-sm text-white">{ing.name}</p>
+                  <p className="text-xs text-white/60 leading-relaxed">
                     {ing.description}
                   </p>
                 </div>
@@ -330,20 +330,20 @@ export default function ProductDetail() {
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <Pill className="h-4 w-4" style={{ color: brandColor }} />
-            <h3 className="font-display-bold text-sm uppercase tracking-wide">
+            <h3 className="font-display-bold text-sm uppercase tracking-wide text-white">
               Información Nutricional
             </h3>
           </div>
-          <div className="bg-muted/50 rounded-xl overflow-hidden">
+          <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
             {richProduct.nutritionFacts.map((fact, i) => (
               <div
                 key={i}
                 className={`flex items-center justify-between px-4 py-2.5 text-sm ${
-                  i % 2 === 0 ? 'bg-muted/30' : ''
+                  i % 2 === 0 ? 'bg-white/5' : ''
                 }`}
               >
-                <span className="text-muted-foreground">{fact.label}</span>
-                <span className="font-display-bold">{fact.value}</span>
+                <span className="text-white/60">{fact.label}</span>
+                <span className="font-display-bold text-white">{fact.value}</span>
               </div>
             ))}
           </div>
@@ -355,11 +355,11 @@ export default function ProductDetail() {
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-2">
             <Package className="h-4 w-4" style={{ color: brandColor }} />
-            <h3 className="font-display-bold text-sm uppercase tracking-wide">
+            <h3 className="font-display-bold text-sm uppercase tracking-wide text-white">
               Modo de Empleo
             </h3>
           </div>
-          <p className="text-sm text-muted-foreground/90 leading-relaxed p-3 bg-muted/50 rounded-xl">
+          <p className="text-sm text-white/80 leading-relaxed p-3 bg-white/5 border border-white/10 rounded-xl">
             {richProduct.usage}
           </p>
         </div>
@@ -368,12 +368,12 @@ export default function ProductDetail() {
       {/* Benefits */}
       {richProduct && richProduct.benefits.length > 0 && (
         <div className="mb-5">
-          <h3 className="font-display-bold text-sm uppercase tracking-wide mb-2">
+          <h3 className="font-display-bold text-sm uppercase tracking-wide text-white mb-2">
             Beneficios
           </h3>
           <div className="space-y-1.5">
             {richProduct.benefits.map((benefit, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+              <div key={i} className="flex items-start gap-2 text-sm text-white/70">
                 <Check className="h-4 w-4 shrink-0 mt-0.5" style={{ color: brandColor }} />
                 <span>{benefit}</span>
               </div>
@@ -399,7 +399,7 @@ export default function ProductDetail() {
   const galleryBlock = (
     <div className="relative">
       {/* Main image */}
-      <div className="relative aspect-[5/6] overflow-hidden bg-muted/30 rounded-xl">
+      <div className="relative aspect-[5/6] overflow-hidden bg-white/5 rounded-xl">
         <img
           src={currentImage}
           alt={`${selectedProduct.name} - imagen ${activeSlideIndex + 1}`}
@@ -414,7 +414,7 @@ export default function ProductDetail() {
               onClick={() =>
                 setActiveSlideIndex((i) => (i - 1 + galleryImages.length) % galleryImages.length)
               }
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors cursor-pointer"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/80 text-white transition-colors cursor-pointer"
               aria-label="Imagen anterior"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -427,7 +427,7 @@ export default function ProductDetail() {
               <ChevronRight className="h-5 w-5" />
             </button>
             {/* Slide counter */}
-            <span className="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-display-bold">
+            <span className="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs font-display-bold text-white">
               {activeSlideIndex + 1} / {galleryImages.length}
             </span>
           </>
@@ -458,8 +458,8 @@ export default function ProductDetail() {
 
   // Recommended products block
   const recommendedBlock = recommendedProducts.length > 0 && (
-    <div className="mt-4 pt-3 border-t border-border">
-      <h3 className="font-display-bold text-xs uppercase tracking-wide mb-2">
+    <div className="mt-4 pt-3 border-t border-white/10">
+      <h3 className="font-display-bold text-xs uppercase tracking-wide text-white mb-2">
         Porque te puede interesar
       </h3>
       <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
@@ -475,14 +475,14 @@ export default function ProductDetail() {
               }}
               className="shrink-0 w-16 text-left cursor-pointer group"
             >
-              <div className="aspect-[4/5] rounded-md overflow-hidden mb-1 bg-muted/30">
+              <div className="aspect-[4/5] rounded-md overflow-hidden mb-1 bg-white/5">
                 <img
                   src={storeProduct.image}
                   alt={rec.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                 />
               </div>
-              <p className="text-[10px] font-display-bold line-clamp-1">{rec.name}</p>
+              <p className="text-[10px] font-display-bold line-clamp-1 text-white">{rec.name}</p>
               {rec.price ? (
                 <p className="text-[10px] font-display-bold text-[#E30613]">
                   ${rec.price}
@@ -498,7 +498,7 @@ export default function ProductDetail() {
   return (
     <Dialog open={isOpen} onOpenChange={setDetailOpen}>
       <DialogContent
-        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden bg-background !border-2"
+        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden !border-2 bg-black/60 backdrop-blur-2xl"
         style={{
           borderColor: brandColor,
           boxShadow: `0 0 50px 8px ${glowColor}, 0 0 120px 30px ${glowColorSoft}`,

@@ -2478,3 +2478,45 @@ Stage Summary:
   - Badges, wishlist y quick-add mantienen su funcionalidad.
 - Precio en blanco sobre el overlay (no rojo) porque el user pidió "letras en blanco" sobre el glassmorphism.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 69
+Agent: main (Z.ai Code)
+Task: Cambiar el fondo blanco del ProductDetail por glassmorphism oscuro con sombreado, y adaptar todos los textos y botones para que sean visibles (blancos) sobre el fondo oscuro.
+
+Work Log:
+- **Fondo del modal** (`DialogContent` en ProductDetail.tsx):
+  - Antes: `bg-background` (blanco sólido).
+  - Ahora: `bg-black/60 backdrop-blur-2xl` (glassmorphism oscuro: 60% negro + blur 40px).
+  - Se mantiene el borde dinámico `!border-2` con `brandColor` y el glow `boxShadow`.
+- **Adaptación de textos y fondos internos** (31 reemplazos vía script Python + edits manuales):
+  - **Textos principales → blancos**: categoría (`text-white/60`), nombre del producto (`text-white`), tagline (`text-white/70`), descripción (`text-white/80`), labels de Presentación/Cantidad (`text-white/60`), subtotal (`text-white/70` + valor `text-white`), headers de secciones (Ingredientes, Info Nutricional, Modo de Empleo, Beneficios, "Porque te puede interesar" → `text-white`), nombre de productos recomendados (`text-white`).
+  - **Precio**: mantiene `text-[#E30613]` (rojo de marca) para destacar.
+  - **"Precio por confirmar"**: `text-white/60 italic`.
+  - **Cards internas** (ingredientes, nutrition facts, usage): `bg-muted/50` → `bg-white/5 border border-white/10`.
+  - **Filas alternas nutrition facts**: `bg-muted/30` → `bg-white/5`.
+  - **Control de cantidad**: `bg-muted` → `bg-white/10`; botones +/- `hover:bg-background` → `hover:bg-white/10 text-white`.
+  - **Botones wishlist/share**: `border-border hover:border-foreground/30` → `border-white/20 hover:border-white/40 text-white`.
+  - **Selector de presentación**: activo `bg-[#E30613]/10 text-[#E30613]` → `bg-[#E30613]/20 text-white`; inactivo `border-border` → `border-white/20 text-white/80 hover:border-white/40`.
+  - **Dropdown de share**: `bg-popover border-border` → `bg-black/80 backdrop-blur-xl border-white/20`; items `hover:bg-muted` → `hover:bg-white/10 text-white`.
+  - **Botón "Agregar al Carrito"**: mantiene `bg-[#E30613] text-white` (ya era visible).
+  - **Área de imagen**: `bg-muted/30` → `bg-white/5`.
+  - **Flechas de navegación de galería**: `bg-background/80` → `bg-black/60 text-white hover:bg-black/80`.
+  - **Contador de slide**: `bg-background/80` → `bg-black/60 text-white`.
+  - **Thumbnails de recomendados**: `bg-muted/30` → `bg-white/5`.
+  - **Separador de recomendados**: `border-border` → `border-white/10`.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser: modal bg = `oklab(0 0 0 / 0.6)` (negro 60%), backdrop-filter = `blur(40px)`.
+  - VLM confirmó: "El fondo del modal de producto es oscuro (con efecto glassmorphism)... Los textos son legibles. Título blanco, categoría gris claro, descripción blanca, precio rojo, labels gris claro, subtotal blanco."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **ProductDetail ahora tiene fondo glassmorphism oscuro** (`bg-black/60 backdrop-blur-2xl`) en lugar del fondo blanco sólido.
+- **Todos los textos adaptados a blanco** (categoría `white/60`, nombre `white`, descripción `white/80`, labels `white/60`) para legibilidad sobre el fondo oscuro.
+- **Cards internas** (ingredientes, nutrition, usage) con `bg-white/5 border-white/10` (glass sutil).
+- **Botones** (wishlist, share, +/-) con bordes `white/20` y texto blanco.
+- **Dropdown de share** con glassmorphism oscuro.
+- **Precio mantiene rojo #E30613** para destacar sobre el fondo oscuro.
+- El borde dinámico (brandColor) y el glow se mantienen sobre el nuevo fondo glass.
+- Cambios committeados y pusheados a GitHub.
