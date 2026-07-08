@@ -2583,3 +2583,35 @@ Stage Summary:
 - El DialogContent es ahora un contenedor transparente; el BorderGlow es el card visible con fondo blanco, borde mesh-gradient y glow direccional.
 - Reemplazó el boxShadow estático anterior (glow radial fijo) por un glow dinámico que responde al movimiento del cursor.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 72
+Agent: main (Z.ai Code)
+Task: Corregir el scroll del ProductDetail que desapareció al integrar BorderGlow — el contenido no se podía desplazar para ver la info inferior.
+
+Work Log:
+- **Diagnóstico:** Al envolver el contenido del modal dentro de `<BorderGlow>`, la estructura de layout cambió:
+  - `.border-glow-card` tenía `display: grid; overflow: visible;` → la card se expandía al tamaño del contenido (1659px) en lugar de respetar el 90vh, y el `overflow: visible` impedía que el contenido se recortara/scrollara.
+  - `.border-glow-inner` tenía `overflow: auto` pero sin `height: 100%` ni `min-height: 0` → no creaba un contenedor de scroll válido.
+  - Resultado: el modal crecía más allá del viewport y la barra de scroll desaparecía.
+- **Solución en `src/components/ui/border-glow.css`:**
+  - `.border-glow-card`: cambié `display: grid; overflow: visible;` → `display: flex; flex-direction: column; overflow: hidden; height: 100%;`. Esto asegura que la card respete la altura del DialogContent (90vh) y recorte el contenido.
+  - `.border-glow-inner`: cambié `height: 100%; overflow: auto;` → `flex: 1 1 0%; min-height: 0; overflow: hidden;`. En un contexto flex, `flex: 1 1 0%; min-height: 0;` hace que el inner llene el espacio disponible sin desbordarse.
+  - Añadí regla `.border-glow-inner > div { flex: 1 1 0%; min-height: 0; }` para que los layouts (mobile y desktop) llenen el inner y puedan scrollar.
+- **Resultado:**
+  - La card respeta `height: 100%` (90vh del DialogContent).
+  - El layout mobile/desktop llena el espacio y su `overflow-y-auto` (de Tailwind) permite scroll.
+  - En desktop, las dos columnas (galería izquierda + info derecha) hacen scroll independientemente.
+  - En mobile, el layout vertical completa hace scroll.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Desktop (1280x577): columna izquierda (galería) sh=857 > h=517 canScroll=true ✓; columna derecha (info) sh=1659 > h=517 canScroll=true ✓; scrollTop=500 funciona ✓; VLM confirmó ingredientes visibles tras scroll + scrollbar visible ✓.
+  - Mobile (375x812): h=729, sh=2365, canScroll=true ✓; scrollTop=400 funciona ✓.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Scroll del ProductDetail restaurado** tras la integración de BorderGlow.
+- Causa raíz: el CSS original de BorderGlow (`display: grid; overflow: visible;`) hacía que la card se expandiera al tamaño del contenido, rompiendo la cadena de alturas y eliminando el scroll.
+- Solución: cambiar a `display: flex; flex-direction: column; overflow: hidden; height: 100%;` en la card + `flex: 1 1 0%; min-height: 0;` en el inner y sus hijos.
+- El efecto glow interactivo de BorderGlow se mantiene (borde mesh + glow direccional que sigue el cursor).
+- Cambios committeados y pusheados a GitHub.
