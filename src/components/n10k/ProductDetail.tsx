@@ -149,7 +149,7 @@ export default function ProductDetail() {
   // Header block (category + name + tagline)
   const headerBlock = (
     <div className="mb-3">
-      <p className="text-xs uppercase tracking-wide text-white/60 mb-1">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
         {selectedProduct.category}
       </p>
       <h2 className="font-display-black text-xl sm:text-2xl md:text-3xl mb-1 leading-tight">
@@ -186,7 +186,7 @@ export default function ProductDetail() {
 
   // Description block
   const descriptionBlock = (
-    <p className="text-sm text-white/80 leading-relaxed mb-5">
+    <p className="text-sm text-muted-foreground/90 leading-relaxed mb-5">
       {selectedProduct.description}
     </p>
   );
@@ -197,7 +197,7 @@ export default function ProductDetail() {
       {/* Size selector */}
       {selectedProduct.sizes.length > 0 && (
         <div className="mb-5">
-          <p className="text-xs font-display-bold uppercase tracking-wide text-white/60 mb-2">
+          <p className="text-xs font-display-bold uppercase tracking-wide text-muted-foreground mb-2">
             Presentación
           </p>
           <div className="flex flex-wrap gap-2">
@@ -373,7 +373,7 @@ export default function ProductDetail() {
           </h3>
           <div className="space-y-1.5">
             {richProduct.benefits.map((benefit, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-white/70">
+              <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                 <Check className="h-4 w-4 shrink-0 mt-0.5" style={{ color: brandColor }} />
                 <span>{benefit}</span>
               </div>
@@ -498,7 +498,7 @@ export default function ProductDetail() {
   return (
     <Dialog open={isOpen} onOpenChange={setDetailOpen}>
       <DialogContent
-        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden !border-2 bg-white/70 backdrop-blur-2xl"
+        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden bg-background !border-2"
         style={{
           borderColor: brandColor,
           boxShadow: `0 0 50px 8px ${glowColor}, 0 0 120px 30px ${glowColorSoft}`,

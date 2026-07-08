@@ -2520,3 +2520,32 @@ Stage Summary:
 - **Precio mantiene rojo #E30613** para destacar sobre el fondo oscuro.
 - El borde dinámico (brandColor) y el glow se mantienen sobre el nuevo fondo glass.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 70
+Agent: main (Z.ai Code)
+Task: Revertir el fondo del ProductDetail al estado blanco original (deshacer los cambios de glassmorphism oscuro y blanco).
+
+Work Log:
+- El usuario probó glassmorphism oscuro (Task 69, bg-black/60), luego glass blanco (bg-white/70), pero ninguno convenció.
+- Revertí al estado anterior al Task 69:
+  - Fondo del DialogContent: `bg-white/70 backdrop-blur-2xl` → `bg-background` (blanco sólido original).
+  - Textos: reverí todos los `text-white*` → `text-muted-foreground` / `text-foreground` (oscuros sobre blanco).
+  - Cards internas (ingredientes, nutrition, usage): `bg-white/5 border-white/10` → `bg-muted/50` (original).
+  - Botones (wishlist, share, +/-): bordes `white/20` → `border-border` (original).
+  - Selector de presentación: `bg-[#E30613]/20 text-white` → `bg-[#E30613]/10 text-[#E30613]` (original).
+  - Dropdown de share: `bg-black/80 backdrop-blur-xl` → `bg-popover` (original).
+  - Nav arrows, slide counter, thumbnails: revertidos a `bg-background/80` y `bg-muted/30`.
+- Se mantienen los cambios del Task 65 (glow dinámico con brandColor) y Task 66 (brandColors corregidos) — el borde dinámico y el glow siguen activos sobre el fondo blanco.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser: bg = `lab(100 0 0)` (blanco puro), h2 color = `lab(0.462488...)` (oscuro).
+  - VLM confirmó: "El fondo del modal de producto es blanco. Los textos son oscuros y legibles."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **ProductDetail revertido al fondo blanco original** (`bg-background`).
+- Todos los textos volvieron a colores oscuros (muted-foreground / foreground) sobre fondo blanco.
+- Se mantienen el borde dinámico (brandColor, 2px) y el glow (halo radial brandColor) del Task 65.
+- Los únicos `text-white` restantes son los correctos: badges (Top/Nuevo) sobre rojo y botón "Agregar al Carrito" sobre rojo.
+- Cambios committeados y pusheados a GitHub.
