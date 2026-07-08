@@ -2,7 +2,7 @@
 
 import { useRef, useMemo, useState, useEffect } from 'react';
 import { useCartStore } from '@/lib/store';
-import { PRODUCTS, CATEGORIES, type ProductCategory } from '@/data/products';
+import { CATEGORIES, type ProductCategory } from '@/data/products';
 import { BlurIn, SplitWords } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef, useStaggerChildren } from '@/hooks/use-scroll-visible';
 import { handleKeyboardClick, getProductShareUrl, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
@@ -259,89 +259,85 @@ function ProductCard({
   onWishlistToggle: (e: React.MouseEvent) => void;
   onShare: (e: React.MouseEvent) => void;
 }) {
-  const n10kProduct = PRODUCTS.find((p) => p.id === product.id);
-  const brandColor = n10kProduct?.brandColor ?? '#E30613';
   const isWishlisted = wishlistSet.has(product.id);
 
   return (
     <div
-      className="pg-card glass-card group cursor-pointer overflow-hidden"
+      className="pg-card group cursor-pointer overflow-hidden rounded-[20px] border border-border relative aspect-[4/5] bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
       role="button"
       tabIndex={0}
       onClick={onViewDetail}
       onKeyDown={(e) => handleKeyboardClick(e, onViewDetail)}
     >
-      {/* Image */}
-      <div className="relative aspect-[4/5] overflow-hidden rounded-t-[20px]">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+      {/* Image fills entire card */}
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        loading="lazy"
+      />
 
-        {/* Brand color bar */}
-        <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: brandColor }} />
-
-        {/* Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1">
-          {product.isBestSeller && (
-            <span className="bg-[#E30613] text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">
-              Top
-            </span>
-          )}
-          {product.isNew && (
-            <span className="bg-white/90 text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">
-              Nuevo
-            </span>
-          )}
-        </div>
-
-        {/* Wishlist */}
-        <button
-          onClick={onWishlistToggle}
-          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/30 backdrop-blur-md flex items-center justify-center hover:bg-black/50 transition-colors cursor-pointer"
-          aria-label={isWishlisted ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-        >
-          <Heart
-            className={`h-4 w-4 transition-all ${isWishlisted ? 'fill-[#E30613] text-[#E30613] heart-animate' : 'text-white'}`}
-          />
-        </button>
-
-        {/* Quick add */}
-        <button
-          onClick={onQuickAdd}
-          className="absolute bottom-2 right-2 w-9 h-9 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 translate-y-10 group-hover:translate-y-0 cursor-pointer"
-          aria-label={`Agregar ${product.name} al carrito`}
-        >
-          <ShoppingBag className="h-4 w-4" />
-        </button>
+      {/* Badges */}
+      <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+        {product.isBestSeller && (
+          <span className="bg-[#E30613] text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">
+            Top
+          </span>
+        )}
+        {product.isNew && (
+          <span className="bg-white/90 text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">
+            Nuevo
+          </span>
+        )}
       </div>
 
-      {/* Info */}
-      <div className="p-3">
-        <p className="text-[9px] uppercase tracking-wide text-muted-foreground mb-0.5">
+      {/* Wishlist */}
+      <button
+        onClick={onWishlistToggle}
+        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/30 backdrop-blur-md flex items-center justify-center hover:bg-black/50 transition-colors cursor-pointer z-10"
+        aria-label={isWishlisted ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+      >
+        <Heart
+          className={`h-4 w-4 transition-all ${isWishlisted ? 'fill-[#E30613] text-[#E30613] heart-animate' : 'text-white'}`}
+        />
+      </button>
+
+      {/* Quick add */}
+      <button
+        onClick={onQuickAdd}
+        className="absolute bottom-2 right-2 w-9 h-9 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 translate-y-10 group-hover:translate-y-0 cursor-pointer z-20"
+        aria-label={`Agregar ${product.name} al carrito`}
+      >
+        <ShoppingBag className="h-4 w-4" />
+      </button>
+
+      {/* Glassmorphism info overlay at bottom
+          - Mobile: always visible (dark glass + white text)
+          - Desktop (md): hidden, shows on hover */}
+      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black/45 backdrop-blur-md transition-all duration-300 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+        <p className="text-[9px] uppercase tracking-wide text-white/70 mb-0.5">
           {product.category}
         </p>
-        <h3 className="font-display-bold text-xs sm:text-sm mb-1 line-clamp-1">{product.name}</h3>
+        <h3 className="font-display-bold text-xs sm:text-sm mb-1 line-clamp-1 text-white">
+          {product.name}
+        </h3>
         {product.rating && (
           <div className="flex items-center gap-1 mb-1">
-            <Star className="h-3 w-3 fill-[#E30613] text-[#E30613]" />
-            <span className="text-[10px] text-muted-foreground">{product.rating.toFixed(1)}</span>
+            <Star className="h-3 w-3 fill-white text-white" />
+            <span className="text-[10px] text-white/80">{product.rating.toFixed(1)}</span>
           </div>
         )}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pr-10">
           {product.price > 0 ? (
-            <span className="font-display-bold text-sm sm:text-base text-[#E30613]">
+            <span className="font-display-bold text-sm sm:text-base text-white">
               {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
             </span>
           ) : (
-            <span className="text-[10px] text-muted-foreground italic">Por confirmar</span>
+            <span className="text-[10px] text-white/60 italic">Por confirmar</span>
           )}
           <button
             onClick={onShare}
-            className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="text-white/70 hover:text-white transition-colors cursor-pointer"
             aria-label="Compartir producto"
           >
             <Share2 className="h-3.5 w-3.5" />

@@ -2430,3 +2430,51 @@ Stage Summary:
 - **Categorías reordenadas** por número de productos (Proteínas y Rendimiento primero con 4 cada una), con agrupación lógica (quemadores/inhibidores/cetogénicos juntos, nutracéuticos/longevidad juntos).
 - **Layout de filtros responsive**: en mobile los pills y el sort se apilan verticalmente (antes se amontonaban en una fila); en desktop mantienen el layout side-by-side.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 68
+Agent: main (Z.ai Code)
+Task: Rediseñar las cards de producto: eliminar el borde rojo y la barra de color, diseño minimalista con imagen llenando la card, info (categoría/nombre/precio) sobre la imagen con glassmorphism — en mobile siempre visible con letras blancas, en desktop solo visible al hacer hover.
+
+Work Log:
+- **Análisis de la imagen de referencia** (VLM): cards minimalistas, imagen ocupa toda la card, sin borde rojo visible, info sobre la imagen.
+- **Rediseño del ProductCard en `src/components/n10k/ProductGrid.tsx`:**
+  - **Eliminado:**
+    - Clase `glass-card` (que tenía `border: 1px solid #E30613` — borde rojo).
+    - Barra de color de marca (`h-1` con `backgroundColor: brandColor`) en la parte superior.
+    - Sección de info separada debajo de la imagen (`p-3` con categoría/nombre/precio en fondo claro).
+    - Gradient overlay `from-black/60`.
+    - Variables no usadas: `n10kProduct`, `brandColor` y import `PRODUCTS`.
+  - **Nuevo diseño:**
+    - Card: `rounded-[20px] border border-border relative aspect-[4/5]` — borde sutil neutral (no rojo), la imagen llena toda la card con `w-full h-full object-cover`.
+    - Badges (Top/Nuevo) y botón wishlist: posicionados arriba, `z-10`.
+    - Botón quick-add: `absolute bottom-2 right-2 z-20`, aparece en hover (desktop) o visible (mobile via translate-y-10 → group-hover:translate-y-0).
+    - **Overlay glassmorphism en la parte inferior** (`absolute bottom-0 left-0 right-0 p-3 bg-black/45 backdrop-blur-md`):
+      - Contiene: categoría (text-white/70), nombre (text-white), rating (estrellas blancas), precio (text-white), botón share (text-white/70).
+      - **Mobile**: siempre visible (`opacity: 1` por defecto).
+      - **Desktop (md+)**: oculto por defecto (`md:opacity-0 md:translate-y-2`), aparece al hover (`md:group-hover:opacity-100 md:group-hover:translate-y-0`).
+      - `pr-10` en la fila de precio/share para no solaparse con el botón quick-add.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (mobile 375x812):
+    - Borde: neutral (no rojo) ✓
+    - Sin barra roja (`cardHasRedBar: false`) ✓
+    - Overlay visible: opacity 1, bg alpha 0.45, backdrop blur 12px ✓
+    - Texto blanco: rgb(255,255,255) ✓
+  - Agent Browser (desktop 1280x800):
+    - Overlay oculto por defecto: opacity 0 ✓
+    - Clase `md:group-hover:opacity-100` presente para mostrar en hover ✓
+  - VLM confirmó en captura mobile: "las cards muestran el nombre del producto, categoría y precio sobre la imagen con un fondo oscuro semitransparente (glassmorphism) en la parte inferior, y las letras son blancas."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Cards rediseñadas con estética minimalista + glassmorphism:**
+  - Borde rojo eliminado → reemplazado por borde sutil neutral (`border-border`).
+  - Barra de color de marca eliminada.
+  - Imagen llena toda la card (aspect 4/5).
+  - Info (categoría/nombre/precio) sobre la imagen en la parte inferior con glassmorphism (`bg-black/45 backdrop-blur-md`).
+  - **Mobile**: info siempre visible, letras blancas sobre glass oscura.
+  - **Desktop**: info oculta, aparece al hacer hover sobre la card.
+  - Badges, wishlist y quick-add mantienen su funcionalidad.
+- Precio en blanco sobre el overlay (no rojo) porque el user pidió "letras en blanco" sobre el glassmorphism.
+- Cambios committeados y pusheados a GitHub.
