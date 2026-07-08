@@ -2549,3 +2549,37 @@ Stage Summary:
 - Se mantienen el borde dinámico (brandColor, 2px) y el glow (halo radial brandColor) del Task 65.
 - Los únicos `text-white` restantes son los correctos: badges (Top/Nuevo) sobre rojo y botón "Agregar al Carrito" sobre rojo.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 71
+Agent: main (Z.ai Code)
+Task: Integrar el componente BorderGlow de React Bits en el ProductDetail modal — glow interactivo que sigue el cursor cerca de los bordes, usando el brandColor de cada producto.
+
+Work Log:
+- **Creé el componente BorderGlow** en TypeScript:
+  - `src/components/ui/border-glow.tsx` — adapté el JSX original a TSX con tipos (ReactNode, CSSProperties, interfaz BorderGlowProps).
+  - `src/components/ui/border-glow.css` — copié el CSS original sin cambios.
+  - El componente renderiza una card con: borde mesh-gradient, glow direccional que sigue el cursor (conic-gradient mask), y halo exterior (edge-light).
+- **Integración en ProductDetail.tsx:**
+  - Añadí import de BorderGlow.
+  - Añadí helper `hexToHsl(hex)` que convierte el brandColor hex a formato "H S L" (requerido por la prop `glowColor` del componente).
+  - Removí `hexToRgba`, `glowColor`, `glowColorSoft` (ya no se usan — el boxShadow estático fue reemplazado por BorderGlow).
+  - **DialogContent**: cambié de `bg-background !border-2` + `boxShadow` estático → `!bg-transparent !border-0 !shadow-none overflow-visible` (contenedor transparente, el BorderGlow es el card visible).
+  - **Envolví todo el contenido** (VisuallyHidden + mobile layout + desktop layout) dentro de `<BorderGlow>`:
+    - `glowColor={glowHsl}` — HSL del brandColor del producto (verde para Bye Bye Belly, teal para CLA, etc.).
+    - `backgroundColor="var(--background, #ffffff)"` — fondo blanco (preserva el theme).
+    - `borderRadius={20}`, `glowRadius={50}`, `glowIntensity={1.2}`, `edgeSensitivity={25}`, `coneSpread={25}`, `fillOpacity={0.3}`.
+    - `colors={[brandColor, brandColor, brandColor]}` — mesh gradient del color de marca.
+    - `className="!h-full"` — llena el DialogContent (90vh).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser: confirmó que el modal se abre, `.border-glow-card` está presente en el DOM, `display: grid`, contenido visible.
+  - VLM confirmó: "Sí, hay un modal de producto visible. El modal tiene un borde con glow (resplandor verde) alrededor. Su fondo es blanco. Hay textos visibles, incluyendo el título 'Bye Bye Belly', descripción, precio, etc."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **BorderGlow de React Bits integrado en el ProductDetail** — efecto de glow interactivo que sigue el cursor cuando se acerca a los bordes del modal.
+- El glow usa el brandColor de cada producto (convertido a HSL), al igual que el mesh-gradient del borde.
+- El DialogContent es ahora un contenedor transparente; el BorderGlow es el card visible con fondo blanco, borde mesh-gradient y glow direccional.
+- Reemplazó el boxShadow estático anterior (glow radial fijo) por un glow dinámico que responde al movimiento del cursor.
+- Cambios committeados y pusheados a GitHub.
