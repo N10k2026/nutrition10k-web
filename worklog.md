@@ -2676,3 +2676,42 @@ Stage Summary:
 - **Glow simple restaurado** vía `boxShadow` directo en el DialogContent: borde de color (brandColor 2px) + halo cercano (30px, 50% opacidad) + halo exterior suave (80px, 25% opacidad).
 - El glow es siempre visible (no depende de hover), usa el brandColor de cada producto, y el scroll funciona correctamente.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 75
+Agent: main (Z.ai Code)
+Task: En mobile, reducir el tamaño del overlay glass de la card para que no tape la mitad de la imagen, ajustar nombre/precio para que no se deforme, y hacer visible el botón de añadir al carrito (estaba cortado/fuera de la card).
+
+Work Log:
+- **Problemas identificados en la card mobile:**
+  1. El overlay glass tenía `p-3` + 4 líneas (categoría, nombre, rating, precio) → ocupaba ~35% de la card, tapando parte de la imagen.
+  2. El botón quick-add tenía `translate-y-10` (40px abajo) que lo empujaba fuera de la card en mobile (no hay hover en mobile, así que nunca llegaba a `translate-y-0`).
+- **Solución en `src/components/n10k/ProductGrid.tsx`:**
+  - **Overlay más compacto:**
+    - Padding: `p-3` → `px-2.5 py-1.5` (menos padding).
+    - Categoría: `text-[9px]` → `text-[8px]`, `leading-tight`, removido `mb-0.5`.
+    - Nombre: `text-xs` → `text-[11px]`, `leading-tight`, removido `mb-1`.
+    - Removido el bloque de rating (estrellas) — no era esencial y ocupaba espacio.
+    - Precio: `text-sm` → `text-xs`.
+    - Share button: `h-3.5` → `h-3`.
+    - Removido `pr-10` (ya no hay quick-add en la esquina inferior que necesite espacio).
+  - **Botón quick-add visible en mobile:**
+    - Posición: `bottom-2 right-2` → `top-12 right-2` (en mobile, debajo del botón wishlist).
+    - Tamaño: `w-9 h-9` → `w-7 h-7` (más pequeño).
+    - Icono: `h-4 w-4` → `h-3.5 w-3.5`.
+    - Visibilidad: removido `translate-y-10` global; ahora es `md:translate-y-10 md:group-hover:translate-y-0` (solo desktop lo oculta/aparece en hover; mobile siempre visible).
+    - En desktop: `md:top-2` (vuelve a la esquina superior derecha en hover).
+  - Removí el import de `Star` (ya no se usa tras quitar el rating).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (mobile 375x812):
+    - Overlay: 52px de 207px = 25% de la card (antes ~35%) ✓
+    - Botón quick-add: visible (28x28px), top=49px (debajo de wishlist), no cortado ✓
+  - VLM confirmó: "el overlay oscuro de abajo es pequeño (20-25%), el botón rojo de añadir al carrito es visible y no está cortado, el nombre y precio se ven bien."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Overlay glass más compacto en mobile** (25% vs 35% antes): padding reducido, texto más pequeño, rating removido.
+- **Botón quick-add visible en mobile** (28x28px, debajo del wishlist); en desktop sigue oculto y aparece en hover.
+- Nombre y precio no se deforman (text-[11px] + leading-tight + line-clamp-1).
+- Cambios committeados y pusheados a GitHub.

@@ -7,7 +7,7 @@ import { BlurIn, SplitWords } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef, useStaggerChildren } from '@/hooks/use-scroll-visible';
 import { handleKeyboardClick, getProductShareUrl, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
 import { gsap, ScrollTrigger } from '@/lib/gsap-init';
-import { ShoppingBag, Star, Heart, Share2, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Heart, Share2, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-asc';
@@ -302,34 +302,28 @@ function ProductCard({
         />
       </button>
 
-      {/* Quick add */}
+      {/* Quick add — visible en mobile (más pequeño), aparece en hover en desktop */}
       <button
         onClick={onQuickAdd}
-        className="absolute bottom-2 right-2 w-9 h-9 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 translate-y-10 group-hover:translate-y-0 cursor-pointer z-20"
+        className="absolute top-12 right-2 w-7 h-7 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 md:translate-y-10 md:group-hover:translate-y-0 md:top-2 cursor-pointer z-20"
         aria-label={`Agregar ${product.name} al carrito`}
       >
-        <ShoppingBag className="h-4 w-4" />
+        <ShoppingBag className="h-3.5 w-3.5" />
       </button>
 
-      {/* Glassmorphism info overlay at bottom
-          - Mobile: always visible (dark glass + white text)
+      {/* Glassmorphism info overlay at bottom — compacto
+          - Mobile: always visible (dark glass + white text), más bajo
           - Desktop (md): hidden, shows on hover */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black/45 backdrop-blur-md transition-all duration-300 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
-        <p className="text-[9px] uppercase tracking-wide text-white/70 mb-0.5">
+      <div className="absolute bottom-0 left-0 right-0 px-2.5 py-1.5 bg-black/50 backdrop-blur-md transition-all duration-300 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+        <p className="text-[8px] uppercase tracking-wide text-white/60 leading-tight">
           {product.category}
         </p>
-        <h3 className="font-display-bold text-xs sm:text-sm mb-1 line-clamp-1 text-white">
+        <h3 className="font-display-bold text-[11px] sm:text-sm leading-tight line-clamp-1 text-white">
           {product.name}
         </h3>
-        {product.rating && (
-          <div className="flex items-center gap-1 mb-1">
-            <Star className="h-3 w-3 fill-white text-white" />
-            <span className="text-[10px] text-white/80">{product.rating.toFixed(1)}</span>
-          </div>
-        )}
-        <div className="flex items-center justify-between pr-10">
+        <div className="flex items-center justify-between">
           {product.price > 0 ? (
-            <span className="font-display-bold text-sm sm:text-base text-white">
+            <span className="font-display-bold text-xs sm:text-base text-white">
               {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
             </span>
           ) : (
@@ -337,10 +331,10 @@ function ProductCard({
           )}
           <button
             onClick={onShare}
-            className="text-white/70 hover:text-white transition-colors cursor-pointer"
+            className="text-white/60 hover:text-white transition-colors cursor-pointer shrink-0"
             aria-label="Compartir producto"
           >
-            <Share2 className="h-3.5 w-3.5" />
+            <Share2 className="h-3 w-3" />
           </button>
         </div>
       </div>
