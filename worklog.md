@@ -2089,3 +2089,269 @@ Stage Summary:
 - Solución: `handleNavClick` hace scroll incremental para forzar el render de secciones deferred antes de hacer `scrollIntoView` al target.
 - La solución es genérica y funciona para cualquier enlace de navegación (#nosotros, #newsletter, #catalogo, #novedades) que apunte a una sección deferred.
 - Cambios committeados localmente pero SIN pushear (pendiente confirmación del usuario).
+
+---
+Task ID: 58
+Agent: main (Z.ai Code)
+Task: Añadir 9 imágenes subidas (Creatina01-09.jpg) al producto Creatine X-Plosion.
+
+Work Log:
+- Verifiqué las 9 imágenes subidas en `/home/z/my-project/upload/Creatina01.jpg` a `Creatina09.jpg`.
+- Analicé las 9 imágenes con VLM (z-ai vision) una por una:
+  - Creatina01: frasco frontal promocional (fondo de fuego)
+  - Creatina02: frasco/envase (Creatine HCL Tropical Blast)
+  - Creatina03: frasco promocional (fuerza, enfoque, rendimiento)
+  - Creatina04: frasco promocional ("CREADA PARA GANAR")
+  - Creatina05: frasco promocional (diseño impactante)
+  - Creatina06: frasco promocional (1200mg Creatine HCL, 100 servicios)
+  - Creatina07: frasco/envase (Tropical Blast, nutrientes, branding)
+  - Creatina08: parte posterior del envase (info nutricional, uso)
+  - Creatina09: etiqueta de info nutricional (ficha técnica)
+- Creé la carpeta `/home/z/my-project/public/products/creatine-x-plosion/`.
+- Convertí las 9 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - Creatina01.webp (84KB), 02 (53KB), 03 (53KB), 04 (62KB), 05 (41KB), 06 (48KB), 07 (35KB), 08 (49KB), 09 (38KB)
+  - Total: ~463KB
+- Actualicé `creatineXplosion` en `src/data/products.ts`:
+  - Añadí `image: '/products/creatine-x-plosion/Creatina01.webp'` (imagen principal — frasco promocional con fondo de fuego).
+  - Añadí `images: [...]` array con las 9 imágenes webp en orden.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Creatine X-Plosion con `image` y `images[]` (9 imágenes) correctos.
+  - Las 9 imágenes webp se sirven con HTTP 200 desde `/products/creatine-x-plosion/CreatinaXX.webp`.
+  - Agent Browser:
+    - Card del catálogo: muestra Creatina01.webp como imagen principal (640px, loaded=true).
+    - Modal de detalle: galería con las 9 imágenes, contador "1 / 9", navegación con flechas disponible.
+    - Thumbnails visibles en la galería (todas loaded=true, 640px natural).
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Creatine X-Plosion ahora tiene galería de 9 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~463KB total).
+- Galería interactiva: imagen principal + 8 thumbnails + navegación con flechas + contador "1 / 9".
+- Card del catálogo muestra la imagen principal (Creatina01 — frasco promocional con fondo de fuego).
+- Categoría: Rendimiento.
+
+---
+Task ID: 59
+Agent: main (Z.ai Code)
+Task: Añadir 6 imágenes del sachet (creatinasachet01-06.jpg) a la presentación "Sachet · 100 unidades" de Creatine X-Plosion, de forma que la galería cambie dinámicamente según la presentación seleccionada.
+
+Work Log:
+- Verifiqué las 6 imágenes subidas en `/home/z/my-project/upload/creatinasachet01.jpg` a `creatinasachet06.jpg`.
+- Analicé las 6 imágenes con VLM (z-ai vision) una por una:
+  - creatinasachet01: sachet frontal promocional (fondo de fuego, Tropical Blast, 1200mg creatina HCL)
+  - creatinasachet02: sachet promocional ("FUEL FOR THE FLOW STATE", diseño dinámico)
+  - creatinasachet03: caja/envase (naranja y negro, HCL Fast Absorption, Tropical Blast)
+  - creatinasachet04: display de sachets (diseño naranja y negro, Tropical Blast) — promocional
+  - creatinasachet05: sachet/envase (1200mg creatina HCL, energía, resistencia, fuerza)
+  - creatinasachet06: etiqueta de info nutricional (ficha técnica)
+- **Implementé soporte de imágenes por presentación (`sizeImages`)** — nueva feature:
+  - Añadí `sizeImages?: Record<string, string[]>` a la interfaz `NutritionProduct` (products.ts).
+  - Añadí `sizeImages?: Record<string, string[]>` a la interfaz `Product` (store.ts).
+  - Actualicé `toStoreProduct` para pasar `sizeImages`.
+  - Actualicé `galleryImages` en ProductDetail.tsx: si la presentación seleccionada tiene imágenes en `sizeImages`, se muestran esas; si no, las imágenes generales del producto.
+  - Añadí un useEffect que resetea `activeSlideIndex` a 0 cuando cambia `selectedSize` (para que no se quede en un índice inválido al cambiar de galería).
+- Creé las imágenes webp en `/home/z/my-project/public/products/creatine-x-plosion/`:
+  - CreatinaSachet01.webp (99KB), 02 (32KB), 03 (38KB), 04 (59KB), 05 (51KB), 06 (34KB)
+  - Total: ~313KB
+- Actualicé `creatineXplosion` en `src/data/products.ts`:
+  - Añadí `sizeImages: { 'Sachet · 100 unidades': [...] }` con las 6 imágenes del sachet.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Creatine X-Plosion con `sizeImages` (6 imágenes para "Sachet · 100 unidades").
+  - Las 6 imágenes webp se sirven con HTTP 200 desde `/products/creatine-x-plosion/CreatinaSachetXX.webp`.
+  - Agent Browser (flujo completo):
+    - Al abrir el detalle (Pote por defecto): galería muestra 9 imágenes (Creatina01-09), contador "1 / 9" ✓
+    - Al seleccionar "Sachet · 100 unidades": galería cambia a 6 imágenes (CreatinaSachet01-06), contador "1 / 6" ✓
+    - Al volver a "Pote · 30 servicios": galería restaura las 9 imágenes, contador "1 / 9" ✓
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Nueva feature: imágenes por presentación (`sizeImages`)** — la galería del modal de detalle ahora cambia dinámicamente según la presentación seleccionada.
+- **Creatine X-Plosion**: la presentación "Sachet · 100 unidades" ahora tiene sus propias 6 imágenes (CreatinaSachet01-06), y la presentación "Pote · 30 servicios" mantiene sus 9 imágenes generales (Creatina01-09).
+- Imágenes del sachet optimizadas a WebP (~313KB total).
+- La feature `sizeImages` es genérica y puede usarse en cualquier producto con múltiples presentaciones (ej. Whey Protein sachet en el futuro).
+- Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 60
+Agent: main (Z.ai Code)
+Task: Renombrar presentaciones: "Envase normal" → "Empaque" en las 3 Whey Protein (Chocolate, Vainilla, Cookies and Cream); "Pote · 30 servicios" → "Envase · 30 servicios" en Creatine X-Plosion.
+
+Work Log:
+- Localicé las ocurrencias con grep:
+  - "Envase normal" en líneas 689, 769, 830 (Whey Protein Chocolate, Vainilla, Cookies and Cream).
+  - "Pote · 30 servicios" en línea 1016 (Creatine X-Plosion, que también tiene Sachet).
+  - "Pote · 30 servicios" en líneas 1074, 1134 (AminoStack Limón/Frambuesa) — el usuario NO los mencionó, se dejaron sin cambio.
+- Cambios en `src/data/products.ts`:
+  - Whey Protein Chocolate/Vainilla/Cookies and Cream: `sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades']` → `sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades']` (replace_all, string idéntico en los 3).
+  - Creatine X-Plosion: `sizes: ['Pote · 30 servicios', 'Sachet · 100 unidades']` → `sizes: ['Envase · 30 servicios', 'Sachet · 100 unidades']`.
+  - NOTA: No fue necesario actualizar `sizePricing` ni `sizeImages` porque sus claves referencian la etiqueta del Sachet (que no cambió).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API confirma las nuevas etiquetas:
+    - Whey Protein Chocolate/Vainilla/Cookies and Cream: ['Empaque', 'Sachet · 3 cajas de 14 unidades']
+    - Whey Protein Space Edition (Envase): sin cambio ['Envase · 28 servicios · Vainilla']
+    - Creatine X-Plosion: ['Envase · 30 servicios', 'Sachet · 100 unidades']
+    - AminoStack Limón/Frambuesa: sin cambio ['Pote · 30 servicios']
+  - Agent Browser (Creatine): botones muestran "Envase · 30 servicios" y "Sachet · 100 unidades"; al seleccionar Sachet el precio cambia a $70 y la galería muestra las 6 imágenes del sachet (contador "1 / 6") — el sizePricing y sizeImages siguen funcionando.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Presentaciones renombradas** según lo solicitado:
+  - 3 Whey Protein (Chocolate, Vainilla, Cookies and Cream): "Envase normal" → **"Empaque"**.
+  - Creatine X-Plosion: "Pote · 30 servicios" → **"Envase · 30 servicios"**.
+- Whey Protein Space Edition (Envase), AminoStack Limón y AminoStack Frambuesa se mantienen sin cambios.
+- El sistema de precio por presentación (sizePricing) e imágenes por presentación (sizeImages) sigue funcionando porque las claves referencian la etiqueta del Sachet (sin cambio).
+- Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 61
+Agent: main (Z.ai Code)
+Task: Añadir 6 imágenes subidas a las 3 Whey Protein según su nombre (Wheyproteinchocolate.jpg, Wheyproteinchocolate01.jpg, Wheyproteinvainilla01.jpg, Wheyproteinvainilla02.jpg, Wheyproteincookies01.jpg, Wheyproteincookies02.jpg).
+
+Work Log:
+- Verifiqué las 6 imágenes subidas en `/home/z/my-project/upload/`.
+- Analicé las 2 de chocolate con VLM:
+  - Wheyproteinchocolate.jpg: foto frontal del envase (Space Edition, diseño limpio)
+  - Wheyproteinchocolate01.jpg: imagen promocional frontal (elementos dinámicos: leche, chocolate)
+- Las 4 de Vainilla/Cookies se asignaron por su numeración (01 = principal, 02 = secundaria).
+- Convertí las 6 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82), normalizando nombres:
+  - Chocolate (carpeta existente): WheyProteinChocolate04.webp (38KB, de Wheyproteinchocolate.jpg), WheyProteinChocolate05.webp (113KB, de Wheyproteinchocolate01.jpg)
+  - Vainilla (nueva carpeta): WheyProteinVainilla01.webp (78KB), WheyProteinVainilla02.webp (34KB)
+  - Cookies and Cream (nueva carpeta): WheyProteinCookies01.webp (105KB), WheyProteinCookies02.webp (34KB)
+- Actualicé los 3 productos en `src/data/products.ts`:
+  - **Whey Protein Chocolate**: ya tenía 3 imágenes (01-03); añadí 04 y 05 a la galería (ahora 5 imágenes total). Mantuve la imagen principal (01).
+  - **Whey Protein Vainilla**: NO tenía imágenes (usaba placeholder SVG). Añadí `image` + `images[]` con 2 imágenes.
+  - **Whey Protein Cookies and Cream**: NO tenía imágenes (usaba placeholder SVG). Añadí `image` + `images[]` con 2 imágenes.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API confirma: Chocolate (5 imágenes), Vainilla (2 imágenes), Cookies and Cream (2 imágenes).
+  - Las 6 imágenes webp se sirven con HTTP 200.
+  - Agent Browser:
+    - Filtré por "Proteínas" → las cards de Vainilla y Cookies ahora muestran imágenes reales (antes placeholders SVG).
+    - Modal de Vainilla: galería con 2 imágenes, contador "1 / 2".
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Whey Protein Vainilla y Cookies and Cream ahora tienen galerías de imágenes reales** (antes usaban placeholder SVG con color de marca).
+- **Whey Protein Chocolate amplió su galería** de 3 a 5 imágenes.
+- Imágenes optimizadas a WebP.
+- Las 3 Whey Protein (excepto Space Edition) ahora tienen imágenes reales.
+- Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 62
+Agent: main (Z.ai Code)
+Task: Revertir el cambio anterior y colocar Wheyproteinchocolate01.jpg (= WheyProteinChocolate05.webp) como imagen de portada de Whey Protein Chocolate.
+
+Work Log:
+- El usuario aclaró que la imagen que quiere como portada es `Wheyproteinchocolate01.jpg` (la promocional con elementos dinámicos de leche y chocolate), que se había convertido a `WheyProteinChocolate05.webp`.
+- En la tarea anterior (parte de Task 61/62) había puesto como portada `WheyProteinChocolate04.webp` (la frontal limpia Space Edition, de `Wheyproteinchocolate.jpg`) — revertí eso.
+- Cambio en `src/data/products.ts` (Whey Protein Chocolate):
+  - `image` (portada): `WheyProteinChocolate01.webp` → **`WheyProteinChocolate05.webp`**
+  - `images[0]` (primera de la galería): **`WheyProteinChocolate05.webp`**
+  - Orden de la galería: 05 (portada), 01, 02, 03, 04
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API confirma: `image` = WheyProteinChocolate05.webp, `images[0]` = WheyProteinChocolate05.webp.
+  - Agent Browser: la card de Whey Protein Chocolate (`.pg-card`) ahora muestra `WheyProteinChocolate05.webp` como portada.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Portada de Whey Protein Chocolate actualizada** a la imagen promocional con elementos dinámicos (leche, chocolate) — `WheyProteinChocolate05.webp` (de `Wheyproteinchocolate01.jpg`).
+- La galería mantiene las 5 imágenes, con la portada primero y las demás detrás (01, 02, 03, 04).
+- Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 63
+Agent: main (Z.ai Code)
+Task: Cambiar estética: unificar colores de los precios a la paleta de la web (rojo #E30613) en lugar de brandColor por producto; y al abrir el product detail, el borde del modal debe tomar el color de la portada (brandColor) de cada producto.
+
+Work Log:
+- **Precios unificados al rojo de marca (#E30613)** — antes cada card usaba `style={{ color: brandColor }}` lo que generaba multicolor (verde Aliens, teal CLA, amarillo DeTox, magenta OMG, etc.). Cambios:
+  - `ProductGrid.tsx` (línea 336): card price → `text-[#E30613]` (antes brandColor).
+  - `FeaturedProducts.tsx` (línea 155): featured card price → `text-[#E30613]`.
+  - `RecentlyViewedSection.tsx` (línea 86): recently viewed price → `text-[#E30613]`.
+  - `ProductDetail.tsx` (línea 150): precio principal del modal → `text-[#E30613]`.
+  - `ProductDetail.tsx` (línea 469): mini-precio de productos recomendados → `text-[#E30613]`.
+  - SearchModal y WishlistSidebar ya usaban `text-[#E30613]` — sin cambios.
+- **Borde dinámico del ProductDetail con el color de la portada:**
+  - `ProductDetail.tsx` DialogContent: cambié `border-border` → `!border-2` + `style={{ borderColor: brandColor }}`.
+  - `brandColor` viene de `richProduct?.brandColor ?? '#E30613'`, así que cada producto tiñe el borde del modal con su color de marca (verde Aliens, teal CLA, amarillo DeTox, etc.).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser confirmó:
+    - Aliens Blocker: borde rgb(76,175,80)=#4CAF50 (verde), precio rgb(227,6,19)=#E30613 (rojo) ✓
+    - CLA 10K: borde rgb(13,148,136)=#0D9488 (teal), precio rgb(227,6,19)=#E30613 (rojo) ✓
+  - Los precios ya no son multicolor — todos en rojo de marca, coherente con CTAs, logo y paleta white/red/black.
+  - El borde del modal cambia según el producto abierto, dando identidad cromática sin saturar las cards.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Estética simplificada:** los precios en cards y modal ahora son todos rojo #E30613 (paleta de marca), eliminando el multicolor (verde/teal/amarillo/magenta/cyan) que saturaba el catálogo.
+- **Borde dinámico del ProductDetail:** al abrir un producto, el borde del modal se tiñe con el brandColor de la portada de ese producto (verde para Aliens, teal para CLA, etc.), dando un acento cromático por producto solo en el detalle.
+- Resultado: catálogo más limpio y coherente (paleta white/red/black), con el color de marca de cada producto reservado como acento en el borde del modal de detalle.
+- Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 64
+Agent: main (Z.ai Code)
+Task: Añadir 2 imágenes (WheyproteinEnvase01.jpg, WheyproteinEnvase02.jpg) al producto Whey Protein Space Edition (Envase) · Vainilla — el último producto sin imágenes.
+
+Work Log:
+- Verifiqué las 2 imágenes subidas en `/home/z/my-project/upload/WheyproteinEnvase01.jpg` y `WheyproteinEnvase02.jpg`.
+- Analicé las 2 imágenes con VLM (z-ai vision):
+  - WheyproteinEnvase01: imagen promocional con fondo cósmico (Space Edition).
+  - WheyproteinEnvase02: foto frontal del envase (Space Edition, sabor vainilla).
+- Creé la carpeta `/home/z/my-project/public/products/whey-protein-space-edition/`.
+- Convertí las 2 imágenes JPG a WebP con sharp (resize 800x800 inside, quality 82):
+  - WheyProteinEnvase01.webp (92KB), WheyProteinEnvase02.webp (34KB)
+  - Total: ~126KB
+- Actualicé `wheyProteinSpaceEditionEnvase` en `src/data/products.ts`:
+  - Añadí `image: '/products/whey-protein-space-edition/WheyProteinEnvase01.webp'` (imagen principal — promocional con fondo cósmico).
+  - Añadí `images: [...]` array con las 2 imágenes webp.
+  - Este producto era el ÚLTIMO que usaba placeholder SVG — ahora todos los 16 productos tienen imágenes reales.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API `/api/products`: devuelve Whey Protein Space Edition con `image` y `images[]` (2 imágenes).
+  - Las 2 imágenes webp se sirven con HTTP 200.
+  - Agent Browser:
+    - Card del catálogo: muestra WheyProteinEnvase01.webp como imagen principal (isPlaceholder=false, isCard=true).
+    - Modal de detalle: galería con 2 imágenes, contador "1 / 2".
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Whey Protein Space Edition (Envase) ahora tiene galería de 2 imágenes reales** (antes usaba placeholder SVG con color de marca).
+- Imágenes optimizadas a WebP (~126KB total).
+- Galería interactiva: imagen principal + 1 thumbnail + navegación con flechas + contador "1 / 2".
+- 🎉 **CATÁLOGO COMPLETO: los 16 productos ahora tienen galerías de imágenes reales.**
+- Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 65
+Agent: main (Z.ai Code)
+Task: Añadir un glow/halo al ProductDetail modal, usando el color de marca (brandColor) de cada producto.
+
+Work Log:
+- Analicé la imagen de referencia subida por el usuario con VLM: el glow es un halo radial rojo detrás del modal, más intenso al centro y desvaneciendo hacia los bordes.
+- Implementación en `src/components/n10k/ProductDetail.tsx`:
+  - Añadí un helper `hexToRgba(hex, alpha)` que convierte el brandColor hex (#RRGGBB o #RGB) a `rgba(r, g, b, alpha)` para poder usarlo con opacidad.
+  - Calculé dos capas de glow:
+    - `glowColor` = brandColor al 45% opacidad (glow intenso, 50px blur, 8px spread).
+    - `glowColorSoft` = brandColor al 20% opacidad (glow suave exterior, 120px blur, 30px spread).
+  - Apliqué `boxShadow` al DialogContent: `0 0 50px 8px ${glowColor}, 0 0 120px 30px ${glowColorSoft}`.
+  - El glow es dinámico: cada producto tiñe el halo con su brandColor (verde Aliens, teal CLA, rojo Bye Bye Belly, etc.), igual que el borde.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (Aliens Blocker, brandColor verde #4CAF50):
+    - boxShadow: `rgba(76, 175, 80, 0.45) 0px 0px 50px 8px, rgba(76, 175, 80, 0.2) 0px 0px 120px 30px` ✓
+    - borderColor: rgb(76,175,80) ✓ (verde)
+  - VLM confirmó visualmente: "Sí, se ve un resplandor (glow/halo) de color verde alrededor del modal."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Glow dinámico añadido al ProductDetail modal** — halo del color de marca de cada producto detrás del modal (dos capas: intenso 45% + suave 20%).
+- El glow combina con el borde dinámico (ambos usan brandColor), dando identidad cromática por producto solo en el detalle.
+- Catálogo mantiene precios en rojo unificado; el color de marca de cada producto aparece como acento en el borde + glow del modal.
+- Cambios committeados y pusheados a GitHub.

@@ -52,18 +52,34 @@ export default function ProductDetail() {
     }
   }, [isOpen, selectedProduct, addRecentlyViewed]);
 
+  // Reset slide index when the selected size changes (the gallery may
+  // swap to size-specific images with a different count).
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveSlideIndex(0);
+  }, [selectedSize]);
+
   // Look up the rich NutritionProduct data for ingredients/nutrition facts
   const richProduct = useMemo(
     () => (selectedProduct ? PRODUCTS.find((p) => p.id === selectedProduct.id) : null),
     [selectedProduct],
   );
 
-  // Gallery images from the rich product (or fallback to product.image)
+  // Gallery images from the rich product (or fallback to product.image).
+  // Si la presentación seleccionada tiene imágenes específicas (sizeImages),
+  // se muestran esas; si no, las imágenes generales del producto.
   const galleryImages = useMemo(() => {
     if (!selectedProduct) return [];
+    if (
+      selectedSize &&
+      selectedProduct.sizeImages &&
+      selectedProduct.sizeImages[selectedSize]?.length
+    ) {
+      return selectedProduct.sizeImages[selectedSize];
+    }
     if (richProduct?.images && richProduct.images.length > 0) return richProduct.images;
     return [selectedProduct.image];
-  }, [selectedProduct, richProduct]);
+  }, [selectedProduct, richProduct, selectedSize]);
 
   const isWishlisted = selectedProduct
     ? wishlist.some((w) => w.productId === selectedProduct.id)
@@ -108,6 +124,24 @@ export default function ProductDetail() {
   if (!selectedProduct) return null;
 
   const brandColor = richProduct?.brandColor ?? '#E30613';
+
+  // Convierte un color hex (#RRGGBB o #RGB) a `rgba(r, g, b, alpha)` para
+  // poder usar el brandColor con opacidad en el glow del modal.
+  const hexToRgba = (hex: string, alpha: number): string => {
+    let h = hex.replace('#', '');
+    if (h.length === 3) {
+      h = h.split('').map((c) => c + c).join('');
+    }
+    const r = parseInt(h.substring(0, 2), 16) || 0;
+    const g = parseInt(h.substring(2, 4), 16) || 0;
+    const b = parseInt(h.substring(4, 6), 16) || 0;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  // Glow del modal: halo radial del color de marca del producto detrás del modal.
+  const glowColor = hexToRgba(brandColor, 0.45);
+  const glowColorSoft = hexToRgba(brandColor, 0.2);
+
   const currentPrice = getProductPrice(selectedProduct, selectedSize);
   const subtotal = currentPrice * quantity;
   const currentImage = galleryImages[activeSlideIndex] || selectedProduct.image;
@@ -131,7 +165,7 @@ export default function ProductDetail() {
   const priceBlock = (
     <div className="flex items-center gap-3 mb-4">
       {currentPrice > 0 ? (
-        <span className="font-display-black text-2xl sm:text-3xl" style={{ color: brandColor }}>
+        <span className="font-display-black text-2xl sm:text-3xl text-[#E30613]">
           ${currentPrice}
         </span>
       ) : (
@@ -450,7 +484,7 @@ export default function ProductDetail() {
               </div>
               <p className="text-[10px] font-display-bold line-clamp-1">{rec.name}</p>
               {rec.price ? (
-                <p className="text-[10px] font-display-bold" style={{ color: rec.brandColor }}>
+                <p className="text-[10px] font-display-bold text-[#E30613]">
                   ${rec.price}
                 </p>
               ) : null}
@@ -463,7 +497,13 @@ export default function ProductDetail() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setDetailOpen}>
-      <DialogContent className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden bg-background border-border">
+      <DialogContent
+        className="!max-w-4xl !w-[95vw] !h-[90vh] !p-0 !gap-0 overflow-hidden bg-background !border-2"
+        style={{
+          borderColor: brandColor,
+          boxShadow: `0 0 50px 8px ${glowColor}, 0 0 120px 30px ${glowColorSoft}`,
+        }}
+      >
         <VisuallyHidden>
           <DialogTitle>{selectedProduct.name}</DialogTitle>
           <DialogDescription>

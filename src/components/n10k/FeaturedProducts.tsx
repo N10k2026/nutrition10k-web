@@ -152,7 +152,7 @@ function FeaturedCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {product.price > 0 ? (
-              <span className="font-display-bold text-lg" style={{ color: brandColor }}>
+              <span className="font-display-bold text-lg text-[#E30613]">
                 {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
               </span>
             ) : (

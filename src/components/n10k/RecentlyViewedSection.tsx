@@ -83,7 +83,7 @@ export default function RecentlyViewedSection() {
                   <p className="text-[9px] uppercase tracking-wide text-muted-foreground">{product.category}</p>
                   <h3 className="font-display-bold text-xs line-clamp-1 mt-0.5">{product.name}</h3>
                   {product.price > 0 ? (
-                    <span className="font-display-bold text-sm" style={{ color: brandColor }}>
+                    <span className="font-display-bold text-sm text-[#E30613]">
                       {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
                     </span>
                   ) : (

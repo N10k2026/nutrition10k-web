@@ -52,6 +52,10 @@ export interface NutritionProduct {
   sizes: string[];
   /** Precios por presentación (label del size → precio en USD). Opcional. */
   sizePricing?: Record<string, number>;
+  /** Imágenes específicas por presentación (label del size → array de URLs). Opcional.
+   *  Si la presentación seleccionada tiene imágenes aquí, se muestran en la galería
+   *  en lugar de las imágenes generales del producto. */
+  sizeImages?: Record<string, string[]>;
   /** Beneficios principales (bullets cortos para cards) */
   benefits: string[];
   /** Información nutricional destacada (para proteínas) */
@@ -589,6 +593,11 @@ export const wheyProteinSpaceEditionEnvase: NutritionProduct = {
   brandColor: '#1E40AF', // azul espacial
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
+  image: '/products/whey-protein-space-edition/WheyProteinEnvase01.webp',
+  images: [
+    '/products/whey-protein-space-edition/WheyProteinEnvase01.webp',
+    '/products/whey-protein-space-edition/WheyProteinEnvase02.webp',
+  ],
   sizes: ['Envase · 28 servicios · Vainilla'],
   benefits: [
     '25 gramos de proteína pura por servicio',
@@ -676,13 +685,15 @@ export const wheyProteinChocolate: NutritionProduct = {
   brandColor: '#3E2723', // chocolate oscuro
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  image: '/products/whey-protein-chocolate/WheyProteinChocolate01.webp',
+  image: '/products/whey-protein-chocolate/WheyProteinChocolate05.webp',
   images: [
+    '/products/whey-protein-chocolate/WheyProteinChocolate05.webp',
     '/products/whey-protein-chocolate/WheyProteinChocolate01.webp',
     '/products/whey-protein-chocolate/WheyProteinChocolate02.webp',
     '/products/whey-protein-chocolate/WheyProteinChocolate03.webp',
+    '/products/whey-protein-chocolate/WheyProteinChocolate04.webp',
   ],
-  sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades'],
+  sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades'],
   price: 60,
   sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
   benefits: [
@@ -762,7 +773,12 @@ export const wheyProteinVainilla: NutritionProduct = {
   brandColor: '#C19A6B', // vainilla / camel
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades'],
+  image: '/products/whey-protein-vainilla/WheyProteinVainilla01.webp',
+  images: [
+    '/products/whey-protein-vainilla/WheyProteinVainilla01.webp',
+    '/products/whey-protein-vainilla/WheyProteinVainilla02.webp',
+  ],
+  sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades'],
   price: 60,
   sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
   benefits: [
@@ -823,7 +839,12 @@ export const wheyProteinCookiesAndCream: NutritionProduct = {
   brandColor: '#6B4F2A', // cookies and cream (galleta)
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  sizes: ['Envase normal', 'Sachet · 3 cajas de 14 unidades'],
+  image: '/products/whey-protein-cookies-and-cream/WheyProteinCookies01.webp',
+  images: [
+    '/products/whey-protein-cookies-and-cream/WheyProteinCookies01.webp',
+    '/products/whey-protein-cookies-and-cream/WheyProteinCookies02.webp',
+  ],
+  sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades'],
   price: 60,
   sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
   benefits: [
@@ -997,8 +1018,30 @@ export const creatineXplosion: NutritionProduct = {
   brandColor: '#0891B2', // cyan explosión
   brandColorFg: '#FFFFFF',
   format: 'Polvo',
-  sizes: ['Pote · 30 servicios', 'Sachet · 100 unidades'],
+  image: '/products/creatine-x-plosion/Creatina01.webp',
+  images: [
+    '/products/creatine-x-plosion/Creatina01.webp',
+    '/products/creatine-x-plosion/Creatina02.webp',
+    '/products/creatine-x-plosion/Creatina03.webp',
+    '/products/creatine-x-plosion/Creatina04.webp',
+    '/products/creatine-x-plosion/Creatina05.webp',
+    '/products/creatine-x-plosion/Creatina06.webp',
+    '/products/creatine-x-plosion/Creatina07.webp',
+    '/products/creatine-x-plosion/Creatina08.webp',
+    '/products/creatine-x-plosion/Creatina09.webp',
+  ],
+  sizes: ['Envase · 30 servicios', 'Sachet · 100 unidades'],
   sizePricing: { 'Sachet · 100 unidades': 70 },
+  sizeImages: {
+    'Sachet · 100 unidades': [
+      '/products/creatine-x-plosion/CreatinaSachet01.webp',
+      '/products/creatine-x-plosion/CreatinaSachet02.webp',
+      '/products/creatine-x-plosion/CreatinaSachet03.webp',
+      '/products/creatine-x-plosion/CreatinaSachet04.webp',
+      '/products/creatine-x-plosion/CreatinaSachet05.webp',
+      '/products/creatine-x-plosion/CreatinaSachet06.webp',
+    ],
+  },
   benefits: [
     'Creatina HCL de alta biodisponibilidad y rápida absorción',
     'Mejora significativa en fuerza, potencia y volumen muscular',

@@ -333,7 +333,7 @@ function ProductCard({
         )}
         <div className="flex items-center justify-between">
           {product.price > 0 ? (
-            <span className="font-display-bold text-sm sm:text-base" style={{ color: brandColor }}>
+            <span className="font-display-bold text-sm sm:text-base text-[#E30613]">
               {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
             </span>
           ) : (

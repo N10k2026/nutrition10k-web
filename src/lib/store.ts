@@ -30,6 +30,10 @@ export interface Product {
   outOfStock?: string[];
   /** Per-size pricing override (size label → price in USD). */
   sizePricing?: Record<string, number>;
+  /** Per-size images override (size label → array of image URLs).
+   *  When the selected size has images here, the gallery shows them
+   *  instead of the general product images. */
+  sizeImages?: Record<string, string[]>;
   /** Flavors with their brand color swatch (only for Whey Protein). */
   flavors?: { name: string; hex: string }[];
   description: string;
@@ -94,6 +98,7 @@ export function toStoreProduct(p: NutritionProduct): Product {
     sizes: p.sizes,
     outOfStock: [],
     sizePricing: p.sizePricing,
+    sizeImages: p.sizeImages,
     flavors:
       p.category === "Proteínas"
         ? [{ name: p.name, hex: p.brandColor }]
