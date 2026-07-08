@@ -2827,3 +2827,30 @@ Stage Summary:
 - Aplicado a ProductGrid y FeaturedProducts.
 - **Magic 10K brandColor corregido** de naranja (#EA580C) a rojo (#E30613) — el glow del modal de detalle ahora es rojo.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 80
+Agent: main (Z.ai Code)
+Task: Corregir el error del CLA 10K que mencionaba azúcar/insulina (el CLA no tiene nada que ver con el azúcar).
+
+Work Log:
+- El usuario reportó que el CLA 10K mencionaba azúcar, lo cual es incorrecto (el CLA es un quemador de grasa / Omega 3, no un regulador de azúcar).
+- **Menciones de azúcar encontradas en CLA 10K:**
+  1. Descripción (línea 439): "...mantiene la masa muscular y regula el azúcar en sangre."
+  2. Beneficio (línea 460): "Regula el azúcar en sangre mejorando la sensibilidad a la insulina"
+- **Correcciones en `src/data/products.ts`:**
+  - Descripción: removí "y regula el azúcar en sangre" → ahora termina en "...mantiene la masa muscular."
+  - Beneficio 4: cambié "Regula el azúcar en sangre mejorando la sensibilidad a la insulina" → "Apoya el metabolismo de los lípidos y el bienestar cardiovascular" (más preciso para un producto CLA/Omega 3).
+- **Verifiqué que las otras menciones de azúcar SÍ son correctas** (no se tocaron):
+  - Aliens Blocker (carb blocker): "controla los niveles de azúcar en sangre" ✓ (correcto, es un bloqueador de carbohidratos).
+  - DeTox: "controla azúcar, colesterol y triglicéridos" ✓ (correcto, el detox regula esos valores).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - API confirma la nueva descripción del CLA sin mención de azúcar.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **CLA 10K corregido**: removidas las menciones incorrectas de azúcar/insulina de la descripción y los beneficios.
+- El CLA ahora se describe correctamente como quemador de grasa + Omega 3 (función cerebral/cardiaca, metabolismo de lípidos, masa muscular, colesterol/triglicéridos) — sin mencionar azúcar.
+- Las menciones de azúcar en Aliens Blocker y DeTox se mantienen porque sí son correctas para esos productos.
+- Cambios committeados y pusheados a GitHub.

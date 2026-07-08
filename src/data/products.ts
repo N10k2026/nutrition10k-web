@@ -436,7 +436,7 @@ export const cla10k: NutritionProduct = {
   name: 'CLA 10K',
   tagline: 'Ácido Linolénico Conjugado · Rico en Omega 3',
   description:
-    'CLA 10K es un producto rico en Omega 3, un ácido graso imprescindible para la función cerebral y cardiaca, además del bienestar general del cuerpo. El CLA (Ácido Linolénico Conjugado) fomenta la reducción de la masa grasa al potenciar el metabolismo de los lípidos, mantiene la masa muscular y regula el azúcar en sangre. Presentado en cápsulas blandas. Formulado y producido en Estados Unidos.',
+    'CLA 10K es un producto rico en Omega 3, un ácido graso imprescindible para la función cerebral y cardiaca, además del bienestar general del cuerpo. El CLA (Ácido Linolénico Conjugado) fomenta la reducción de la masa grasa al potenciar el metabolismo de los lípidos y mantiene la masa muscular. Presentado en cápsulas blandas. Formulado y producido en Estados Unidos.',
   category: 'Quemadores',
   brandColor: '#4B5320', // verde militar (army green)
   brandColorFg: '#FFFFFF',
@@ -457,7 +457,7 @@ export const cla10k: NutritionProduct = {
     'Reduce la masa grasa y mantiene la masa muscular',
     'Rico en Omega 3 para la función cerebral y cardiaca',
     'Controla colesterol y triglicéridos (grasa abdominal)',
-    'Regula el azúcar en sangre mejorando la sensibilidad a la insulina',
+    'Apoya el metabolismo de los lípidos y el bienestar cardiovascular',
   ],
   isBestSeller: true,
   fichaStatus: 'complete',
