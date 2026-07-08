@@ -92,12 +92,12 @@ export type ProductCategory =
 export type ProductFormat = 'Cápsulas' | 'Cápsulas blandas' | 'Polvo' | 'Líquido' | 'Gomitas';
 
 export const CATEGORIES: { id: ProductCategory; label: string }[] = [
-  { id: 'Digestión', label: 'Digestión' },
-  { id: 'Quemadores', label: 'Quemadores' },
-  { id: 'Inhibidores', label: 'Inhibidores' },
-  { id: 'Cetogénicos', label: 'Cetogénicos' },
   { id: 'Proteínas', label: 'Proteínas' },
   { id: 'Rendimiento', label: 'Rendimiento' },
+  { id: 'Quemadores', label: 'Quemadores' },
+  { id: 'Digestión', label: 'Digestión' },
+  { id: 'Inhibidores', label: 'Inhibidores' },
+  { id: 'Cetogénicos', label: 'Cetogénicos' },
   { id: 'Nutracéuticos', label: 'Nutracéuticos' },
   { id: 'Longevidad', label: 'Longevidad' },
   { id: 'Accesorios', label: 'Accesorios' },

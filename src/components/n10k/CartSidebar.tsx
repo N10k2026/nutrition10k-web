@@ -53,7 +53,7 @@ export default function CartSidebar() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetContent side="right" className="!w-full sm:!max-w-md !p-0 flex flex-col bg-background">
+      <SheetContent side="right" showCloseButton={false} className="!w-full sm:!max-w-md !p-0 flex flex-col bg-background">
         <VisuallyHidden>
           <SheetTitle>Carrito de compras</SheetTitle>
         </VisuallyHidden>

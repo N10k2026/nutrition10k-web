@@ -61,12 +61,12 @@ export interface WishlistItem {
 
 export const categories: { id: ProductCategory | "Todos"; label: string }[] = [
   { id: "Todos", label: "Todos" },
-  { id: "Digestión", label: "Digestión" },
-  { id: "Quemadores", label: "Quemadores" },
-  { id: "Inhibidores", label: "Inhibidores" },
-  { id: "Cetogénicos", label: "Cetogénicos" },
   { id: "Proteínas", label: "Proteínas" },
   { id: "Rendimiento", label: "Rendimiento" },
+  { id: "Quemadores", label: "Quemadores" },
+  { id: "Digestión", label: "Digestión" },
+  { id: "Inhibidores", label: "Inhibidores" },
+  { id: "Cetogénicos", label: "Cetogénicos" },
   { id: "Nutracéuticos", label: "Nutracéuticos" },
   { id: "Longevidad", label: "Longevidad" },
 ];

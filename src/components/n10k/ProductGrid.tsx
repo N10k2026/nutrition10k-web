@@ -140,7 +140,7 @@ export default function ProductGrid() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2">
             {([
               { id: 'Todos' as const, label: 'Todos' },

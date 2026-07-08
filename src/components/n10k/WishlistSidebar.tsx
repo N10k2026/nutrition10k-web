@@ -77,7 +77,7 @@ export default function WishlistSidebar() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setWishlistOpen}>
-      <SheetContent side="left" className="!w-full sm:!max-w-md !p-0 flex flex-col bg-background">
+      <SheetContent side="left" showCloseButton={false} className="!w-full sm:!max-w-md !p-0 flex flex-col bg-background">
         <VisuallyHidden>
           <SheetTitle>Lista de favoritos</SheetTitle>
         </VisuallyHidden>

@@ -2392,3 +2392,41 @@ Stage Summary:
 - El borde (2px) y el glow (halo radial 45% + 20%) del modal ahora muestran el color correcto de cada producto.
 - brandColorFg ajustado a oscuro (#1A1A1A) para Bye Bye Belly (verde amarillo necesita texto oscuro para contraste); el resto mantiene blanco.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 67
+Agent: main (Z.ai Code)
+Task: (1) Reordenar categorías para que se vean más ordenadas y responsive en mobile; (2) eliminar el botón de cierre (X) duplicado que se sobrepone en el carrito y favoritos.
+
+Work Log:
+- **Análisis del problema de las X duplicadas:**
+  - El componente `Sheet` de shadcn/ui (`src/components/ui/sheet.tsx`) tiene un botón de cierre por defecto hardcoded (`absolute top-4 right-4`, XIcon 16px) que NO se podía desactivar (no tenía `showCloseButton` como sí tiene el Dialog).
+  - CartSidebar y WishlistSidebar tenían su propio botón de cierre personalizado (X h-5 w-5 = 20px, aria-label="Cerrar carrito"/"Cerrar favoritos").
+  - Resultado: dos botones X solapados en la esquina superior derecha de ambos sheets.
+- **Solución (botones duplicados):**
+  - Añadí `showCloseButton?: boolean` (default `true`) a `SheetContent` en `src/components/ui/sheet.tsx`, envolviendo el `<SheetPrimitive.Close>` por defecto en `{showCloseButton && (...)}`.
+  - Pasé `showCloseButton={false}` en:
+    - `CartSidebar.tsx`: `<SheetContent side="right" showCloseButton={false} ...>`
+    - `WishlistSidebar.tsx`: `<SheetContent side="left" showCloseButton={false} ...>`
+  - Ahora cada sheet mantiene solo su botón personalizado (36x36px, aria-label descriptivo).
+- **Reorden de categorías (más ordenado + mobile responsive):**
+  - Reordené `CATEGORIES` (products.ts) y `categories` (store.ts) por número de productos (más primero) + agrupación lógica:
+    - Antes: Todos, Digestión, Quemadores, Inhibidores, Cetogénicos, Proteínas, Rendimiento, Nutracéuticos, Longevidad
+    - Ahora: Todos, **Proteínas (4)**, **Rendimiento (4)**, **Quemadores (2)**, **Digestión (2)**, Inhibidores (1), Cetogénicos (1), Nutracéuticos (1), Longevidad (1)
+  - Mejoré la responsividad del contenedor de filtros en `ProductGrid.tsx`:
+    - Antes: `flex flex-wrap items-center justify-between gap-4` (filtros y sort en la misma fila, causaba wrapping apretado en mobile).
+    - Ahora: `flex flex-col gap-4 mb-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between` (en mobile los pills ocupan todo el ancho y el sort baja debajo; en desktop siguen side-by-side).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (mobile 375x812):
+    - Orden de categorías confirmado: Todos, Proteínas, Rendimiento, Quemadores, Digestión, Inhibidores, Cetogénicos, Nutracéuticos, Longevidad.
+    - Layout apilado en mobile: `stacked: true` (pills arriba, sort abajo).
+    - Carrito: solo 1 botón de cierre (aria-label="Cerrar carrito", 36x36px) — antes había 2.
+    - Favoritos: solo 1 botón de cierre (aria-label="Cerrar favoritos", 36x36px) — antes había 2.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Botones de cierre duplicados eliminados** en carrito y favoritos: el Sheet de shadcn ahora soporta `showCloseButton={false}` y ambos sheets lo usan, dejando solo su botón personalizado.
+- **Categorías reordenadas** por número de productos (Proteínas y Rendimiento primero con 4 cada una), con agrupación lógica (quemadores/inhibidores/cetogénicos juntos, nutracéuticos/longevidad juntos).
+- **Layout de filtros responsive**: en mobile los pills y el sort se apilan verticalmente (antes se amontonaban en una fila); en desktop mantienen el layout side-by-side.
+- Cambios committeados y pusheados a GitHub.
