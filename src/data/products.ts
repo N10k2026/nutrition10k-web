@@ -497,7 +497,7 @@ export const magic10k: NutritionProduct = {
   description:
     'Magic de Nutrition10k combina ingredientes clave para ofrecer una experiencia de entrenamiento superior. Su matriz energética está diseñada para proporcionar un impulso sostenido, evitando los picos y caídas abruptas. Los componentes enfocados en la fuerza buscan mejorar la potencia muscular y la resistencia durante sesiones intensas. Adicionalmente, su fórmula incluye nootrópicos que promueven la concentración mental y la conexión mente-músculo, permitiendo entrenamientos más focalizados y efectivos. La inclusión de ingredientes termogénicos tiene como objetivo estimular el metabolismo y favorecer la quema de grasa en todo el cuerpo. Formulado y producido en Estados Unidos.',
   category: 'Rendimiento',
-  brandColor: '#EA580C', // naranja energía
+  brandColor: '#E30613', // rojo Nutrition 10K
   brandColorFg: '#FFFFFF',
   format: 'Cápsulas',
   image: '/products/magic-10k/Magic01.webp',

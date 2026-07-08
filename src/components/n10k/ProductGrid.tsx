@@ -302,10 +302,10 @@ function ProductCard({
         />
       </button>
 
-      {/* Quick add — visible en mobile (más pequeño), aparece en hover en desktop */}
+      {/* Quick add — estático en la esquina inferior derecha (no se solapa con wishlist) */}
       <button
         onClick={onQuickAdd}
-        className="absolute top-12 right-2 w-7 h-7 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 md:translate-y-10 md:group-hover:translate-y-0 md:top-2 cursor-pointer z-20"
+        className="absolute bottom-12 right-2 w-7 h-7 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-colors cursor-pointer z-20"
         aria-label={`Agregar ${product.name} al carrito`}
       >
         <ShoppingBag className="h-3.5 w-3.5" />

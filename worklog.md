@@ -2798,3 +2798,32 @@ Stage Summary:
 - Cada logo en su región correspondiente, no duplicados.
 - Cache-busting actualizado a `?v=3` para forzar recarga.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 79
+Agent: main (Z.ai Code)
+Task: (1) Hacer el botón quick-add estático (sin movimiento) para que no se solape con el de favoritos; (2) cambiar el glow de Magic 10K a rojo.
+
+Work Log:
+- **Problema del solapamiento:**
+  - El botón quick-add tenía `top-12 right-2` en mobile + `md:top-2 md:translate-y-10 md:group-hover:translate-y-0` en desktop.
+  - En desktop, `md:top-2` lo movía a la misma posición que el botón wishlist (`top-2 right-2`), solapándose.
+  - El movimiento `translate-y-10 → group-hover:translate-y-0` hacía que apareciera encima del wishlist al hacer hover.
+- **Solución:** hice el quick-add estático en la esquina inferior derecha (`bottom-12 right-2`), sin ningún movimiento:
+  - `ProductGrid.tsx`: `absolute bottom-12 right-2 w-7 h-7 ... transition-colors` (sin `translate-y`, sin `md:top-2`, sin `md:group-hover`).
+  - `FeaturedProducts.tsx`: misma corrección.
+  - Ahora quick-add está siempre en la esquina inferior derecha, wishlist en la superior derecha — nunca se solapan.
+- **Magic 10K brandColor:**
+  - Antes: `#EA580C` (naranja energía).
+  - Ahora: `#E30613` (rojo Nutrition 10K) — el glow del modal de detalle ahora es rojo para Magic.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (mobile): wishlist top=-161, quickAdd top=-40, overlap=false ✓ (no se solapan).
+  - brandColor de Magic: `#E30613` (rojo) confirmado en products.ts.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Botón quick-add ahora estático** en la esquina inferior derecha (`bottom-12 right-2`) — sin movimiento, sin solaparse con el botón de favoritos (esquina superior derecha).
+- Aplicado a ProductGrid y FeaturedProducts.
+- **Magic 10K brandColor corregido** de naranja (#EA580C) a rojo (#E30613) — el glow del modal de detalle ahora es rojo.
+- Cambios committeados y pusheados a GitHub.
