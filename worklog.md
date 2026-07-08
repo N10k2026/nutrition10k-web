@@ -2854,3 +2854,37 @@ Stage Summary:
 - El CLA ahora se describe correctamente como quemador de grasa + Omega 3 (función cerebral/cardiaca, metabolismo de lípidos, masa muscular, colesterol/triglicéridos) — sin mencionar azúcar.
 - Las menciones de azúcar en Aliens Blocker y DeTox se mantienen porque sí son correctas para esos productos.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 81
+Agent: main (Z.ai Code)
+Task: Corregir error de runtime "q is not defined" en SearchModal.tsx.
+
+Work Log:
+- **Error:** `ReferenceError: q is not defined` en SearchModal.tsx:55 al filtrar productos en la búsqueda.
+- **Causa:** el `useMemo` que filtra productos usaba la variable `q` (que no existía) en lugar de `debouncedQuery`:
+  ```js
+  // Antes (roto):
+  p.name.toLowerCase().includes(q)  // q no está definida
+  ```
+- **Corrección:** añadí `const q = debouncedQuery.toLowerCase();` dentro del `useMemo` antes del filter, para que `q` sea la query en minúsculas:
+  ```js
+  // Ahora (corregido):
+  const q = debouncedQuery.toLowerCase();
+  return PRODUCTS.filter(
+    (p) =>
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.tagline.toLowerCase().includes(q),
+  ).slice(0, 8);
+  ```
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser: abrí el search modal, escribí "cla", sin errores en la consola ni en el dev log.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Error `q is not defined` corregido** en SearchModal.tsx.
+- La búsqueda ahora filtra productos correctamente por nombre, categoría, descripción y tagline.
+- Cambios committeados y pusheados a GitHub.

@@ -50,6 +50,7 @@ export default function SearchModal() {
 
   const results = useMemo(() => {
     if (!debouncedQuery.trim()) return [];
+    const q = debouncedQuery.toLowerCase();
     return PRODUCTS.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
