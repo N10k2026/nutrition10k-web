@@ -98,11 +98,20 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-8">
           {/* Brand + Social — full width on mobile */}
           <div className="footer-col flex flex-col items-center md:items-start gap-4 col-span-2 md:col-span-3">
-            <img
-              src="/brand/logo-negative.png?v=2"
-              alt="Nutrition 10K"
-              className="h-11 sm:h-14 w-auto"
-            />
+            <div className="flex items-center gap-3">
+              {/* Favicon circular */}
+              <img
+                src="/brand/favicon.png?v=3"
+                alt="Nutrition 10K favicon"
+                className="h-10 w-10 sm:h-12 sm:w-12 rounded-full shrink-0"
+              />
+              {/* Logo negativo (para fondos oscuros) */}
+              <img
+                src="/brand/logo-negative.png?v=3"
+                alt="Nutrition 10K"
+                className="h-11 sm:h-14 w-auto"
+              />
+            </div>
             <p className="text-white/70 text-xs sm:text-sm text-center md:text-left max-w-xs">
               Tu aliado para la pérdida de peso y el aumento de tu autoestima.
               Productos formulados y producidos en Estados Unidos.
