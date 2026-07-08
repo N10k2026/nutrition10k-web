@@ -64,7 +64,7 @@ export default function FeaturedProducts() {
           />
         </div>
 
-        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x">
+        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 pr-8 snap-x">
           {featured.map((product) => (
             <div
               key={product.id}

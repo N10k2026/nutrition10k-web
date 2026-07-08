@@ -2750,3 +2750,24 @@ Stage Summary:
 - FeaturedProducts además tiene botón quick-add visible en mobile (igual que el catálogo).
 - Limpieza de imports/vars no usados (Star, PRODUCTS, brandColor, n10kProduct) en ambos componentes.
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 77
+Agent: main (Z.ai Code)
+Task: Adaptar el área de carrusel para que la última tarjeta no se corte en Productos Destacados y Vistos Recientemente.
+
+Work Log:
+- **Problema:** En el carrusel horizontal de Productos Destacados, al hacer scroll hasta el final, la última card se cortaba por el borde derecho del viewport (no había padding derecho suficiente).
+- **Causa:** El contenedor del carrusel tenía `px-4` (padding izquierdo + derecho de 16px) pero el scroll horizontal llegaba hasta el borde del contenido sin margen extra, cortando la última card.
+- **Solución:**
+  - `FeaturedProducts.tsx` (línea 67): añadí `pr-8` (padding derecho extra de 32px) al contenedor del carrusel: `px-4` → `px-4 pr-8`.
+  - `RecentlyViewedSection.tsx` (línea 58): misma corrección: `px-4` → `px-4 pr-8`.
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - Agent Browser (mobile 375x812): tras hacer scroll al final del carrusel de FeaturedProducts, la última card es totalmente visible: `lastRight: 343, containerRight: 375, gap: 32, fullyVisibleAfterScroll: true` ✓.
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Última tarjeta del carrusel ya no se corta** en Productos Destacados ni Vistos Recientemente.
+- Solución: añadir `pr-8` (32px padding derecho extra) al contenedor del scroll horizontal.
+- Cambios committeados y pusheados a GitHub.

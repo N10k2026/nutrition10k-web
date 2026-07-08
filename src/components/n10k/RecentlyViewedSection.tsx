@@ -55,7 +55,7 @@ export default function RecentlyViewedSection() {
           </button>
         </div>
 
-        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 snap-x">
+        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 pr-8 snap-x">
           {items.map((product) => {
             return (
               <div
