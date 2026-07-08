@@ -696,6 +696,18 @@ export const wheyProteinChocolate: NutritionProduct = {
   sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades'],
   price: 60,
   sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
+  sizeImages: {
+    'Sachet · 3 cajas de 14 unidades': [
+      '/products/whey-protein-sachet/WheyProteinSachet01.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet02.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet03.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet04.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet05.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet06.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet07.webp',
+      '/products/whey-protein-chocolate/WheyProteinChocolateSupplementFacts.webp',
+    ],
+  },
   benefits: [
     'Desarrollo y crecimiento muscular (masa magra)',
     '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
@@ -781,6 +793,18 @@ export const wheyProteinVainilla: NutritionProduct = {
   sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades'],
   price: 60,
   sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
+  sizeImages: {
+    'Sachet · 3 cajas de 14 unidades': [
+      '/products/whey-protein-sachet/WheyProteinSachet01.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet02.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet03.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet04.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet05.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet06.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet07.webp',
+      '/products/whey-protein-vainilla/WheyProteinVainillaSupplementFacts.webp',
+    ],
+  },
   benefits: [
     'Desarrollo y crecimiento muscular (hipertrofia)',
     '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
@@ -847,6 +871,18 @@ export const wheyProteinCookiesAndCream: NutritionProduct = {
   sizes: ['Empaque', 'Sachet · 3 cajas de 14 unidades'],
   price: 60,
   sizePricing: { 'Sachet · 3 cajas de 14 unidades': 105 },
+  sizeImages: {
+    'Sachet · 3 cajas de 14 unidades': [
+      '/products/whey-protein-sachet/WheyProteinSachet01.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet02.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet03.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet04.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet05.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet06.webp',
+      '/products/whey-protein-sachet/WheyProteinSachet07.webp',
+      '/products/whey-protein-cookies-and-cream/WheyProteinCookiesSupplementFacts.webp',
+    ],
+  },
   benefits: [
     'Desarrollo y crecimiento muscular (hipertrofia)',
     '25g de proteína + 5.1g de BCAA + 4g de glutamina por servicio',
