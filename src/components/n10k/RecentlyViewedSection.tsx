@@ -2,7 +2,6 @@
 
 import { useRef, useMemo } from 'react';
 import { useCartStore } from '@/lib/store';
-import { PRODUCTS } from '@/data/products';
 import { BlurIn } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef } from '@/hooks/use-scroll-visible';
 import { handleKeyboardClick, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
@@ -58,36 +57,37 @@ export default function RecentlyViewedSection() {
 
         <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 snap-x">
           {items.map((product) => {
-            const richProduct = PRODUCTS.find((p) => p.id === product.id);
-            const brandColor = richProduct?.brandColor ?? '#E30613';
-
             return (
               <div
                 key={product.id}
-                className="shrink-0 w-[160px] sm:w-[180px] snap-start glass-card group cursor-pointer overflow-hidden"
+                className="shrink-0 w-[160px] sm:w-[180px] snap-start group cursor-pointer overflow-hidden rounded-[16px] border border-border relative aspect-[4/5] bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 role="button"
                 tabIndex={0}
                 onClick={() => handleClick(product)}
                 onKeyDown={(e) => handleKeyboardClick(e, () => handleClick(product))}
               >
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: brandColor }} />
-                </div>
-                <div className="p-2.5">
-                  <p className="text-[9px] uppercase tracking-wide text-muted-foreground">{product.category}</p>
-                  <h3 className="font-display-bold text-xs line-clamp-1 mt-0.5">{product.name}</h3>
+                {/* Image fills entire card */}
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+
+                {/* Glassmorphism info overlay at bottom — compacto */}
+                <div className="absolute bottom-0 left-0 right-0 px-2 py-1 bg-black/50 backdrop-blur-md transition-all duration-300 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+                  <p className="text-[7px] uppercase tracking-wide text-white/60 leading-tight">
+                    {product.category}
+                  </p>
+                  <h3 className="font-display-bold text-[10px] leading-tight line-clamp-1 text-white">
+                    {product.name}
+                  </h3>
                   {product.price > 0 ? (
-                    <span className="font-display-bold text-sm text-[#E30613]">
+                    <span className="font-display-bold text-[11px] text-white">
                       {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
                     </span>
                   ) : (
-                    <span className="text-[10px] text-muted-foreground italic">Por confirmar</span>
+                    <span className="text-[9px] text-white/60 italic">Por confirmar</span>
                   )}
                 </div>
               </div>

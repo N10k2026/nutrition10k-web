@@ -2715,3 +2715,38 @@ Stage Summary:
 - **Botón quick-add visible en mobile** (28x28px, debajo del wishlist); en desktop sigue oculto y aparece en hover.
 - Nombre y precio no se deforman (text-[11px] + leading-tight + line-clamp-1).
 - Cambios committeados y pusheados a GitHub.
+
+---
+Task ID: 76
+Agent: main (Z.ai Code)
+Task: Aplicar el mismo diseño elegante de cards (imagen llena + overlay glass compacto + quick-add visible en mobile) a las secciones Productos Destacados (FeaturedProducts) y Vistos Recientemente (RecentlyViewedSection).
+
+Work Log:
+- **FeaturedProducts.tsx** — rediseñé la card:
+  - Antes: `glass-card` (borde rojo) + imagen en `aspect-[4/5]` separada de la info (`p-4` con categoría, nombre, rating, precio, arrow).
+  - Ahora: `rounded-[20px] border border-border relative aspect-[4/5] bg-background` — imagen llena la card, borde neutral.
+  - Overlay glass compacto en la parte inferior: `px-2.5 py-1.5 bg-black/50 backdrop-blur-md`, categoría `text-[8px]`, nombre `text-[11px] sm:text-sm`, precio `text-xs sm:text-base` — todos en blanco.
+  - Botón quick-add: `w-7 h-7` visible en mobile (`top-12 right-2`), oculto en desktop hasta hover (`md:top-2 md:translate-y-10 md:group-hover:translate-y-0`).
+  - Arrow de "ver más" dentro del overlay (text-white/60 → white en hover).
+  - Removidos: `Star` import, `PRODUCTS` import, `n10kProduct`/`brandColor` vars, bloque de rating, gradient overlay, barra de color de marca.
+- **RecentlyViewedSection.tsx** — rediseñé la card:
+  - Antes: `glass-card` + imagen en `aspect-square` separada de la info (`p-2.5` con categoría, nombre, precio rojo) + barra de color de marca.
+  - Ahora: `rounded-[16px] border border-border relative aspect-[4/5] bg-background` — imagen llena la card (aspect 4/5 en lugar de square para más verticalidad).
+  - Overlay glass compacto: `px-2 py-1 bg-black/50 backdrop-blur-md`, categoría `text-[7px]`, nombre `text-[10px]`, precio `text-[11px]` — todos en blanco (textos más pequeños por ser cards de 160-180px).
+  - Removidos: `PRODUCTS` import, `richProduct`/`brandColor` vars, barra de color de marca.
+  - En desktop: overlay oculto, aparece en hover (`md:opacity-0 md:group-hover:opacity-100`).
+- Verificación:
+  - Lint: 0 errores, 0 warnings.
+  - VLM (mobile) confirmó FeaturedProducts: "La imagen llena la card, hay un overlay glass oscuro compacto con nombre y precio en blanco, el diseño es elegante."
+  - VLM (mobile) confirmó RecentlyViewed: "La imagen llena la card, hay un overlay glass oscuro compacto con nombre y precio en blanco."
+- Pusheo los cambios a GitHub.
+
+Stage Summary:
+- **Productos Destacados (FeaturedProducts)** y **Vistos Recientemente (RecentlyViewedSection)** ahora usan el mismo diseño elegante que el catálogo principal:
+  - Imagen llena la card (aspect 4/5).
+  - Borde neutral (`border-border`, no rojo).
+  - Overlay glass compacto en la parte inferior con categoría, nombre y precio en blanco.
+  - Mobile: overlay siempre visible; Desktop: overlay oculto, aparece en hover.
+- FeaturedProducts además tiene botón quick-add visible en mobile (igual que el catálogo).
+- Limpieza de imports/vars no usados (Star, PRODUCTS, brandColor, n10kProduct) en ambos componentes.
+- Cambios committeados y pusheados a GitHub.

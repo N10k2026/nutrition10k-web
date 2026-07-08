@@ -2,11 +2,10 @@
 
 import { useRef, useMemo } from 'react';
 import { useCartStore } from '@/lib/store';
-import { PRODUCTS } from '@/data/products';
 import { BlurIn, SplitWords } from '@/components/n10k/TextAnimations';
 import { useScrollVisibleWithRef, useStaggerChildren } from '@/hooks/use-scroll-visible';
 import { handleKeyboardClick, hasMultiPrice, getProductMinPrice } from '@/lib/product-utils';
-import { ShoppingBag, Star, ArrowRight } from 'lucide-react';
+import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function FeaturedProducts() {
@@ -98,73 +97,58 @@ function FeaturedCard({
   product: { id: string; name: string; image: string; price: number; originalPrice?: number; isNew?: boolean; isBestSeller?: boolean; rating?: number; category: string; description: string };
   onQuickAdd: (e: React.MouseEvent) => void;
 }) {
-  const n10kProduct = PRODUCTS.find((p) => p.id === product.id);
-  const brandColor = n10kProduct?.brandColor ?? '#E30613';
-
   return (
-    <div className="glass-card group cursor-pointer h-full overflow-hidden">
-      {/* Image */}
-      <div className="relative aspect-[4/5] overflow-hidden rounded-t-[20px]">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+    <div className="group cursor-pointer h-full overflow-hidden rounded-[20px] border border-border relative aspect-[4/5] bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      {/* Image fills entire card */}
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        loading="lazy"
+      />
 
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-          {product.isBestSeller && (
-            <span className="bg-[#E30613] text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wide">
-              Top Ventas
-            </span>
-          )}
-          {product.isNew && (
-            <span className="bg-white/90 text-black text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wide">
-              Nuevo
-            </span>
-          )}
-        </div>
-
-        {/* Quick add */}
-        <button
-          onClick={onQuickAdd}
-          className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 translate-y-12 group-hover:translate-y-0 cursor-pointer"
-          aria-label={`Agregar ${product.name} al carrito`}
-        >
-          <ShoppingBag className="h-5 w-5" />
-        </button>
+      {/* Badges */}
+      <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+        {product.isBestSeller && (
+          <span className="bg-[#E30613] text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">
+            Top
+          </span>
+        )}
+        {product.isNew && (
+          <span className="bg-white/90 text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">
+            Nuevo
+          </span>
+        )}
       </div>
 
-      {/* Info */}
-      <div className="p-4">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">
+      {/* Quick add — visible en mobile (más pequeño), aparece en hover en desktop */}
+      <button
+        onClick={onQuickAdd}
+        className="absolute top-12 right-2 w-7 h-7 rounded-full bg-[#E30613] hover:bg-[#c50511] text-white flex items-center justify-center shadow-lg shadow-black/25 transition-all duration-300 md:translate-y-10 md:group-hover:translate-y-0 md:top-2 cursor-pointer z-20"
+        aria-label={`Agregar ${product.name} al carrito`}
+      >
+        <ShoppingBag className="h-3.5 w-3.5" />
+      </button>
+
+      {/* Glassmorphism info overlay at bottom — compacto
+          - Mobile: always visible (dark glass + white text)
+          - Desktop (md): hidden, shows on hover */}
+      <div className="absolute bottom-0 left-0 right-0 px-2.5 py-1.5 bg-black/50 backdrop-blur-md transition-all duration-300 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+        <p className="text-[8px] uppercase tracking-wide text-white/60 leading-tight">
           {product.category}
         </p>
-        <h3 className="font-display-bold text-sm mb-1 line-clamp-1">{product.name}</h3>
-        {product.rating && (
-          <div className="flex items-center gap-1 mb-2">
-            <Star className="h-3 w-3 fill-[#E30613] text-[#E30613]" />
-            <span className="text-xs text-muted-foreground">{product.rating.toFixed(1)}</span>
-          </div>
-        )}
+        <h3 className="font-display-bold text-[11px] sm:text-sm leading-tight line-clamp-1 text-white">
+          {product.name}
+        </h3>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {product.price > 0 ? (
-              <span className="font-display-bold text-lg text-[#E30613]">
-                {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
-              </span>
-            ) : (
-              <span className="text-xs text-muted-foreground italic">Por confirmar</span>
-            )}
-            {product.originalPrice && (
-              <span className="text-xs text-muted-foreground line-through">
-                ${product.originalPrice}
-              </span>
-            )}
-          </div>
-          <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
+          {product.price > 0 ? (
+            <span className="font-display-bold text-xs sm:text-base text-white">
+              {hasMultiPrice(product) ? 'Desde ' : ''}${getProductMinPrice(product)}
+            </span>
+          ) : (
+            <span className="text-[10px] text-white/60 italic">Por confirmar</span>
+          )}
+          <ArrowRight className="h-3 w-3 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
         </div>
       </div>
     </div>
